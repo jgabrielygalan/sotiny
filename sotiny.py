@@ -12,19 +12,21 @@ client = discord.Client()
 
 @client.event
 async def on_ready():
-    for guild in client.guilds:
-        if guild.name == GUILD:
-            break
-        
-    print(
-        f'{client.user} is connected to the following guild:\n'
-        f'{guild.name}(id: {guild.id})'
-    )
-    members = '\n - '.join([member.name for member in guild.members])
-    print(f'Guild Members: \n - {members}')
+    print(f'{client.user.name} has connected to Discord!')
     
 
+@client.event
+async def on_message(message):
+    if message.author == client.user:
+        return
 
+    if message.content == '>>>repartecartas':
+        response = 'momentito estoy barajando...'
+        await message.channel.send(response)
+    elif message.content == 'raise-exception':
+        raise discord.DiscordException
+        
+    
     
 #client.run(TOKEN)
 
