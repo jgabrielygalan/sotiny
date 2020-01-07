@@ -41,7 +41,18 @@ async def repartir(ctx):
 
     
     await ctx.send(response)
-    
+ 
+@bot.command(name='pick', help='Pick a card from the boooster')
+async def pick(ctx, *, card):
+    ctx.send("You picked {card}".format(card))
+    next_state = draft.pick(ctx.author.name, card)
+    if next_state is not None:
+        for player in next_state:
+            dm.send(player, next_state[player])
+        enviar a los 4 el siguiente sobre
+    else:
+        nada
+
 #client.run(TOKEN)
 
 

@@ -1,46 +1,56 @@
 import random
+import booster
 
 class Draft:
 
-	CUBE_CARDS = 'EternalPennyDreadfulCube.txt'
+	FILE_NAME = 'EternalPennyDreadfulCube.txt'
 
-	def __init__(self, num_players, cube_cards=CUBE_CARDS):
-		self.cube_cards = cube_cards
-		self.num_players = num_players
-		decks = {f'player_{p}':[] for p in range(self.num_players)}
-		print(f'{num_players} playing')
+	def __init__(self, players, file_name=FILE_NAME):
+		self.file_name = file_name
+		self.players = random.shuffle(players)
+		self.state = {}
+		self.decks = {player:[] for player in players}
 		
-		
-	def get_cards(self):
-		with open(self.cube_cards) as f:
-			read_cards = f.read().splitlines()
-
-		return read_cards
-
-	def deal_cards(self, cards_to_deal):
-		players = 4
-		draft = {}
-		cards = cards_to_deal
-
-		for p in range(players):
-			draft[f'player_{p}'] = []
-
+	def start(self):
+		self.cards = get_cards(self.file_name)
+		for player in players:
+			card_list = []
 			for i in range(15):
-				card = cards.pop(random.randint(0, len(cards)))
-				draft[f'player_{p}'].append(card)
-				
-		return draft, cards
+				card_list.append(cards.pop(random.randint(0, len(cards))))
+			self.state[player] = Booster(card_list)
+		self.booster_number = 1
+		self.picked = []
+		return self.state
 
-	def pick(self, card_name, player):
+	
+	def pick(self, player, card_name):
+		if player not in self.picked:
+			self.state[player].pick(card_name)
+			self.decks[player].append(card_name)
+			self.picked.append(player)
+		if len(picked) == len(self.players):
+			self.picked = []
+			if len(self.players[0]) > 0:
+				self.pass_boosters()
+			else:
+				self.open_next_booster()
+			return self.state
+		return None
 
-		return
-
+	def pass_boosters(self):
+		last_booster = self.state[self.players[-1]]
+		for player in self.players[0...]
 
 	def show_decks(self, cards):
 		print(cards)
 		return
 
 
+def get_cards(file_name):
+	with open(file_name) as f:
+		read_cards = f.read().splitlines()
+
+	return read_cards
 
 
 def main():
