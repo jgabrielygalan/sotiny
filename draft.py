@@ -36,7 +36,7 @@ class Draft:
 		return
 
 
-	def show_decks(self):
+	def show_decks(self, cards):
 		print(cards)
 		return
 
@@ -46,7 +46,7 @@ class Draft:
 def main():
 	draft = Draft(4)
 	cube = draft.get_cards()
-	draft.show_decks()
+	draft.show_decks(cube)
 	#print(draft.deal_cards(cube))
 
 if __name__ == "__main__":
