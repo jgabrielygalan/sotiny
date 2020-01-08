@@ -38,8 +38,8 @@ class Draft:
 		return None
 
 	def pass_boosters(self):
-		last_booster = self.state[self.players[-1]]
-		for player in self.players[0...]
+		self.state = { list(self.state)[i]: list(self.state.values())[i + (-1)^self.booster_number] for i in range(len(self.state)) }
+		
 
 	def show_decks(self, cards):
 		print(cards)
