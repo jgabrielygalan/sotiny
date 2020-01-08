@@ -1,5 +1,9 @@
+from enum import Enum
 import random
 from booster import Booster
+
+PickReturn = Enum('PickReturn', 'in_progress, next_booster, finished')
+
 
 class Draft:
 
@@ -39,11 +43,15 @@ class Draft:
 			if len(self.state[self.players[0]].cards) > 0:
 				print("pass booster")
 				self.pass_boosters()
-			else:
+				return PickReturn.next_booster
+			elif self.booster_number < 3:
 				print("open new booster")
 				self.open_boosters()
-			return self.state
-		return None
+				return PickReturn.next_booster
+			else:
+				print("Draft finished")
+				return PickReturn.finished
+		return PickReturn.in_progress
 
 	def pass_boosters(self):
 		if self.booster_number % 2 == 0:
@@ -74,15 +82,18 @@ def main():
 	players = ['a', 'b', 'c', 'd']
 	draft = Draft(players)
 	packs = draft.start()
-	for i in range(1,46):
+	state = PickReturn.in_progress
+	while state != PickReturn.finished:
 		for p in players:
 			print("{player} deck: {cards}".format(player=p,cards=draft.decks[p]))
 			print("{player}: {cards}".format(player=p,cards=packs[p].cards))
 
 		for p in players:
-			new_packs = draft.pick(p, packs[p].cards[0])
-		packs = new_packs
+			state = draft.pick(p, packs[p].cards[0])
+			if state == PickReturn.next_booster:
+				packs = draft.state
 
+	print(draft.decks)
 	#cube = draft.get_cards()
 	#draft.show_decks(cube)
 	#print(draft.deal_cards(cube))
