@@ -9,7 +9,7 @@ class Draft:
 		self.file_name = file_name
 		self.players = random.shuffle(players)
 		self.state = {}
-		self.decks = {player:[] for player in players}
+		self.decks = { player:[] for player in players }
 		
 	def start(self):
 		self.cards = get_cards(self.file_name)
@@ -41,9 +41,8 @@ class Draft:
 		self.state = { list(self.state)[i]: list(self.state.values())[i + (-1)^self.booster_number] for i in range(len(self.state)) }
 		
 
-	def show_decks(self, cards):
-		print(cards)
-		return
+	def show_deck(self, player):
+		return decks[player]
 
 
 def get_cards(file_name):
