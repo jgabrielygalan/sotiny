@@ -16,15 +16,15 @@ class Draft:
 		self.cards = get_cards(self.file_name)
 		random.shuffle(self.cards)
 		self.booster_number = 0
-		self.picked = []
-		self.open_next_booster()
+		self.open_boosters()
 		return self.state
 
-	def open_next_booster(self):
+	def open_boosters(self):
 		for player in self.players:
 			card_list = [self.cards.pop() for _ in range(0,15)]
 			self.state[player] = Booster(card_list)
 		self.booster_number += 1
+		print("Opening pack {num}".format(num=self.booster_number))
 		self.picked = []
 
 	def pick(self, player, card_name):
@@ -41,7 +41,7 @@ class Draft:
 				self.pass_boosters()
 			else:
 				print("open new booster")
-				self.open_next_booster()
+				self.open_boosters()
 			return self.state
 		return None
 
@@ -74,7 +74,7 @@ def main():
 	players = ['a', 'b', 'c', 'd']
 	draft = Draft(players)
 	packs = draft.start()
-	for i in range(1,45):
+	for i in range(1,46):
 		for p in players:
 			print("{player} deck: {cards}".format(player=p,cards=draft.decks[p]))
 			print("{player}: {cards}".format(player=p,cards=packs[p].cards))
