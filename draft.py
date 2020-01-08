@@ -14,15 +14,18 @@ class Draft:
 		
 	def start(self):
 		self.cards = get_cards(self.file_name)
+		self.booster_number = 0
+		self.open_boosters()
+		self.picked = []
+		return self.state
+
+	def open_boosters(self):
 		for player in self.players:
 			card_list = []
 			for i in range(15):
 				card_list.append(self.cards.pop(random.randint(0, len(self.cards))))
 			self.state[player] = Booster(card_list)
-		self.booster_number = 1
-		self.picked = []
-		return self.state
-
+		self.booster_number += 1
 	
 	def pick(self, player, card_name):
 		if player not in self.picked:
@@ -37,7 +40,7 @@ class Draft:
 				self.pass_boosters()
 			else:
 				print("open new booster")
-				self.open_next_booster()
+				self.open_boosters()
 			return self.state
 		return None
 
