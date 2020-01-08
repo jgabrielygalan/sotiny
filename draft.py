@@ -14,25 +14,29 @@ class Draft:
 		
 	def start(self):
 		self.cards = get_cards(self.file_name)
-		for player in self.players:
-			card_list = []
-			for i in range(15):
-				card_list.append(self.cards.pop(random.randint(0, len(self.cards))))
-			self.state[player] = Booster(card_list)
-		self.booster_number = 1
+		random.shuffle(self.cards)
+		self.booster_number = 0
 		self.picked = []
+		self.open_next_booster()
 		return self.state
 
-	
+	def open_next_booster(self):
+		for player in self.players:
+			card_list = [self.cards.pop() for _ in range(0,15)]
+			self.state[player] = Booster(card_list)
+		self.booster_number += 1
+		self.picked = []
+
 	def pick(self, player, card_name):
 		if player not in self.picked:
+			print("Player {p} picked {c}".format(p=player,c=card_name))
 			self.state[player].pick(card_name)
 			self.decks[player].append(card_name)
 			self.picked.append(player)
 		if len(self.picked) == len(self.players):
 			print("all players picked")
 			self.picked = []
-			if len(self.players[0]) > 0:
+			if len(self.state[self.players[0]].cards) > 0:
 				print("pass booster")
 				self.pass_boosters()
 			else:
@@ -42,7 +46,18 @@ class Draft:
 		return None
 
 	def pass_boosters(self):
-		self.state = { list(self.players)[i + 1*(-1)^self.booster_number]: self.state[self.players[i]] for i in range(len(self.players)) }
+		if self.booster_number % 2 == 0:
+			last = self.state[self.players[-1]]
+			for i in range(len(self.players)-1, 0, -1):
+		  		self.state[self.players[i]] = self.state[self.players[i-1]]
+			self.state[self.players[0]] = last
+		else:
+			last = self.state[self.players[0]]
+			for i in range(0, len(self.players)-1):
+  				self.state[self.players[i]] = self.state[self.players[i+1]]
+			self.state[self.players[-1]] = last
+
+		#self.state = { list(self.players)[i + 1*(-1)^self.booster_number]: self.state[self.players[i]] for i in range(len(self.players)) }
 
 	def show_deck(self, player):
 		return decks[player]
