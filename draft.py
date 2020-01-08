@@ -2,7 +2,7 @@ from enum import Enum
 import random
 from booster import Booster
 
-PickReturn = Enum('PickReturn', 'in_progress, next_booster, finished')
+PickReturn = Enum('PickReturn', 'pick_error, in_progress, next_booster, finished')
 
 
 class Draft:
@@ -34,12 +34,16 @@ class Draft:
 	def pick(self, player, card_name):
 		if player not in self.picked:
 			print("Player {p} picked {c}".format(p=player,c=card_name))
-			self.state[player].pick(card_name)
+			card = self.state[player].pick(card_name)
+			if card is None:
+				return PickReturn.pick_error
 			self.decks[player].append(card_name)
 			self.picked.append(player)
 		if len(self.picked) == len(self.players):
 			print("all players picked")
 			self.picked = []
+			print(self.players)
+			print(self.state[self.players[0]])
 			if len(self.state[self.players[0]].cards) > 0:
 				print("pass booster")
 				self.pass_boosters()
@@ -82,6 +86,7 @@ def main():
 	players = ['a', 'b', 'c', 'd']
 	draft = Draft(players)
 	packs = draft.start()
+	print(packs)
 	state = PickReturn.in_progress
 	while state != PickReturn.finished:
 		for p in players:
