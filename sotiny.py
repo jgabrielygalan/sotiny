@@ -3,6 +3,7 @@ import random
 
 from draft import Draft
 from draft_cog import DraftCog
+from image_cog import ImageCog
 
 CUBE_CARDS = 'EternalPennyDreadfulCube.txt'
 
@@ -23,5 +24,6 @@ async def on_ready():
 
 
 bot.add_cog(DraftCog(bot))
+bot.add_cog(ImageCog(bot))
 bot.run('NjYzMDI3MjY5NjAxNTkxMzI3.XhCjYg.V4f6J8u9KmPHJhrXkXkcmCSnQyw')
 

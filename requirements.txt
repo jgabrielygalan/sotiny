@@ -1,0 +1,2 @@
+discord.py[voice]==1.2.4
+pillow==6.2.1

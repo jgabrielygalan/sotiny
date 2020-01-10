@@ -1,6 +1,10 @@
+import numpy
+
 from discord.ext import commands
 from draft import Draft
 from draft import PickReturn
+from discord import File
+import image_fetcher
 
 class DraftCog(commands.Cog):
     def __init__(self, bot):
@@ -42,7 +46,7 @@ class DraftCog(commands.Cog):
             packs = self.draft.start()
             for p in self.players.values():
                 await p.send("Draft has started. Here is your first pack. Type: >pick <cardname> to make your pick")
-                await p.send(packs[p.id])
+                await self.send_cards_to_user(ctx, p, packs[p.id].cards)
             await ctx.send("Pack 1 sent to all players")
 
 
@@ -61,14 +65,55 @@ class DraftCog(commands.Cog):
         elif state == PickReturn.next_booster:
             packs = self.draft.state
             for player in self.players.values():
-                await player.dm_channel.send("Your picks: ")
-                await player.dm_channel.send(self.draft.decks[player.id])
-                await player.dm_channel.send("Next pack:")
-                await player.dm_channel.send(packs[player.id])
+                await player.send("Your picks: ")
+                await self.send_cards_to_user(ctx, player, self.draft.decks[player.id])
+                await player.send("Next pack:")
+                await self.send_cards_to_user(ctx, player, packs[player.id].cards)
         else:
             for player in self.players.values():
-                await player.dm_channel.send("The draft finished")
-                await player.dm_channel.send("Your picks: ")
-                await player.dm_channel.send(self.draft.decks[player.id])
+                await player.dm_channel.send("The draft finished. Your picks: ")
+                await player.dm_channel.send_cards_to_user(ctx, player, self.draft.decks[player.id])
             self.players.clear()
             self.started = False
+
+
+    async def send_cards_to_user(self, ctx, user, cards):
+        async with ctx.typing():
+            print(type(cards))
+            print(numpy.array(cards))
+            list = numpy.array_split(numpy.array(cards),[5,10]) #split at positions 5 and 10, defaulting to empty arrays
+            for l in list:
+                if l is not None and len(l)>0:
+                    image_file = await image_fetcher.download_image_async(l)
+                    await send_image_with_retry(user, image_file)
+
+
+
+async def send_image_with_retry(user, image_file: str, text: str = '') -> None:
+    message = await send(user, file=File(image_file), content=text)
+    if message and message.attachments and message.attachments[0].size == 0:
+        print('Message size is zero so resending')
+        await message.delete()
+        await send(user, file=File(image_file), content=text)
+
+async def send(user, content: str, file = None):
+    new_s = escape_underscores(content)
+    return await user.send(file=file, content=new_s)
+
+def escape_underscores(s: str) -> str:
+    new_s = ''
+    in_url, in_emoji = False, False
+    for char in s:
+        if char == ':':
+            in_emoji = True
+        elif char not in 'abcdefghijklmnopqrstuvwxyz_':
+            in_emoji = False
+        if char == '<':
+            in_url = True
+        elif char == '>':
+            in_url = False
+        if char == '_' and not in_url and not in_emoji:
+            new_s += '\\_'
+        else:
+            new_s += char
+    return new_s
