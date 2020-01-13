@@ -1,10 +1,15 @@
 import numpy
-
+import re
 from discord.ext import commands
 from draft import Draft
 from draft import PickReturn
 from discord import File
 import image_fetcher
+
+
+EMOJIS_BY_NUMBER = {1 : '1⃣', 2 : '2⃣', 3 : '3⃣', 4 : '4⃣', 5 : '5⃣'}
+NUMBERS_BY_EMOJI = {'1⃣' : 1, '2⃣' : 2, '3⃣' : 3, '4⃣' : 4, '5⃣' : 5}
+
 
 class DraftCog(commands.Cog):
     def __init__(self, bot):
@@ -37,7 +42,7 @@ class DraftCog(commands.Cog):
             await ctx.send("Draft already start. Players: {p}".format(p=[p.nick for p in self.players.values()]))
             return
         if len(self.players) == 0:
-            await ctx.send("Can't start the draft, there are no self.players registered")
+            await ctx.send("Can't start the draft, there are no players registered")
             return
         self.started = True
         await ctx.send("Starting the draft with {p}".format(p=[p.mention for p in self.players.values()]))
@@ -47,7 +52,6 @@ class DraftCog(commands.Cog):
             for p in self.players.values():
                 await p.send("Draft has started. Here is your first pack. Type: >pick <cardname> to make your pick")
                 await self.send_cards_to_user(ctx, p, packs[p.id].cards)
-            await ctx.send("Pack 1 sent to all players")
 
 
     @commands.command(name='pick', help='Pick a card from the booster')
@@ -56,36 +60,58 @@ class DraftCog(commands.Cog):
             await ctx.send("You are not registered for the current draft")
             return
 
-        await ctx.send("You picked {card}".format(card=card))
-        state = self.draft.pick(ctx.author.id, card)
+        #await ctx.send("You picked {card}".format(card=card))
+        state = self.draft.pick(ctx.author.id, card_name=card)
+        await self.handle_pick_response(state, ctx)
+
+    @commands.Cog.listener()
+    async def on_reaction_add(self, reaction, author) -> None:
+        if author == self.bot.user:
+            return
+        if author.id not in self.players:
+            await author.send("You are not registered for the current draft")
+            return
+
+        page_number = int(re.search(r'(1|2|3)\.', reaction.message.content).group(1))
+        item_number = NUMBERS_BY_EMOJI[reaction.emoji]
+        print("User {u} reacted with {n} to message {i}".format(u=author.name, n=item_number, i=page_number))
+        state = self.draft.pick(author.id, position=item_number+(5*(page_number-1)))
+        await self.handle_pick_response(state, reaction.message.channel)
+
+    async def handle_pick_response(self, state, messageable):
         if state == PickReturn.pick_error:
-            await ctx.send("That card is not in the booster")
+            await messageable.send("That card is not in the booster")
         elif state == PickReturn.in_progress:
-            await ctx.send("Waiting for other self.players to make their picks")
+            await messageable.send("Waiting for other players to make their picks")
         elif state == PickReturn.next_booster:
             packs = self.draft.state
             for player in self.players.values():
                 await player.send("Your picks: ")
-                await self.send_cards_to_user(ctx, player, self.draft.decks[player.id])
+                await self.send_cards_to_user(messageable, player, self.draft.decks[player.id], False)
                 await player.send("Next pack:")
-                await self.send_cards_to_user(ctx, player, packs[player.id].cards)
+                await self.send_cards_to_user(messageable, player, packs[player.id].cards)
         else:
             for player in self.players.values():
-                await player.dm_channel.send("The draft finished. Your picks: ")
-                await player.dm_channel.send_cards_to_user(ctx, player, self.draft.decks[player.id])
+                await player.send("The draft finished. Your picks: ")
+                await player.send_cards_to_user(messageable, player, self.draft.decks[player.id], False)
             self.players.clear()
             self.started = False
 
 
-    async def send_cards_to_user(self, ctx, user, cards):
-        async with ctx.typing():
-            print(type(cards))
+    async def send_cards_to_user(self, messageable, user, cards, pickable=True):
+        async with messageable.typing():
             print(numpy.array(cards))
             list = numpy.array_split(numpy.array(cards),[5,10]) #split at positions 5 and 10, defaulting to empty arrays
+            i = 1
             for l in list:
                 if l is not None and len(l)>0:
                     image_file = await image_fetcher.download_image_async(l)
                     await send_image_with_retry(user, image_file)
+                    if pickable:
+                        message = await user.send("{i}. Click a number below or type >pick <card name>".format(i=i))
+                        i += 1
+                        for j in range(1,len(l)+1):
+                            await message.add_reaction(EMOJIS_BY_NUMBER[j])
 
 
 
@@ -94,7 +120,8 @@ async def send_image_with_retry(user, image_file: str, text: str = '') -> None:
     if message and message.attachments and message.attachments[0].size == 0:
         print('Message size is zero so resending')
         await message.delete()
-        await send(user, file=File(image_file), content=text)
+        message = await send(user, file=File(image_file), content=text)
+    return message
 
 async def send(user, content: str, file = None):
     new_s = escape_underscores(content)

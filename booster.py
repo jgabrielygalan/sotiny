@@ -15,3 +15,11 @@ class Booster(object):
 			return card
 		else:
 			return None
+
+	def pick_by_position(self, position):
+		print("position: {p}".format(p=position))
+		print(len(self.cards))
+		print(self.cards[position-1])
+		if len(self.cards) < position:
+			return None
+		return self.cards.pop(position-1)

@@ -31,13 +31,19 @@ class Draft:
 		print("Opening pack {num}".format(num=self.booster_number))
 		self.picked = []
 
-	def pick(self, player, card_name):
+	def pick(self, player, card_name=None, position=None):
 		if player not in self.picked:
-			print("Player {p} picked {c}".format(p=player,c=card_name))
-			card = self.state[player].pick(card_name)
+			if card_name is not None:
+				card = self.state[player].pick(card_name)
+			elif position is not None:
+				card = self.state[player].pick_by_position(position)
+			else:
+				print("Both card_name and position are None")
+				return PickReturn.pick_error
+			print("Player {p} picked {c}".format(p=player,c=card))
 			if card is None:
 				return PickReturn.pick_error
-			self.decks[player].append(card_name)
+			self.decks[player].append(card)
 			self.picked.append(player)
 		if len(self.picked) == len(self.players):
 			print("all players picked")
