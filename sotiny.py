@@ -1,3 +1,5 @@
+#sotiny.py
+
 import os
 import random
 
