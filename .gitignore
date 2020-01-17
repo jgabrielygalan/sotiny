@@ -1,3 +1,5 @@
 images
 # ignore environment variables
 .env
+
+__pycache__
