@@ -32,14 +32,14 @@ class DraftCog(commands.Cog):
     @commands.command(name='players', help='List registered players for the next draft')
     async def players(self, ctx):
         if self.started:
-            await ctx.send("Draft in progress. Players: {p}".format(p=[p.nick for p in self.players.values()]))
+            await ctx.send("Draft in progress. Players: {p}".format(p=[p.display_name for p in self.players.values()]))
         else:
-            await ctx.send("{p} are registered for the next draft".format(p=[p.nick for p in self.players.values()]))
+            await ctx.send("{p} are registered for the next draft".format(p=[p.display_name for p in self.players.values()]))
 
     @commands.command(name='start', help="Start the draft with the current self.players")
     async def start(self, ctx):
         if self.started:
-            await ctx.send("Draft already start. Players: {p}".format(p=[p.nick for p in self.players.values()]))
+            await ctx.send("Draft already start. Players: {p}".format(p=[p.display_name for p in self.players.values()]))
             return
         if len(self.players) == 0:
             await ctx.send("Can't start the draft, there are no players registered")
@@ -93,7 +93,7 @@ class DraftCog(commands.Cog):
         else:
             for player in self.players.values():
                 await player.send("The draft finished. Your picks: ")
-                await player.send_cards_to_user(messageable, player, self.draft.decks[player.id], False)
+                await self.send_cards_to_user(messageable, player, self.draft.decks[player.id], False)
             self.players.clear()
             self.started = False
 
