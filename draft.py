@@ -7,6 +7,8 @@ PickReturn = Enum('PickReturn', 'pick_error, in_progress, next_booster, finished
 
 class Draft:
 
+	NUMBER_OF_BOOSTERS = 1
+	BOOSTER_SIZE = 25
 	FILE_NAME = 'EternalPennyDreadfulCube.txt'
 
 	def __init__(self, players, file_name=FILE_NAME):
@@ -25,7 +27,7 @@ class Draft:
 
 	def open_boosters(self):
 		for player in self.players:
-			card_list = [self.cards.pop() for _ in range(0,15)]
+			card_list = [self.cards.pop() for _ in range(0,self.BOOSTER_SIZE)]
 			self.state[player] = Booster(card_list)
 		self.booster_number += 1
 		print("Opening pack {num}".format(num=self.booster_number))
@@ -54,7 +56,7 @@ class Draft:
 				print("pass booster")
 				self.pass_boosters()
 				return PickReturn.next_booster
-			elif self.booster_number < 3:
+			elif self.booster_number < self.NUMBER_OF_BOOSTERS:
 				print("open new booster")
 				self.open_boosters()
 				return PickReturn.next_booster

@@ -1,5 +1,7 @@
 import numpy
 import re
+import tempfile
+from io import BytesIO
 from discord.ext import commands
 from draft import Draft
 from draft import PickReturn
@@ -51,7 +53,7 @@ class DraftCog(commands.Cog):
             packs = self.draft.start()
             for p in self.players.values():
                 await p.send("Draft has started. Here is your first pack. Type: >pick <cardname> to make your pick")
-                await self.send_cards_to_user(ctx, p, packs[p.id].cards)
+                await send_cards_to_user(ctx, p, packs[p.id].cards)
 
 
     @commands.command(name='pick', help='Pick a card from the booster')
@@ -87,33 +89,35 @@ class DraftCog(commands.Cog):
             packs = self.draft.state
             for player in self.players.values():
                 await player.send("Your picks: ")
-                await self.send_cards_to_user(messageable, player, self.draft.decks[player.id], False)
+                # await send_cards_to_user(messageable, player, self.draft.decks[player.id], False)
+                await player.send(", ".join(self.draft.decks[player.id]))
                 await player.send("Next pack:")
-                await self.send_cards_to_user(messageable, player, packs[player.id].cards)
+                await send_cards_to_user(messageable, player, packs[player.id].cards)
         else:
             for player in self.players.values():
                 await player.send("The draft finished. Your picks: ")
-                await self.send_cards_to_user(messageable, player, self.draft.decks[player.id], False)
+                #await send_cards_to_user(messageable, player, self.draft.decks[player.id], False)
+                content = generate_file_content(self.draft.decks[player.id])
+                file=BytesIO(bytes(content, 'utf-8'))
+                await player.send(content="Your picks", file=File(fp=file, filename="picks.txt"))
             self.players.clear()
             self.started = False
 
 
-    async def send_cards_to_user(self, messageable, user, cards, pickable=True):
-        async with messageable.typing():
-            print(numpy.array(cards))
-            list = numpy.array_split(numpy.array(cards),[5,10]) #split at positions 5 and 10, defaulting to empty arrays
-            i = 1
-            for l in list:
-                if l is not None and len(l)>0:
-                    image_file = await image_fetcher.download_image_async(l)
-                    await send_image_with_retry(user, image_file)
-                    if pickable:
-                        message = await user.send("{i}. Click a number below or type >pick <card name>".format(i=i))
-                        i += 1
-                        for j in range(1,len(l)+1):
-                            await message.add_reaction(EMOJIS_BY_NUMBER[j])
-
-
+async def send_cards_to_user(messageable, user, cards, pickable=True):
+    async with messageable.typing():
+        print(numpy.array(cards))
+        list = numpy.array_split(numpy.array(cards),[5,10]) #split at positions 5 and 10, defaulting to empty arrays
+        i = 1
+        for l in list:
+            if l is not None and len(l)>0:
+                image_file = await image_fetcher.download_image_async(l)
+                await send_image_with_retry(user, image_file)
+                if pickable:
+                    message = await user.send("{i}. Click a number below or type >pick <card name>".format(i=i))
+                    i += 1
+                    for j in range(1,len(l)+1):
+                        await message.add_reaction(EMOJIS_BY_NUMBER[j])
 
 async def send_image_with_retry(user, image_file: str, text: str = '') -> None:
     message = await send(user, file=File(image_file), content=text)
@@ -144,3 +148,6 @@ def escape_underscores(s: str) -> str:
         else:
             new_s += char
     return new_s
+
+def generate_file_content(cards):
+    return "\n".join(["1 {c}".format(c=card) for card in cards])
