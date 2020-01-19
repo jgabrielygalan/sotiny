@@ -18,6 +18,7 @@ class DraftCog(commands.Cog):
         self.bot = bot
         self.players = {}
         self.started = False
+        self.messages_by_player = {}
 
     @commands.command(name='play', help='Register to play a draft')
     async def play(self, ctx):
@@ -52,8 +53,9 @@ class DraftCog(commands.Cog):
             self.draft = Draft(list(self.players.keys()))
             packs = self.draft.start()
             for p in self.players.values():
+                self.messages_by_player[p.id] = []
                 await p.send("Draft has started. Here is your first pack. Type: >pick <cardname> to make your pick")
-                await send_cards_to_user(ctx, p, packs[p.id].cards)
+                await self.send_packs_to_player(ctx, p.id)
 
 
     @commands.command(name='pick', help='Pick a card from the booster')
@@ -62,9 +64,8 @@ class DraftCog(commands.Cog):
             await ctx.send("You are not registered for the current draft")
             return
 
-        #await ctx.send("You picked {card}".format(card=card))
         state = self.draft.pick(ctx.author.id, card_name=card)
-        await self.handle_pick_response(state, ctx)
+        await self.handle_pick_response(state, ctx, ctx.author.id)
 
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, author) -> None:
@@ -78,43 +79,47 @@ class DraftCog(commands.Cog):
         item_number = NUMBERS_BY_EMOJI[reaction.emoji]
         print("User {u} reacted with {n} to message {i}".format(u=author.name, n=item_number, i=page_number))
         state = self.draft.pick(author.id, position=item_number+(5*(page_number-1)))
-        await self.handle_pick_response(state, reaction.message.channel)
+        await self.handle_pick_response(state, reaction.message.channel, author.id)
 
-    async def handle_pick_response(self, state, messageable):
+    async def handle_pick_response(self, state, messageable, player_id):
         if state == PickReturn.pick_error:
             await messageable.send("That card is not in the booster")
         elif state == PickReturn.in_progress:
+            print("Deleting {m}".format(m=self.messages_by_player[player_id]))
+            [await message.delete() for message in self.messages_by_player[player_id]]
+            self.messages_by_player[player_id].clear()
             await messageable.send("Waiting for other players to make their picks")
         elif state == PickReturn.next_booster:
-            packs = self.draft.state
             for player in self.players.values():
+                print("Deleting {m}".format(m=self.messages_by_player[player.id]))
+                [await message.delete() for message in self.messages_by_player[player.id]]
+                self.messages_by_player[player.id].clear()
                 await player.send("Your picks: ")
-                # await send_cards_to_user(messageable, player, self.draft.decks[player.id], False)
-                await player.send(", ".join(self.draft.decks[player.id]))
+                await player.send(", ".join(self.draft.deck_of(player.id)))
                 await player.send("Next pack:")
-                await send_cards_to_user(messageable, player, packs[player.id].cards)
+                await self.send_packs_to_player(messageable, player.id)
         else:
             for player in self.players.values():
                 await player.send("The draft finished. Your picks: ")
-                #await send_cards_to_user(messageable, player, self.draft.decks[player.id], False)
-                content = generate_file_content(self.draft.decks[player.id])
+                content = generate_file_content(self.draft.deck_of(player.id))
                 file=BytesIO(bytes(content, 'utf-8'))
                 await player.send(content="Your picks", file=File(fp=file, filename="picks.txt"))
             self.players.clear()
             self.started = False
 
 
-async def send_cards_to_user(messageable, user, cards, pickable=True):
-    async with messageable.typing():
-        print(numpy.array(cards))
-        list = numpy.array_split(numpy.array(cards),[5,10]) #split at positions 5 and 10, defaulting to empty arrays
-        i = 1
-        for l in list:
-            if l is not None and len(l)>0:
-                image_file = await image_fetcher.download_image_async(l)
-                await send_image_with_retry(user, image_file)
-                if pickable:
-                    message = await user.send("{i}. Click a number below or type >pick <card name>".format(i=i))
+    async def send_packs_to_player(self, messageable, player_id):
+        async with messageable.typing():
+            cards = self.draft.pack_of(player_id).cards
+            print(numpy.array(cards))
+            list = numpy.array_split(numpy.array(cards),[5,10]) #split at positions 5 and 10, defaulting to empty arrays
+            i = 1
+            for l in list:
+                if l is not None and len(l)>0:
+                    image_file = await image_fetcher.download_image_async(l)
+                    await send_image_with_retry(messageable, image_file)
+                    message = await messageable.send("{i}. Click a number below or type >pick <card name>".format(i=i))
+                    self.messages_by_player[player_id].append(message)
                     i += 1
                     for j in range(1,len(l)+1):
                         await message.add_reaction(EMOJIS_BY_NUMBER[j])

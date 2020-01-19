@@ -8,7 +8,7 @@ PickReturn = Enum('PickReturn', 'pick_error, in_progress, next_booster, finished
 class Draft:
 
 	NUMBER_OF_BOOSTERS = 1
-	BOOSTER_SIZE = 25
+	BOOSTER_SIZE = 15
 	FILE_NAME = 'EternalPennyDreadfulCube.txt'
 
 	def __init__(self, players, file_name=FILE_NAME):
@@ -17,7 +17,13 @@ class Draft:
 		random.shuffle(self.players)
 		self.state = {}
 		self.decks = { player:[] for player in players }
-		
+
+	def pack_of(self, player_id):
+		return self.state[player_id]
+
+	def deck_of(self, player_id):
+		return self.decks[player_id]
+
 	def start(self):
 		self.cards = get_cards(self.file_name)
 		random.shuffle(self.cards)
@@ -76,11 +82,6 @@ class Draft:
 			for i in range(0, len(self.players)-1):
   				self.state[self.players[i]] = self.state[self.players[i+1]]
 			self.state[self.players[-1]] = last
-
-		#self.state = { list(self.players)[i + 1*(-1)^self.booster_number]: self.state[self.players[i]] for i in range(len(self.players)) }
-
-	def show_deck(self, player):
-		return decks[player]
 
 
 def get_cards(file_name):
