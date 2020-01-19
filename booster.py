@@ -4,7 +4,7 @@ class Booster(object):
 		self.cards = cards
 	
 	def __str__(self):
-		return self.cards.__str__()
+		return ", ".join(self.cards)
 		
 	def __repr__(self):
 		return self.cards.__repr__()
