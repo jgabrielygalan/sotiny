@@ -113,7 +113,7 @@ def save_composite_image(in_filepaths, out_filepath: str) -> None:
         x_offset += image.size[0]
     for i in range(len(images), 5):
         new_image.paste(CARD_BACK, (x_offset, 0))
-        x_offset += image.size[0]
+        x_offset += CARD_BACK.size[0]
 
     new_image.save(out_filepath)
 

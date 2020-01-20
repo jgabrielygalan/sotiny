@@ -1,13 +1,9 @@
 #sotiny.py
 
 import os
-import random
 
-from draft import Draft
 from draft_cog import DraftCog
 from image_cog import ImageCog
-
-CUBE_CARDS = 'EternalPennyDreadfulCube.txt'
 
 from dotenv import load_dotenv
 
@@ -15,8 +11,6 @@ from discord.ext import commands
 
 load_dotenv()
 TOKEN = os.getenv('DISCORD_TOKEN')
-GUILD = os.getenv('DISCORD_GUILD')
-
 
 bot = commands.Bot(command_prefix='>')
 
