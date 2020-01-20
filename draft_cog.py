@@ -35,9 +35,9 @@ class DraftCog(commands.Cog):
     @commands.command(name='players', help='List registered players for the next draft')
     async def players(self, ctx):
         if self.started:
-            await ctx.send("Draft in progress. Players: {p}".format(p=[p.display_name for p in self.players.values()]))
+            await ctx.send("Draft in progress. Players: {p}".format(p=", ".join([p.display_name for p in self.players.values()])))
         else:
-            await ctx.send("{p} are registered for the next draft".format(p=[p.display_name for p in self.players.values()]))
+            await ctx.send("{p} are registered for the next draft".format(p=", ".join([p.display_name for p in self.players.values()])))
 
     @commands.command(name='start', help="Start the draft with the current self.players")
     async def start(self, ctx):
@@ -55,7 +55,7 @@ class DraftCog(commands.Cog):
             for p in self.players.values():
                 self.messages_by_player[p.id] = []
                 await p.send("Draft has started. Here is your first pack. Type: >pick <cardname> to make your pick")
-                await self.send_packs_to_player(ctx, p.id)
+                await self.send_packs_to_player(p, p.id)
 
 
     @commands.command(name='pick', help='Pick a card from the booster')
@@ -97,7 +97,7 @@ class DraftCog(commands.Cog):
                 await player.send("Your picks: ")
                 await player.send(", ".join(self.draft.deck_of(player.id)))
                 await player.send("Next pack:")
-                await self.send_packs_to_player(messageable, player.id)
+                await self.send_packs_to_player(player, player.id)
         else:
             for player in self.players.values():
                 await player.send("The draft finished. Your picks: ")
