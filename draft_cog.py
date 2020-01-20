@@ -49,13 +49,13 @@ class DraftCog(commands.Cog):
             await ctx.send("Can't start the draft, there are no registered players")
             return
         self.started = True
-        await ctx.send("Starting the draft with {p}".format(p=[p.mention for p in self.players.values()]))
+        await ctx.send("Starting the draft with {p}".format(p=[p.display_name for p in self.players.values()]))
         async with ctx.typing():
             self.draft = Draft(list(self.players.keys()))
             self.draft.start()
             for p in self.players.values():
-                self.messages_by_player[p.id] = []
-            intro = "Draft has started. Here is your first pack. Type: >pick <cardname> to make your pick"
+                self.messages_by_player[p.id] = {}
+            intro = "Draft has started. Here is your first pack. Click on the numbers below the cards or type: _>pick <cardname>_ to make your pick"
             await asyncio.gather(*[self.send_packs_to_player(intro, p, p.id) for p in self.players.values()])
 
 
@@ -76,19 +76,21 @@ class DraftCog(commands.Cog):
             await author.send("You are not registered for the current draft")
             return
 
-        print("Reacted to: {m}".format(m=reaction.message.content))
-        page_number = int(re.search(r'^(1|2|3)', reaction.message.content).group(1))
-        item_number = NUMBERS_BY_EMOJI[reaction.emoji]
-        print("User {u} reacted with {n} to message {i}".format(u=author.name, n=item_number, i=page_number))
-        state = self.draft.pick(author.id, position=item_number+(5*(page_number-1)))
-        await self.handle_pick_response(state, reaction.message.channel, author.id)
+        if reaction.message.id in self.messages_by_player[author.id]:
+            page_number = self.messages_by_player[author.id][reaction.message.id]["row"]
+            item_number = NUMBERS_BY_EMOJI[reaction.emoji]
+            print("User {u} reacted with {n} to message {i}".format(u=author.name, n=item_number, i=page_number))
+            state = self.draft.pick(author.id, position=item_number+(5*(page_number-1)))
+            await self.handle_pick_response(state, reaction.message.channel, author.id)
+        else:
+            print("Discarded reaction: {m}".format(m=reaction.message))
 
     async def handle_pick_response(self, state, messageable, player_id):
         if state == PickReturn.pick_error:
             await messageable.send("That card is not in the booster")
         else:
-            print("Deleting {m}".format(m=self.messages_by_player[player_id]))
-            [await message.delete() for message in self.messages_by_player[player_id]]
+            #print("Deleting {m}".format(m=self.messages_by_player[player_id]))
+            #[await message.delete() for message in self.messages_by_player[player_id].values()]
             self.messages_by_player[player_id].clear()
 
             if state == PickReturn.in_progress:
@@ -115,9 +117,9 @@ class DraftCog(commands.Cog):
             for l in list:
                 if l is not None and len(l)>0:
                     image_file = await image_fetcher.download_image_async(l)
-                    message = await send_image_with_retry(messageable, image_file, f"{i}")
+                    message = await send_image_with_retry(messageable, image_file)
                     #message = await messageable.send("")
-                    self.messages_by_player[player_id].append(message)
+                    self.messages_by_player[player_id][message.id] = {"row": i, "message": message}
                     i += 1
                     for j in range(1,len(l)+1):
                         await message.add_reaction(EMOJIS_BY_NUMBER[j])
