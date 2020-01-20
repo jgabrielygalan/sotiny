@@ -7,6 +7,8 @@ import re
 import unicodedata
 import urllib.request
 
+CARD_BACK=Image.open("./card_back.jpg")
+
 
 class FetchException(Exception):
     pass
@@ -95,18 +97,24 @@ def acceptable_file(filepath: str) -> bool:
     return os.path.isfile(filepath) and os.path.getsize(filepath) > 1000
 
 def save_composite_image(in_filepaths, out_filepath: str) -> None:
+    # Scryfall images are 480x680, so we resize them to height 445, then force an image of 5 cards wide.
     images = list(map(Image.open, in_filepaths))
     for image in images:
-        aspect_ratio = image.width / image.height
-        image.thumbnail([aspect_ratio * 445, 445])
+        aspect_ratio = image.width / image.height       # (0.7059 for 480x680)
+        image.thumbnail([aspect_ratio * 445, 445])      # (314.1255x445)
     widths, heights = zip(*(i.size for i in images))
-    total_width = sum(widths)
+    #total_width = sum(widths)
     max_height = max(heights)
-    new_image = Image.new('RGB', (total_width, max_height))
+    #new_image = Image.new('RGB', (total_width, max_height))
+    new_image = Image.new('RGB', (1571, max_height)) # 5 cards wide: 314.1255*5
     x_offset = 0
     for image in images:
         new_image.paste(image, (x_offset, 0))
         x_offset += image.size[0]
+    for i in range(len(images), 5):
+        new_image.paste(CARD_BACK, (x_offset, 0))
+        x_offset += image.size[0]
+
     new_image.save(out_filepath)
 
 def escape(str_input: str, skip_double_slash: bool = False) -> str:
