@@ -7,6 +7,8 @@ from discord.ext import commands
 from draft import Draft
 from draft import PickReturn
 from discord import File
+from discord import utils
+from discord import Member
 import image_fetcher
 
 
@@ -20,6 +22,18 @@ class DraftCog(commands.Cog):
         self.players = {}
         self.started = False
         self.messages_by_player = {}
+        self.guilds_with_role = {}
+        self.member_guilds = {}
+
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print("Bot is ready (from the Cog)")
+        for guild in self.bot.guilds:
+            print("{n}: {r}".format(n=guild.name, r=guild.roles))
+            role = utils.find(lambda m: m.name == 'CubeDrafter', guild.roles)
+            if role:
+                print("Guild {n} has the CubeDrafter role".format(n=guild.name))
+                self.guilds_with_role[guild.id] = role
 
     @commands.command(name='play', help='Register to play a draft')
     async def play(self, ctx):
@@ -30,6 +44,9 @@ class DraftCog(commands.Cog):
         if player.id not in self.players:
             self.players[player.id] = player
             await ctx.send("{mention}, I have registered you for the next draft".format(mention=ctx.author.mention))
+            if isinstance(player, Member):
+                self.member_guilds[player.id] = player.guild.id
+                await player.add_roles(self.guilds_with_role[player.guild.id])
         else:
             await ctx.send("{mention}, you are already registered for the next draft".format(mention=ctx.author.mention))
 
@@ -38,7 +55,7 @@ class DraftCog(commands.Cog):
         if self.started:
             await ctx.send("Draft in progress. Players: {p}".format(p=", ".join([p.display_name for p in self.players.values()])))
         else:
-            await ctx.send("{p} are registered for the next draft".format(p=", ".join([p.display_name for p in self.players.values()])))
+            await ctx.send("The following players are registered for the next draft: {p}".format(p=", ".join([p.display_name for p in self.players.values()])))
 
     @commands.command(name='start', help="Start the draft with the current self.players")
     async def start(self, ctx):
@@ -73,7 +90,6 @@ class DraftCog(commands.Cog):
         if author == self.bot.user:
             return
         if author.id not in self.players:
-            await author.send("You are not registered for the current draft")
             return
 
         if reaction.message.id in self.messages_by_player[author.id]:
@@ -105,6 +121,8 @@ class DraftCog(commands.Cog):
                     await player.send(content="Your picks", file=File(fp=file, filename="picks.txt"))
                 self.players.clear()
                 self.started = False
+                if isinstance(player, Member) and utils.find(lambda m: m.name == 'CubeDrafter', player.roles):
+                    await player.remove_roles(self.guilds_with_role[self.member_guilds[player.id]])
 
 
     async def send_packs_to_player(self, intro, messageable, player_id):

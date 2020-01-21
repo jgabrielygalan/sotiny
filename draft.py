@@ -8,7 +8,7 @@ PickReturn = Enum('PickReturn', 'pick_error, in_progress, next_booster, finished
 class Draft:
 
 	NUMBER_OF_BOOSTERS = 1
-	BOOSTER_SIZE = 15
+	BOOSTER_SIZE = 2
 	FILE_NAME = 'EternalPennyDreadfulCube.txt'
 
 	def __init__(self, players, file_name=FILE_NAME):
