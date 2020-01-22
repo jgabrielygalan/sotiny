@@ -1,5 +1,6 @@
 images
 # ignore environment variables
 .env
+config.json
 
 __pycache__

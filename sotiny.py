@@ -1,16 +1,15 @@
 #sotiny.py
 
 import os
+import json
 
 from draft_cog import DraftCog
 from image_cog import ImageCog
 
-from dotenv import load_dotenv
-
 from discord.ext import commands
 
-load_dotenv()
-TOKEN = os.getenv('DISCORD_TOKEN')
+cfg = json.load(open('config.json'))
+TOKEN = cfg['DISCORD_TOKEN']
 
 bot = commands.Bot(command_prefix='>')
 
