@@ -60,13 +60,13 @@ class DraftCog(commands.Cog):
     @commands.command(name='start', help="Start the draft with the current self.players")
     async def start(self, ctx):
         if self.started:
-            await ctx.send("Draft already start. Players: {p}".format(p=[p.display_name for p in self.players.values()]))
+            await ctx.send("Draft already started. Players: {p}".format(p=[p.display_name for p in self.players.values()]))
             return
         if len(self.players) == 0:
             await ctx.send("Can't start the draft, there are no registered players")
             return
         self.started = True
-        await ctx.send("Starting the draft with {p}".format(p=[p.display_name for p in self.players.values()]))
+        await ctx.send("Starting the draft with {p}".format(p=", ".join([p.display_name for p in self.players.values()])))
         async with ctx.typing():
             self.draft = Draft(list(self.players.keys()))
             self.draft.start()
