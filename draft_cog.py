@@ -1,176 +1,102 @@
-import asyncio
-import numpy
-import re
-import tempfile
-from io import BytesIO
 from discord.ext import commands
-from draft import Draft
-from draft import PickReturn
-from discord import File
-from discord import utils
-from discord import Member
-import image_fetcher
+from draft_guild import DraftGuild
+import inspect
 
 
-EMOJIS_BY_NUMBER = {1 : '1⃣', 2 : '2⃣', 3 : '3⃣', 4 : '4⃣', 5 : '5⃣'}
-NUMBERS_BY_EMOJI = {'1⃣' : 1, '2⃣' : 2, '3⃣' : 3, '4⃣' : 4, '5⃣' : 5}
+def inject_draft_guild(func):
+    async def decorator(self, ctx, *args, **kwargs):
+        if not ctx.guild:
+            print("Context doesn't have a guild")
+            return
+
+        draft_guild = self.guilds_by_id[ctx.guild.id]
+        print(f"Found guild: {draft_guild}")
+        await func(self, draft_guild, ctx, *args, **kwargs)
+
+    decorator.__name__ = func.__name__
+    sig = inspect.signature(func)
+    decorator.__signature__ = sig.replace(parameters=tuple(sig.parameters.values())[1:])  # from ctx onward
+    return decorator
 
 
 class DraftCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
-        self.players = {}
-        self.started = False
-        self.messages_by_player = {}
-        self.guilds_with_role = {}
-        self.member_guilds = {}
+        self.guilds_by_id = {}
 
     @commands.Cog.listener()
     async def on_ready(self):
         print("Bot is ready (from the Cog)")
         for guild in self.bot.guilds:
-            print("{n}: {r}".format(n=guild.name, r=guild.roles))
-            role = utils.find(lambda m: m.name == 'CubeDrafter', guild.roles)
-            if role:
-                print("Guild {n} has the CubeDrafter role".format(n=guild.name))
-                self.guilds_with_role[guild.id] = role
+            print("Ready on guild: {n}".format(n=guild.name))
+            if not guild.id in self.guilds_by_id:
+                self.guilds_by_id[guild.id] = DraftGuild(guild)
+
+    @commands.Cog.listener()
+    async def on_guild_join(self, guild):
+        print("Joined {n}: {r}".format(n=guild.name, r=guild.roles))
+        if not guild.id in self.guilds_by_id:
+            self.guilds_by_id[guild.id] = DraftGuild(guild)
+
+    @commands.Cog.listener()
+    async def on_guild_remove(self, guild):
+        print("Removed from {n}: {r}".format(n=guild.name))
+        if guild.id in self.guilds_by_id:
+            del self.guilds_by_id[guild.id]
 
     @commands.command(name='play', help='Register to play a draft')
-    async def play(self, ctx):
+    @inject_draft_guild
+    async def play(self, draft_guild, ctx):
         player = ctx.author
-        if self.started:
+        if draft_guild.is_started():
             await ctx.send("A draft is already in progress. Try later when it's over")
             return
-        if player.id not in self.players:
-            self.players[player.id] = player
+        if draft_guild.player_not_playing(player):
+            print(f"{player.display_name} is not playing, registering")
+            await draft_guild.add_player(player)
             await ctx.send("{mention}, I have registered you for the next draft".format(mention=ctx.author.mention))
-            if isinstance(player, Member):
-                self.member_guilds[player.id] = player.guild.id
-                await player.add_roles(self.guilds_with_role[player.guild.id])
         else:
+            print(f"{player.display_name} is already playing, not registering")
             await ctx.send("{mention}, you are already registered for the next draft".format(mention=ctx.author.mention))
 
     @commands.command(name='players', help='List registered players for the next draft')
-    async def players(self, ctx):
-        if self.started:
-            await ctx.send("Draft in progress. Players: {p}".format(p=", ".join([p.display_name for p in self.players.values()])))
+    @inject_draft_guild
+    async def players(self, draft_guild, ctx):
+        if draft_guild.is_started():
+            await ctx.send("Draft in progress. Players: {p}".format(p=", ".join([p.display_name for p in draft_guild.get_players()])))
         else:
-            await ctx.send("The following players are registered for the next draft: {p}".format(p=", ".join([p.display_name for p in self.players.values()])))
+            await ctx.send("The following players are registered for the next draft: {p}".format(p=", ".join([p.display_name for p in draft_guild.get_players()])))
 
     @commands.command(name='start', help="Start the draft with the current self.players")
-    async def start(self, ctx):
-        if self.started:
-            await ctx.send("Draft already started. Players: {p}".format(p=[p.display_name for p in self.players.values()]))
+    @inject_draft_guild
+    async def start(self, draft_guild, ctx):
+        if draft_guild.is_started():
+            await ctx.send("Draft already started. Players: {p}".format(p=[p.display_name for p in draft_guild.get_players()]))
             return
-        if len(self.players) == 0:
+        if draft_guild.is_empty():
             await ctx.send("Can't start the draft, there are no registered players")
             return
-        self.started = True
-        await ctx.send("Starting the draft with {p}".format(p=", ".join([p.display_name for p in self.players.values()])))
         async with ctx.typing():
-            self.draft = Draft(list(self.players.keys()))
-            self.draft.start()
-            for p in self.players.values():
-                self.messages_by_player[p.id] = {}
-            intro = "Draft has started. Here is your first pack. Click on the numbers below the cards or type: _>pick <cardname>_ to make your pick"
-            await asyncio.gather(*[self.send_packs_to_player(intro, p, p.id) for p in self.players.values()])
+            await draft_guild.start(ctx)
 
 
     @commands.command(name='pick', help='Pick a card from the booster')
     async def pick(self, ctx, *, card):
-        if ctx.author.id not in self.players:
-            await ctx.send("You are not registered for the current draft")
+        draft = next((x for x in self.guilds_by_id.values() if x.has_player(ctx.author.id)), None)
+        if draft is None:
+            await ctx.send("You are not registered for a draft")
             return
 
-        state = self.draft.pick(ctx.author.id, card_name=card)
-        await self.handle_pick_response(state, ctx, ctx.author.id)
+        await draft.pick(ctx.author.id, card_name=card)
 
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, author) -> None:
         if author == self.bot.user:
             return
-        if author.id not in self.players:
-            return
-
-        if reaction.message.id in self.messages_by_player[author.id]:
-            page_number = self.messages_by_player[author.id][reaction.message.id]["row"]
-            item_number = NUMBERS_BY_EMOJI[reaction.emoji]
-            print("User {u} reacted with {n} to message {i}".format(u=author.name, n=item_number, i=page_number))
-            state = self.draft.pick(author.id, position=item_number+(5*(page_number-1)))
-            await self.handle_pick_response(state, reaction.message.channel, author.id)
-        else:
+        draft = next((x for x in self.guilds_by_id.values() if x.has_message(reaction.message.id)), None)
+        if draft is None:
             print("Discarded reaction: {m}".format(m=reaction.message))
+            return 
 
-    async def handle_pick_response(self, state, messageable, player_id):
-        if state == PickReturn.pick_error:
-            await messageable.send("That card is not in the booster")
-        else:
-            #print("Deleting {m}".format(m=self.messages_by_player[player_id]))
-            #[await message.delete() for message in self.messages_by_player[player_id].values()]
-            self.messages_by_player[player_id].clear()
+        await draft.pick(author.id, message_id=reaction.message.id, emoji=reaction.emoji)
 
-            if state == PickReturn.in_progress:
-                await messageable.send("Waiting for other players to make their picks")
-            elif state == PickReturn.next_booster:
-                await asyncio.gather(*[self.send_packs_to_player("Your picks: \n{picks}\nNext pack:".format(picks=", ".join(self.draft.deck_of(p.id))), p, p.id) for p in self.players.values()])
-            else:
-                for player in self.players.values():
-                    await player.send("The draft finished")
-                    content = generate_file_content(self.draft.deck_of(player.id))
-                    file=BytesIO(bytes(content, 'utf-8'))
-                    await player.send(content="Your picks", file=File(fp=file, filename="picks.txt"))
-                self.players.clear()
-                self.started = False
-                if isinstance(player, Member) and utils.find(lambda m: m.name == 'CubeDrafter', player.roles):
-                    await player.remove_roles(self.guilds_with_role[self.member_guilds[player.id]])
-
-
-    async def send_packs_to_player(self, intro, messageable, player_id):
-        async with messageable.typing():
-            await messageable.send(intro)
-            cards = self.draft.pack_of(player_id).cards
-            print(numpy.array(cards))
-            list = numpy.array_split(numpy.array(cards),[5,10]) #split at positions 5 and 10, defaulting to empty arrays
-            i = 1
-            for l in list:
-                if l is not None and len(l)>0:
-                    image_file = await image_fetcher.download_image_async(l)
-                    message = await send_image_with_retry(messageable, image_file)
-                    #message = await messageable.send("")
-                    self.messages_by_player[player_id][message.id] = {"row": i, "message": message}
-                    i += 1
-                    for j in range(1,len(l)+1):
-                        await message.add_reaction(EMOJIS_BY_NUMBER[j])
-
-async def send_image_with_retry(user, image_file: str, text: str = '') -> None:
-    message = await send(user, file=File(image_file), content=text)
-    if message and message.attachments and message.attachments[0].size == 0:
-        print('Message size is zero so resending')
-        await message.delete()
-        message = await send(user, file=File(image_file), content=text)
-    return message
-
-async def send(user, content: str, file = None):
-    new_s = escape_underscores(content)
-    return await user.send(file=file, content=new_s)
-
-def escape_underscores(s: str) -> str:
-    new_s = ''
-    in_url, in_emoji = False, False
-    for char in s:
-        if char == ':':
-            in_emoji = True
-        elif char not in 'abcdefghijklmnopqrstuvwxyz_':
-            in_emoji = False
-        if char == '<':
-            in_url = True
-        elif char == '>':
-            in_url = False
-        if char == '_' and not in_url and not in_emoji:
-            new_s += '\\_'
-        else:
-            new_s += char
-    return new_s
-
-def generate_file_content(cards):
-    return "\n".join(["1 {c}".format(c=card) for card in cards])
