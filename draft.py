@@ -24,9 +24,9 @@ class Draft:
 	def deck_of(self, player_id):
 		return self.decks[player_id]
 
-	def start(self, number_of_packs=NUMBER_OF_BOOSTERS, cards_per_booster=BOOSTER_SIZE):
-		self.number_of_packs = number_of_packs
-		self.cards_per_booster = cards_per_booster
+	def start(self, number_of_packs, cards_per_booster):
+		self.number_of_packs = safe_cast(number_of_packs, int, Draft.NUMBER_OF_BOOSTERS)
+		self.cards_per_booster = safe_cast(cards_per_booster, int, Draft.BOOSTER_SIZE)
 		self.cards = get_cards(self.file_name)
 		random.shuffle(self.cards)
 		self.booster_number = 0
@@ -92,6 +92,12 @@ def get_cards(file_name):
 
 	return read_cards
 
+
+def safe_cast(val, to_type, default=None):
+    try:
+        return to_type(val)
+    except (ValueError, TypeError):
+        return default
 
 def main():
 	players = ['a', 'b', 'c', 'd']

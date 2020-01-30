@@ -69,7 +69,7 @@ class DraftCog(commands.Cog):
 
     @commands.command(name='start', help="Start the draft with the current self.players")
     @inject_draft_guild
-    async def start(self, draft_guild, ctx, packs:int=None, cards:int=None):
+    async def start(self, draft_guild, ctx, packs=None, cards=None):
         print(f"Start received {type(packs)} {type(cards)}")
         if draft_guild.is_started():
             await ctx.send("Draft already started. Players: {p}".format(p=[p.display_name for p in draft_guild.get_players()]))
