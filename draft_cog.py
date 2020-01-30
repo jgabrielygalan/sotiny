@@ -69,7 +69,8 @@ class DraftCog(commands.Cog):
 
     @commands.command(name='start', help="Start the draft with the current self.players")
     @inject_draft_guild
-    async def start(self, draft_guild, ctx):
+    async def start(self, draft_guild, ctx, packs:int=None, cards:int=None):
+        print(f"Start received {type(packs)} {type(cards)}")
         if draft_guild.is_started():
             await ctx.send("Draft already started. Players: {p}".format(p=[p.display_name for p in draft_guild.get_players()]))
             return
@@ -77,7 +78,7 @@ class DraftCog(commands.Cog):
             await ctx.send("Can't start the draft, there are no registered players")
             return
         async with ctx.typing():
-            await draft_guild.start(ctx)
+            await draft_guild.start(ctx, packs, cards)
 
 
     @commands.command(name='pick', help='Pick a card from the booster')
