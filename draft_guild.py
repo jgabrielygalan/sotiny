@@ -1,3 +1,4 @@
+import aiohttp
 import asyncio
 from io import BytesIO
 from draft import Draft
@@ -6,10 +7,15 @@ import image_fetcher
 import numpy
 from draft import PickReturn
 from discord import utils
+import urllib.request
 
 EMOJIS_BY_NUMBER = {1 : '1⃣', 2 : '2⃣', 3 : '3⃣', 4 : '4⃣', 5 : '5⃣'}
 NUMBERS_BY_EMOJI = {'1⃣' : 1, '2⃣' : 2, '3⃣' : 3, '4⃣' : 4, '5⃣' : 5}
  
+class FetchException(Exception):
+    pass
+
+
 class DraftGuild:
     def __init__(self, guild):
         self.players = {}
@@ -45,10 +51,11 @@ class DraftGuild:
         if self.role is not None:
             await player.add_roles(self.role)
 
-    async def start(self, ctx, packs, cards):
+    async def start(self, ctx, packs, cards, cube):
         self.started = True
-        self.draft = Draft(list(self.players.keys()))
-        self.draft.start(packs, cards)
+        card_list = await get_card_list(cube)
+        self.draft = Draft(list(self.players.keys()), card_list)
+        self.draft.start(packs, cards,cube)
         for p in self.players.values():
             self.messages_by_player[p.id] = {}
         await ctx.send("Starting the draft with {p}".format(p=", ".join([p.display_name for p in self.get_players()])))
@@ -148,3 +155,29 @@ def escape_underscores(s: str) -> str:
 
 def generate_file_content(cards):
     return "\n".join(["1 {c}".format(c=card) for card in cards])
+
+async def fetch(session, url):
+    async with session.get(url) as response:
+        return await response.text()
+
+async def get_card_list(cube_name):
+    if cube_name is None:
+        return get_cards()
+    url = f'https://cubecobra.com/cube/api/cubelist/{cube_name}'
+    print(f'Async fetching {url}')
+    try:
+        async with aiohttp.ClientSession() as aios:
+            response = (await fetch(aios, url)).split("\n")
+            print(response)
+            print(f"{type(response)}")
+            return response
+    # type: ignore # urllib isn't fully stubbed
+    except (urllib.error.HTTPError, aiohttp.ClientError) as e:
+        raise FetchException(e)
+
+
+def get_cards(file_name='EternalPennyDreadfulCube.txt'):
+	with open(file_name) as f:
+		read_cards = f.read().splitlines()
+
+	return read_cards
