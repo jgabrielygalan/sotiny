@@ -67,9 +67,9 @@ class DraftCog(commands.Cog):
         else:
             await ctx.send("The following players are registered for the next draft: {p}".format(p=", ".join([p.display_name for p in draft_guild.get_players()])))
 
-    @commands.command(name='start', help="Start the draft with the current self.players")
+    @commands.command(name='start', help="Start the draft with the registered players. Packs is the number of packs to open per player (default 3). cards is the number of cards per booster (default 15). cube is the CubeCobra id of a Cube (default Penny Dreadful Eternal Cube).")
     @inject_draft_guild
-    async def start(self, draft_guild, ctx, packs=None, cards=None):
+    async def start(self, draft_guild, ctx, packs=None, cards=None, cube=None):
         print(f"Start received {type(packs)} {type(cards)}")
         if draft_guild.is_started():
             await ctx.send("Draft already started. Players: {p}".format(p=[p.display_name for p in draft_guild.get_players()]))
@@ -78,7 +78,7 @@ class DraftCog(commands.Cog):
             await ctx.send("Can't start the draft, there are no registered players")
             return
         async with ctx.typing():
-            await draft_guild.start(ctx, packs, cards)
+            await draft_guild.start(ctx, packs, cards, cube)
 
 
     @commands.command(name='pick', help='Pick a card from the booster')
