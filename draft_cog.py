@@ -1,6 +1,7 @@
 from discord.ext import commands
 from draft_guild import DraftGuild
 import inspect
+from cog_exceptions import UserFeedbackException
 
 
 def inject_draft_guild(func):
@@ -18,11 +19,17 @@ def inject_draft_guild(func):
     decorator.__signature__ = sig.replace(parameters=tuple(sig.parameters.values())[1:])  # from ctx onward
     return decorator
 
-
 class DraftCog(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.guilds_by_id = {}
+
+    async def cog_command_error(self, ctx, error):
+        print(error)
+        if isinstance(error, UserFeedbackException):
+            await ctx.send(f"{ctx.author.mention}: {error}")
+        else:
+            await ctx.send("There was an error processing your command")
 
     @commands.Cog.listener()
     async def on_ready(self):
