@@ -8,6 +8,7 @@ import numpy
 from draft import PickReturn
 from discord import utils
 import urllib.request
+from cog_exceptions import UserFeedbackException
 
 EMOJIS_BY_NUMBER = {1 : '1⃣', 2 : '2⃣', 3 : '3⃣', 4 : '4⃣', 5 : '5⃣'}
 NUMBERS_BY_EMOJI = {'1⃣' : 1, '2⃣' : 2, '3⃣' : 3, '4⃣' : 4, '5⃣' : 5}
@@ -158,6 +159,8 @@ def generate_file_content(cards):
 
 async def fetch(session, url):
     async with session.get(url) as response:
+        if response.status >= 400:
+            raise UserFeedbackException(f"Unable to load cube list from {url}")
         return await response.text()
 
 async def get_card_list(cube_name):
@@ -172,8 +175,8 @@ async def get_card_list(cube_name):
             print(f"{type(response)}")
             return response
     # type: ignore # urllib isn't fully stubbed
-    except (urllib.error.HTTPError, aiohttp.ClientError) as e:
-        raise FetchException(e)
+    except (urllib.error.HTTPError, aiohttp.ClientError):
+        raise UserFeedbackException(f"Unable to load cube list from {url}")
 
 
 def get_cards(file_name='EternalPennyDreadfulCube.txt'):
