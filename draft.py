@@ -24,7 +24,9 @@ class Draft:
 	def deck_of(self, player_id):
 		return self.decks[player_id]
 
-	def start(self):
+	def start(self, number_of_packs, cards_per_booster):
+		self.number_of_packs = safe_cast(number_of_packs, int, Draft.NUMBER_OF_BOOSTERS)
+		self.cards_per_booster = safe_cast(cards_per_booster, int, Draft.BOOSTER_SIZE)
 		self.cards = get_cards(self.file_name)
 		random.shuffle(self.cards)
 		self.booster_number = 0
@@ -33,7 +35,7 @@ class Draft:
 
 	def open_boosters(self):
 		for player in self.players:
-			card_list = [self.cards.pop() for _ in range(0,self.BOOSTER_SIZE)]
+			card_list = [self.cards.pop() for _ in range(0,self.cards_per_booster)]
 			self.state[player] = Booster(card_list)
 		self.booster_number += 1
 		print("Opening pack {num}".format(num=self.booster_number))
@@ -62,7 +64,7 @@ class Draft:
 				print("pass booster")
 				self.pass_boosters()
 				return PickReturn.next_booster
-			elif self.booster_number < self.NUMBER_OF_BOOSTERS:
+			elif self.booster_number < self.number_of_packs:
 				print("open new booster")
 				self.open_boosters()
 				return PickReturn.next_booster
@@ -90,6 +92,12 @@ def get_cards(file_name):
 
 	return read_cards
 
+
+def safe_cast(val, to_type, default=None):
+    try:
+        return to_type(val)
+    except (ValueError, TypeError):
+        return default
 
 def main():
 	players = ['a', 'b', 'c', 'd']

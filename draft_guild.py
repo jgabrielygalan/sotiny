@@ -45,10 +45,10 @@ class DraftGuild:
         if self.role is not None:
             await player.add_roles(self.role)
 
-    async def start(self, ctx):
+    async def start(self, ctx, packs, cards):
         self.started = True
         self.draft = Draft(list(self.players.keys()))
-        self.draft.start()
+        self.draft.start(packs, cards)
         for p in self.players.values():
             self.messages_by_player[p.id] = {}
         await ctx.send("Starting the draft with {p}".format(p=", ".join([p.display_name for p in self.get_players()])))
