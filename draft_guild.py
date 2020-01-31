@@ -1,14 +1,15 @@
 import aiohttp
 import asyncio
 from io import BytesIO
+import discord
 from draft import Draft
 from discord import File
 import image_fetcher
 import numpy
 from draft import PickReturn
-from discord import utils
 import urllib.request
 from cog_exceptions import UserFeedbackException
+import utils
 
 EMOJIS_BY_NUMBER = {1 : '1⃣', 2 : '2⃣', 3 : '3⃣', 4 : '4⃣', 5 : '5⃣'}
 NUMBERS_BY_EMOJI = {'1⃣' : 1, '2⃣' : 2, '3⃣' : 3, '4⃣' : 4, '5⃣' : 5}
@@ -53,8 +54,9 @@ class DraftGuild:
             await player.add_roles(self.role)
 
     async def start(self, ctx, packs, cards, cube):
-        self.started = True
+        validate_start_input(packs, cards)
         card_list = await get_card_list(cube)
+        self.started = True
         self.draft = Draft(list(self.players.keys()), card_list)
         self.draft.start(packs, cards,cube)
         for p in self.players.values():
@@ -109,14 +111,22 @@ class DraftGuild:
                     content = generate_file_content(self.draft.deck_of(player.id))
                     file=BytesIO(bytes(content, 'utf-8'))
                     await player.send(content="Your picks", file=File(fp=file, filename="picks.txt"))
-                    if utils.find(lambda m: m.name == 'CubeDrafter', player.roles):
+                    if discord.utils.find(lambda m: m.name == 'CubeDrafter', player.roles):
                         await player.remove_roles(self.role)
                 self.players.clear()
                 self.started = False
 
 
+def validate_start_input(packs, cards):
+    packs_valid = utils.safe_cast(packs, int, 0)
+    if packs_valid <= 0:
+        raise UserFeedbackException("packs should be a number greater than 0")
+    cards_valid = utils.safe_cast(cards, int, 0)
+    if cards_valid <= 0:
+        raise UserFeedbackException("cards should be a number greater than 0")
+
 def get_cubedrafter_role(guild):
-    role = utils.find(lambda m: m.name == 'CubeDrafter', guild.roles)
+    role = discord.utils.find(lambda m: m.name == 'CubeDrafter', guild.roles)
     if role:
         print("Guild {n} has the CubeDrafter role with id: {i}".format(n=guild.name,i=role.id))
     else:

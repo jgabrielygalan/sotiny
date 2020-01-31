@@ -4,3 +4,4 @@ images
 config.json
 
 __pycache__
+.vscode

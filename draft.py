@@ -1,6 +1,7 @@
 from enum import Enum
 import random
 from booster import Booster
+import utils
 
 PickReturn = Enum('PickReturn', 'pick_error, in_progress, next_booster, finished')
 
@@ -24,8 +25,8 @@ class Draft:
 		return self.decks[player_id]
 
 	def start(self, number_of_packs=None, cards_per_booster=None, cube=None):
-		self.number_of_packs = safe_cast(number_of_packs, int, Draft.NUMBER_OF_BOOSTERS)
-		self.cards_per_booster = safe_cast(cards_per_booster, int, Draft.BOOSTER_SIZE)
+		self.number_of_packs = utils.safe_cast(number_of_packs, int, Draft.NUMBER_OF_BOOSTERS)
+		self.cards_per_booster = utils.safe_cast(cards_per_booster, int, Draft.BOOSTER_SIZE)
 		random.shuffle(self.cards)
 		self.booster_number = 0
 		self.open_boosters()
@@ -82,9 +83,3 @@ class Draft:
 			for i in range(0, len(self.players)-1):
   				self.state[self.players[i]] = self.state[self.players[i+1]]
 			self.state[self.players[-1]] = last
-
-def safe_cast(val, to_type, default=None):
-    try:
-        return to_type(val)
-    except (ValueError, TypeError):
-        return default

@@ -32,8 +32,7 @@ async def download_scryfall_image(cards, filepath: str, version: str = '') -> bo
             await download_scryfall_card_image(c, card_filepath, version)
         if acceptable_file(card_filepath):
             image_filepaths.append(card_filepath)
-    if len(image_filepaths) > 1:
-        save_composite_image(image_filepaths, filepath)
+    save_composite_image(image_filepaths, filepath)
     return acceptable_file(filepath)
 
 async def download_scryfall_card_image(c, filepath: str, version: str = '') -> bool:
@@ -111,7 +110,7 @@ def save_composite_image(in_filepaths, out_filepath: str) -> None:
     for image in images:
         new_image.paste(image, (x_offset, 0))
         x_offset += image.size[0]
-    for i in range(len(images), 5):
+    for _ in range(len(images), 5):
         new_image.paste(CARD_BACK, (x_offset, 0))
         x_offset += CARD_BACK.size[0]
 

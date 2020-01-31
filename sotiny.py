@@ -19,6 +19,6 @@ async def on_ready():
 
 
 bot.add_cog(DraftCog(bot))
-bot.add_cog(ImageCog(bot))
+#bot.add_cog(ImageCog(bot))
 bot.run(TOKEN)
 
