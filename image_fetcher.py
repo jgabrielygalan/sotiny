@@ -8,13 +8,14 @@ import unicodedata
 import urllib.request
 
 CARD_BACK=Image.open("./card_back.jpg")
-
+STANDALONE="standalone"
+COMPOSITE="composite"
 
 class FetchException(Exception):
     pass
 
 async def download_image_async(cards):
-    filepath = determine_filepath(cards)
+    filepath = determine_filepath(cards, COMPOSITE)
     if acceptable_file(filepath):
         return filepath
     if await download_scryfall_image(cards, filepath, version='border_crop'):
@@ -27,7 +28,7 @@ async def download_scryfall_image(cards, filepath: str, version: str = '') -> bo
     print(f'Trying to get scryfall images for {card_names}')
     image_filepaths = []
     for c in cards:
-        card_filepath = determine_filepath([c])
+        card_filepath = determine_filepath([c], STANDALONE)
         if not acceptable_file(card_filepath):
             await download_scryfall_card_image(c, card_filepath, version)
         if acceptable_file(card_filepath):
@@ -67,13 +68,13 @@ async def store_async(url: str, path: str) -> aiohttp.ClientResponse:
         raise FetchException(e)
 
 
-def determine_filepath(cards, prefix: str = '') -> str:
+def determine_filepath(cards, type, prefix: str = '') -> str:
     imagename = basename(cards)
     # Hash the filename if it's otherwise going to be too large to use.
     if len(imagename) > 240:
         imagename = hashlib.md5(imagename.encode('utf-8')).hexdigest()
     filename = imagename + '.jpg'
-    directory = "./images"
+    directory = f"./images/{type}"
     return f'{directory}/{prefix}{filename}'
 
 def basename(cards) -> str:
