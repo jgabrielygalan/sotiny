@@ -2,6 +2,12 @@ from discord.ext import commands
 from draft_guild import DraftGuild
 import inspect
 from cog_exceptions import UserFeedbackException
+import traceback
+import utils
+
+
+DEFAULT_PACK_NUMBER = 3
+DEFAULT_CARD_NUMBER = 15
 
 
 def inject_draft_guild(func):
@@ -26,6 +32,7 @@ class DraftCog(commands.Cog):
 
     async def cog_command_error(self, ctx, error):
         print(error)
+        traceback.print_exception(type(error), error, error.__traceback__)
         if isinstance(error, UserFeedbackException):
             await ctx.send(f"{ctx.author.mention}: {error}")
         else:
@@ -72,12 +79,15 @@ class DraftCog(commands.Cog):
         if draft_guild.is_started():
             await ctx.send("Draft in progress. Players: {p}".format(p=", ".join([p.display_name for p in draft_guild.get_players()])))
         else:
-            await ctx.send("The following players are registered for the next draft: {p}".format(p=", ".join([p.display_name for p in draft_guild.get_players()])))
+            players = draft_guild.get_players()
+            if len(players) == 0:
+                await ctx.send("No players registered for the next draft")
+            else:
+                await ctx.send("The following players are registered for the next draft: {p}".format(p=", ".join([p.display_name for p in players])))
 
     @commands.command(name='start', help="Start the draft with the registered players. Packs is the number of packs to open per player (default 3). cards is the number of cards per booster (default 15). cube is the CubeCobra id of a Cube (default Penny Dreadful Eternal Cube).")
     @inject_draft_guild
     async def start(self, draft_guild, ctx, packs=None, cards=None, cube=None):
-        print(f"Start received {type(packs)} {type(cards)}")
         if draft_guild.is_started():
             await ctx.send("Draft already started. Players: {p}".format(p=[p.display_name for p in draft_guild.get_players()]))
             return
@@ -85,6 +95,7 @@ class DraftCog(commands.Cog):
             await ctx.send("Can't start the draft, there are no registered players")
             return
         async with ctx.typing():
+            packs, cards = validate_and_cast_start_input(packs, cards)                
             await draft_guild.start(ctx, packs, cards, cube)
 
 
@@ -108,3 +119,17 @@ class DraftCog(commands.Cog):
 
         await draft.pick(author.id, message_id=reaction.message.id, emoji=reaction.emoji)
 
+
+def validate_and_cast_start_input(packs, cards):
+    if packs is None:
+        packs = DEFAULT_PACK_NUMBER
+    if cards is None:
+        cards = DEFAULT_CARD_NUMBER
+
+    packs_valid = utils.safe_cast(packs, int, 0)
+    if packs_valid <= 0:
+        raise UserFeedbackException("packs should be a number greater than 0")
+    cards_valid = utils.safe_cast(cards, int, 0)
+    if cards_valid <= 0:
+        raise UserFeedbackException("cards should be a number greater than 0")
+    return (packs_valid, cards_valid)

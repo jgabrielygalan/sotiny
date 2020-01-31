@@ -7,10 +7,6 @@ PickReturn = Enum('PickReturn', 'pick_error, in_progress, next_booster, finished
 
 
 class Draft:
-
-	NUMBER_OF_BOOSTERS = 3
-	BOOSTER_SIZE = 15
-
 	def __init__(self, players, card_list):
 		self.cards = card_list
 		self.players = players
@@ -24,9 +20,9 @@ class Draft:
 	def deck_of(self, player_id):
 		return self.decks[player_id]
 
-	def start(self, number_of_packs=None, cards_per_booster=None, cube=None):
-		self.number_of_packs = utils.safe_cast(number_of_packs, int, Draft.NUMBER_OF_BOOSTERS)
-		self.cards_per_booster = utils.safe_cast(cards_per_booster, int, Draft.BOOSTER_SIZE)
+	def start(self, number_of_packs, cards_per_booster, cube=None):
+		self.number_of_packs = number_of_packs
+		self.cards_per_booster = cards_per_booster
 		random.shuffle(self.cards)
 		self.booster_number = 0
 		self.open_boosters()
