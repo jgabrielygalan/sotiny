@@ -89,6 +89,7 @@ class DraftGuild:
                 await send_image_with_retry(messageable, image_file)
 
     async def send_packs_to_player(self, intro, messageable, player_id):
+        self.messages_by_player[player_id].clear()
         async with messageable.typing():
             await messageable.send(intro)
             cards = self.draft.pack_of(player_id).cards
@@ -111,7 +112,6 @@ class DraftGuild:
             await self.players[player_id].send("That card is not in the booster")
         else:
             self.messages_by_player[player_id].clear()
-
             if state == PickReturn.in_progress:
                 pending = self.draft.get_pending_players()
                 players = [self.players[x] for x in pending]

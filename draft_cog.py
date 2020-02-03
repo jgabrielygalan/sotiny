@@ -25,7 +25,7 @@ def inject_draft_guild(func):
     decorator.__signature__ = sig.replace(parameters=tuple(sig.parameters.values())[1:])  # from ctx onward
     return decorator
 
-class DraftCog(commands.Cog):
+class DraftCog(commands.Cog, name="CubeDrafter"):
     def __init__(self, bot):
         self.bot = bot
         self.guilds_by_id = {}
@@ -35,6 +35,8 @@ class DraftCog(commands.Cog):
         traceback.print_exception(type(error), error, error.__traceback__)
         if isinstance(error, UserFeedbackException):
             await ctx.send(f"{ctx.author.mention}: {error}")
+        elif isinstance(error, commands.PrivateMessageOnly):
+            await ctx.send("That command can only be used in Private Message with the bot")
         else:
             await ctx.send("There was an error processing your command")
 
@@ -108,7 +110,8 @@ class DraftCog(commands.Cog):
 
         await draft.pick(ctx.author.id, card_name=card)
 
-    @commands.command(name='picks', help="Show your current picks as a paginated image. Click the arrows for next or previous pages")
+    @commands.dm_only()
+    @commands.command(name='picks', help="Show your current picks as images")
     async def my_picks(self, ctx):
         draft = next((x for x in self.guilds_by_id.values() if x.has_player(ctx.author.id)), None)
         if draft is None:
@@ -116,6 +119,16 @@ class DraftCog(commands.Cog):
             return
 
         await draft.picks(ctx, ctx.author.id)
+
+    @commands.dm_only()
+    @commands.command(name='pack', help="Resend your current pack")
+    async def my_pack(self, ctx):
+        draft = next((x for x in self.guilds_by_id.values() if x.has_player(ctx.author.id)), None)
+        if draft is None:
+            await ctx.send("You are not playing any draft")
+            return
+
+        await draft.send_packs_to_player("Your pack:", ctx, ctx.author.id)
 
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, author) -> None:
