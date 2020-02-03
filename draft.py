@@ -36,6 +36,9 @@ class Draft:
 		print("Opening pack {num}".format(num=self.booster_number))
 		self.picked = []
 
+	def get_pending_players(self):
+		return (set(self.players).difference(set(self.picked)))
+
 	def pick(self, player, card_name=None, position=None):
 		if player not in self.picked:
 			if card_name is not None:
@@ -52,7 +55,6 @@ class Draft:
 			self.picked.append(player)
 		if len(self.picked) == len(self.players):
 			print("all players picked")
-			self.picked = []
 			print(self.players)
 			print(self.state[self.players[0]])
 			if len(self.state[self.players[0]].cards) > 0:
@@ -79,3 +81,4 @@ class Draft:
 			for i in range(0, len(self.players)-1):
   				self.state[self.players[i]] = self.state[self.players[i+1]]
 			self.state[self.players[-1]] = last
+		self.picked = []
