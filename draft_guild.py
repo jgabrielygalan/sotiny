@@ -9,6 +9,7 @@ import numpy
 from draft import PickReturn
 import urllib.request
 from cog_exceptions import UserFeedbackException
+import time
 
 EMOJIS_BY_NUMBER = {1 : '1⃣', 2 : '2⃣', 3 : '3⃣', 4 : '4⃣', 5 : '5⃣'}
 NUMBERS_BY_EMOJI = {'1⃣' : 1, '2⃣' : 2, '3⃣' : 3, '4⃣' : 4, '5⃣' : 5}
@@ -110,7 +111,7 @@ class DraftGuild:
                     await player.send("The draft finished")
                     content = generate_file_content(self.draft.deck_of(player.id))
                     file=BytesIO(bytes(content, 'utf-8'))
-                    await player.send(content="Your picks", file=File(fp=file, filename="picks.txt"))
+                    await player.send(content="Your picks", file=File(fp=file, filename=f"picks_{time.strftime('%Y%m%d')}.txt"))
                     if discord.utils.find(lambda m: m.name == 'CubeDrafter', player.roles):
                         await player.remove_roles(self.role)
                 self.players.clear()
