@@ -88,10 +88,12 @@ class DraftGuild:
                 if l is not None and len(l)>0:
                     image_file = await image_fetcher.download_image_async(l)
                     message = await send_image_with_retry(messageable, image_file)
-                    self.messages_by_player[player_id][message.id] = {"row": i, "message": message}
+                    self.messages_by_player[player_id][message.id] = {"row": i, "message": message, "len": len(l)}
                     i += 1
-                    for j in range(1,len(l)+1):
-                        await message.add_reaction(EMOJIS_BY_NUMBER[j])
+            for message_info in self.messages_by_player[player_id].values():
+                print(message_info)
+                for i in range(1,message_info["len"] + 1):
+                    await message_info["message"].add_reaction(EMOJIS_BY_NUMBER[i])
 
     async def handle_pick_response(self, state, player_id):
         if state == PickReturn.pick_error:
