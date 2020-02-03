@@ -99,7 +99,7 @@ class DraftCog(commands.Cog):
             await draft_guild.start(ctx, packs, cards, cube)
 
 
-    @commands.command(name='pick', help='Pick a card from the booster')
+    #@commands.command(name='pick', help='Pick a card from the booster')
     async def pick(self, ctx, *, card):
         draft = next((x for x in self.guilds_by_id.values() if x.has_player(ctx.author.id)), None)
         if draft is None:
@@ -107,6 +107,15 @@ class DraftCog(commands.Cog):
             return
 
         await draft.pick(ctx.author.id, card_name=card)
+
+    @commands.command(name='picks', help="Show your current picks as a paginated image. Click the arrows for next or previous pages")
+    async def my_picks(self, ctx):
+        draft = next((x for x in self.guilds_by_id.values() if x.has_player(ctx.author.id)), None)
+        if draft is None:
+            await ctx.send("You are not playing any draft")
+            return
+
+        await draft.picks(ctx, ctx.author.id)
 
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, author) -> None:

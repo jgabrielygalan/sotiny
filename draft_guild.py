@@ -23,6 +23,7 @@ class DraftGuild:
         self.players = {}
         self.started = False
         self.messages_by_player = {}
+        self.picks_message_by_player = {}
         self.guild = guild
         self.role = get_cubedrafter_role(guild)
         print(f"Initialized draft guild. Role: {self.role}")
@@ -78,6 +79,15 @@ class DraftGuild:
 
         await self.handle_pick_response(state, player_id)
 
+
+    async def picks(self, messageable, player_id):
+        cards = self.draft.deck_of(player_id)
+        for page in range(0,int(len(cards)/5)+1):
+            l = cards[5*page:5*page+5]
+            if l is not None and len(l)>0:
+                image_file = await image_fetcher.download_image_async(l)
+                await send_image_with_retry(messageable, image_file)
+
     async def send_packs_to_player(self, intro, messageable, player_id):
         async with messageable.typing():
             await messageable.send(intro)
@@ -103,10 +113,13 @@ class DraftGuild:
             self.messages_by_player[player_id].clear()
 
             if state == PickReturn.in_progress:
-                await self.players[player_id].send("Waiting for other players to make their picks")
+                pending = self.draft.get_pending_players()
+                players = [self.players[x] for x in pending]
+                list = ", ".join([player.display_name for player in players])
+                await self.players[player_id].send(f"Waiting for other players to make their picks: {list}")
             elif state == PickReturn.next_booster:
                 await asyncio.gather(*[self.send_packs_to_player("Your picks: \n{picks}\nNext pack:".format(picks=", ".join(self.draft.deck_of(p.id))), p, p.id) for p in self.players.values()])
-            else:
+            else: # end of draft
                 for player in self.players.values():
                     await player.send("The draft finished")
                     content = generate_file_content(self.draft.deck_of(player.id))
@@ -115,6 +128,8 @@ class DraftGuild:
                     if discord.utils.find(lambda m: m.name == 'CubeDrafter', player.roles):
                         await player.remove_roles(self.role)
                 self.players.clear()
+                self.messages_by_player.clear()
+                self.picks_message_by_player.clear()
                 self.started = False
 
 def get_cubedrafter_role(guild):
