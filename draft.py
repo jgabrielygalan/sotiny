@@ -2,6 +2,26 @@ from enum import Enum
 import random
 from booster import Booster
 import utils
+import logging
+
+
+# create logger with 'spam_application'
+logger = logging.getLogger('draft')
+logger.setLevel(logging.DEBUG)
+# create file handler which logs even debug messages
+fh = logging.FileHandler('test.log')
+fh.setLevel(logging.DEBUG)
+# create console handler with a higher log level
+ch = logging.StreamHandler()
+ch.setLevel(logging.ERROR)
+# create formatter and add it to the handlers
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+fh.setFormatter(formatter)
+ch.setFormatter(formatter)
+# add the handlers to the logger
+logger.addHandler(fh)
+logger.addHandler(ch)
+
 
 PickReturn = Enum('PickReturn', 'pick_error, in_progress, next_booster, finished')
 
@@ -33,7 +53,7 @@ class Draft:
 			card_list = [self.cards.pop() for _ in range(0,self.cards_per_booster)]
 			self.state[player] = Booster(card_list)
 		self.booster_number += 1
-		print("Opening pack {num}".format(num=self.booster_number))
+		logger.info("Opening pack {num}".format(num=self.booster_number))
 		self.picked = []
 
 	def get_pending_players(self):
@@ -46,27 +66,27 @@ class Draft:
 			elif position is not None:
 				card = self.state[player].pick_by_position(position)
 			else:
-				print("Both card_name and position are None")
+				logger.info("Both card_name and position are None")
 				return PickReturn.pick_error
-			print("Player {p} picked {c}".format(p=player,c=card))
+			logger.info("Player {p} picked {c}".format(p=player,c=card))
 			if card is None:
 				return PickReturn.pick_error
 			self.decks[player].append(card)
 			self.picked.append(player)
 		if len(self.picked) == len(self.players):
-			print("all players picked")
-			print(self.players)
-			print(self.state[self.players[0]])
+			logger.info("all players picked")
+			logger.info(self.players)
+			logger.info(self.state[self.players[0]])
 			if len(self.state[self.players[0]].cards) > 0:
-				print("pass booster")
+				logger.info("pass booster")
 				self.pass_boosters()
 				return PickReturn.next_booster
 			elif self.booster_number < self.number_of_packs:
-				print("open new booster")
+				logger.info("open new booster")
 				self.open_boosters()
 				return PickReturn.next_booster
 			else:
-				print("Draft finished")
+				logger.info("Draft finished")
 				return PickReturn.finished
 		return PickReturn.in_progress
 

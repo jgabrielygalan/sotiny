@@ -10,6 +10,26 @@ from draft import PickReturn
 import urllib.request
 from cog_exceptions import UserFeedbackException
 import time
+import logging
+
+
+# create logger with 'spam_application'
+logger = logging.getLogger('draft_guild')
+logger.setLevel(logging.DEBUG)
+# create file handler which logs even debug messages
+fh = logging.FileHandler('test.log')
+fh.setLevel(logging.DEBUG)
+# create console handler with a higher log level
+ch = logging.StreamHandler()
+ch.setLevel(logging.ERROR)
+# create formatter and add it to the handlers
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+fh.setFormatter(formatter)
+ch.setFormatter(formatter)
+# add the handlers to the logger
+logger.addHandler(fh)
+logger.addHandler(ch)
+
 
 EMOJIS_BY_NUMBER = {1 : '1⃣', 2 : '2⃣', 3 : '3⃣', 4 : '4⃣', 5 : '5⃣'}
 NUMBERS_BY_EMOJI = {'1⃣' : 1, '2⃣' : 2, '3⃣' : 3, '4⃣' : 4, '5⃣' : 5}
@@ -26,7 +46,7 @@ class DraftGuild:
         self.picks_message_by_player = {}
         self.guild = guild
         self.role = get_cubedrafter_role(guild)
-        print(f"Initialized draft guild. Role: {self.role}")
+        logger.info(f"Initialized draft guild. Role: {self.role}")
 
     def is_started(self):
         return self.started
@@ -71,10 +91,10 @@ class DraftGuild:
         elif message_id is not None and emoji is not None:
             page_number = self.messages_by_player[player_id][message_id]["row"]
             item_number = NUMBERS_BY_EMOJI[emoji]
-            print("Player {u} reacted with {n} for row {i}".format(u=player_id, n=item_number, i=page_number))
+            logger.info("Player {u} reacted with {n} for row {i}".format(u=player_id, n=item_number, i=page_number))
             state = self.draft.pick(player_id, position=item_number+(5*(page_number-1)))
         else:
-            print(f"Missing card_name ({card_name}) or message_id({message_id} + emoji({emoji})")
+            logger.info(f"Missing card_name ({card_name}) or message_id({message_id} + emoji({emoji})")
             return
 
         await self.handle_pick_response(state, player_id)
@@ -92,7 +112,7 @@ class DraftGuild:
         async with messageable.typing():
             await messageable.send(intro)
             cards = self.draft.pack_of(player_id).cards
-            print(numpy.array(cards))
+            logger.info(numpy.array(cards))
             list = numpy.array_split(numpy.array(cards),[5,10]) #split at positions 5 and 10, defaulting to empty arrays
             i = 1
             for l in list:
@@ -102,7 +122,7 @@ class DraftGuild:
                     self.messages_by_player[player_id][message.id] = {"row": i, "message": message, "len": len(l)}
                     i += 1
             for message_info in self.messages_by_player[player_id].values():
-                print(message_info)
+                logger.info(message_info)
                 for i in range(1,message_info["len"] + 1):
                     await message_info["message"].add_reaction(EMOJIS_BY_NUMBER[i])
 
@@ -135,15 +155,15 @@ class DraftGuild:
 def get_cubedrafter_role(guild):
     role = discord.utils.find(lambda m: m.name == 'CubeDrafter', guild.roles)
     if role:
-        print("Guild {n} has the CubeDrafter role with id: {i}".format(n=guild.name,i=role.id))
+        logger.info("Guild {n} has the CubeDrafter role with id: {i}".format(n=guild.name,i=role.id))
     else:
-        print("Guild {n} doesn't have the CubeDrafter role".format(n=guild.name))
+        logger.info("Guild {n} doesn't have the CubeDrafter role".format(n=guild.name))
     return role
 
 async def send_image_with_retry(user, image_file: str, text: str = '') -> None:
     message = await send(user, file=File(image_file), content=text)
     if message and message.attachments and message.attachments[0].size == 0:
-        print('Message size is zero so resending')
+        logger.info('Message size is zero so resending')
         await message.delete()
         message = await send(user, file=File(image_file), content=text)
     return message
@@ -184,12 +204,12 @@ async def get_card_list(cube_name):
     if cube_name is None:
         return get_cards()
     url = f'https://cubecobra.com/cube/api/cubelist/{cube_name}'
-    print(f'Async fetching {url}')
+    logger.info(f'Async fetching {url}')
     try:
         async with aiohttp.ClientSession() as aios:
             response = (await fetch(aios, url)).split("\n")
-            print(response)
-            print(f"{type(response)}")
+            logger.info(response)
+            logger.info(f"{type(response)}")
             return response
     # type: ignore # urllib isn't fully stubbed
     except (urllib.error.HTTPError, aiohttp.ClientError):

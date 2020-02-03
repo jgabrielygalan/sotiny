@@ -4,6 +4,27 @@ import inspect
 from cog_exceptions import UserFeedbackException
 import traceback
 import utils
+import logging
+
+
+#logging.basicConfig(filename='log.txt', format='%(asctime)s-%(levelname)s: %(message)s', level=logging.INFO)
+
+# create logger with 'spam_application'
+logger = logging.getLogger('draft_cog')
+logger.setLevel(logging.DEBUG)
+# create file handler which logs even debug messages
+fh = logging.FileHandler('test.log')
+fh.setLevel(logging.DEBUG)
+# create console handler with a higher log level
+ch = logging.StreamHandler()
+ch.setLevel(logging.ERROR)
+# create formatter and add it to the handlers
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+fh.setFormatter(formatter)
+ch.setFormatter(formatter)
+# add the handlers to the logger
+logger.addHandler(fh)
+logger.addHandler(ch)
 
 
 DEFAULT_PACK_NUMBER = 3
@@ -13,11 +34,11 @@ DEFAULT_CARD_NUMBER = 15
 def inject_draft_guild(func):
     async def decorator(self, ctx, *args, **kwargs):
         if not ctx.guild:
-            print("Context doesn't have a guild")
+            logger.info("Context doesn't have a guild")
             return
 
         draft_guild = self.guilds_by_id[ctx.guild.id]
-        print(f"Found guild: {draft_guild}")
+        logger.info(f"Found guild: {draft_guild}")
         await func(self, draft_guild, ctx, *args, **kwargs)
 
     decorator.__name__ = func.__name__
@@ -31,7 +52,7 @@ class DraftCog(commands.Cog):
         self.guilds_by_id = {}
 
     async def cog_command_error(self, ctx, error):
-        print(error)
+        logger.info(error)
         traceback.print_exception(type(error), error, error.__traceback__)
         if isinstance(error, UserFeedbackException):
             await ctx.send(f"{ctx.author.mention}: {error}")
@@ -40,21 +61,21 @@ class DraftCog(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print("Bot is ready (from the Cog)")
+        logger.info("Bot is ready (from the Cog)")
         for guild in self.bot.guilds:
-            print("Ready on guild: {n}".format(n=guild.name))
+            logger.info("Ready on guild: {n}".format(n=guild.name))
             if not guild.id in self.guilds_by_id:
                 self.guilds_by_id[guild.id] = DraftGuild(guild)
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
-        print("Joined {n}: {r}".format(n=guild.name, r=guild.roles))
+        logger.info("Joined {n}: {r}".format(n=guild.name, r=guild.roles))
         if not guild.id in self.guilds_by_id:
             self.guilds_by_id[guild.id] = DraftGuild(guild)
 
     @commands.Cog.listener()
     async def on_guild_remove(self, guild):
-        print("Removed from {n}: {r}".format(n=guild.name))
+        logger.info("Removed from {n}: {r}".format(n=guild.name))
         if guild.id in self.guilds_by_id:
             del self.guilds_by_id[guild.id]
 
@@ -66,11 +87,11 @@ class DraftCog(commands.Cog):
             await ctx.send("A draft is already in progress. Try later when it's over")
             return
         if draft_guild.player_not_playing(player):
-            print(f"{player.display_name} is not playing, registering")
+            logger.info(f"{player.display_name} is not playing, registering")
             await draft_guild.add_player(player)
             await ctx.send("{mention}, I have registered you for the next draft".format(mention=ctx.author.mention))
         else:
-            print(f"{player.display_name} is already playing, not registering")
+            logger.info(f"{player.display_name} is already playing, not registering")
             await ctx.send("{mention}, you are already registered for the next draft".format(mention=ctx.author.mention))
 
     @commands.command(name='players', help='List registered players for the next draft')
@@ -123,7 +144,7 @@ class DraftCog(commands.Cog):
             return
         draft = next((x for x in self.guilds_by_id.values() if x.has_message(reaction.message.id)), None)
         if draft is None:
-            print("Discarded reaction: {m}".format(m=reaction.message))
+            logger.info("Discarded reaction: {m}".format(m=reaction.message))
             return 
 
         await draft.pick(author.id, message_id=reaction.message.id, emoji=reaction.emoji)
