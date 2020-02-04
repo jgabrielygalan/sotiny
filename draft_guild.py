@@ -49,6 +49,15 @@ class DraftGuild:
                 return True
         return False
 
+    def get_pending_players(self):
+        if self.started:
+            pending = self.draft.get_pending_players()
+            players = [self.players[x] for x in pending]
+            return players
+        else:
+            return None
+    
+
     async def add_player(self, player):
         self.players[player.id] = player
         if self.role is not None:
@@ -123,9 +132,7 @@ class DraftGuild:
             if player_id:
                 self.messages_by_player[player_id].clear()
             if state == PickReturn.in_progress:
-                pending = self.draft.get_pending_players()
-                players = [self.players[x] for x in pending]
-                list = ", ".join([player.display_name for player in players])
+                list = self.get_pending_players()
                 await self.players[player_id].send(f"Waiting for other players to make their picks: {list}")
             elif state == PickReturn.next_booster:
                 await asyncio.gather(*[self.send_packs_to_player("Your picks: \n{picks}\nNext pack:".format(picks=", ".join(self.draft.deck_of(p.id))), p, p.id) for p in self.players.values()])

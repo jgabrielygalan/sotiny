@@ -110,6 +110,22 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
 
         await draft.pick(ctx.author.id, card_name=card)
 
+    @commands.command(name='pending', help='Show players who still haven\'t picked')
+    async def pending(self, ctx):
+        if ctx.guild:
+            draft = self.guilds_by_id[ctx.guild.id]
+        else:
+            draft = next((x for x in self.guilds_by_id.values() if x.has_player(ctx.author.id)), None)
+        if draft is None:
+            await ctx.send("You are not registered in any draft")
+
+        players = draft.get_pending_players()
+        if players:
+            list = ", ".join([player.display_name for player in players])
+            await ctx.send(f"Pending players: {list}")
+        else:
+            await ctx.send("No pending players")
+
     @commands.dm_only()
     @commands.command(name='picks', help="Show your current picks as images")
     async def my_picks(self, ctx):
