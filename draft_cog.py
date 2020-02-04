@@ -7,24 +7,8 @@ import utils
 import logging
 
 
-#logging.basicConfig(filename='log.txt', format='%(asctime)s-%(levelname)s: %(message)s', level=logging.INFO)
-
-# create logger with 'spam_application'
+logging.basicConfig(filename='test.log', format='%(asctime)s - %(name)s - %(levelname)s: %(message)s', level=logging.INFO)
 logger = logging.getLogger('draft_cog')
-logger.setLevel(logging.DEBUG)
-# create file handler which logs even debug messages
-fh = logging.FileHandler('test.log')
-fh.setLevel(logging.DEBUG)
-# create console handler with a higher log level
-ch = logging.StreamHandler()
-ch.setLevel(logging.ERROR)
-# create formatter and add it to the handlers
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-fh.setFormatter(formatter)
-ch.setFormatter(formatter)
-# add the handlers to the logger
-logger.addHandler(fh)
-logger.addHandler(ch)
 
 
 DEFAULT_PACK_NUMBER = 3

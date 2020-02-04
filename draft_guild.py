@@ -13,22 +13,9 @@ import time
 from cog_exceptions import UserFeedbackException
 import uuid
 
-# create logger with 'spam_application'
+
+logging.basicConfig(filename='test.log', format='%(asctime)s - %(name)s - %(levelname)s: %(message)s', level=logging.INFO)
 logger = logging.getLogger('draft_guild')
-logger.setLevel(logging.DEBUG)
-# create file handler which logs even debug messages
-fh = logging.FileHandler('test.log')
-fh.setLevel(logging.DEBUG)
-# create console handler with a higher log level
-ch = logging.StreamHandler()
-ch.setLevel(logging.ERROR)
-# create formatter and add it to the handlers
-formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-fh.setFormatter(formatter)
-ch.setFormatter(formatter)
-# add the handlers to the logger
-logger.addHandler(fh)
-logger.addHandler(ch)
 
 
 EMOJIS_BY_NUMBER = {1 : '1⃣', 2 : '2⃣', 3 : '3⃣', 4 : '4⃣', 5 : '5⃣'}

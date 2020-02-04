@@ -1,0 +1,47 @@
+2020-02-04 22:23:13,848 - discord.client - INFO: logging in using static token
+2020-02-04 22:23:14,165 - discord.gateway - INFO: Created websocket connected to wss://gateway.discord.gg?encoding=json&v=6&compress=zlib-stream
+2020-02-04 22:23:14,169 - discord.gateway - INFO: Shard ID None has sent the IDENTIFY payload.
+2020-02-04 22:23:14,340 - discord.gateway - INFO: Shard ID None has connected to Gateway: ["gateway-prd-main-jnl6",{"micros":98672,"calls":["discord-sessions-prd-1-28",{"micros":95435,"calls":["start_session",{"micros":93350,"calls":["api-prd-main-j1jp",{"micros":89431,"calls":["get_user",{"micros":3057},"add_authorized_ip",{"micros":3847},"get_guilds",{"micros":4737},"coros_wait",{"micros":1}]}]},"guilds_connect",{"micros":2,"calls":[]},"presence_connect",{"micros":1,"calls":[]}]}]}] (Session ID: efadf5323c570999537a0faa27fc3ab5).
+2020-02-04 22:23:16,344 - sotiny - INFO: DraftingTest has connected to Discord!
+2020-02-04 22:23:16,345 - draft_cog - INFO: Bot is ready (from the Cog)
+2020-02-04 22:23:16,345 - draft_cog - INFO: Ready on guild: JGGTestBots
+2020-02-04 22:23:16,345 - draft_guild - INFO: Guild JGGTestBots has the CubeDrafter role with id: 670019089363894312
+2020-02-04 22:23:16,345 - draft_guild - INFO: Initialized draft guild. Role: CubeDrafter
+2020-02-04 22:23:23,471 - draft_cog - INFO: Found guild: <draft_guild.DraftGuild object at 0x7f49c6a9ee80>
+2020-02-04 22:23:23,471 - draft_cog - INFO: dxfl is not playing, registering
+2020-02-04 22:23:27,763 - draft_cog - INFO: Found guild: <draft_guild.DraftGuild object at 0x7f49c6a9ee80>
+2020-02-04 22:23:27,896 - draft_guild - INFO: Starting draft 2474ffa1199142b193d9fcc2b397d30d, cube: None, players: dxfl
+2020-02-04 22:23:27,903 - draft - INFO: Opening pack 1
+2020-02-04 22:23:28,422 - draft_guild - INFO: ['Honor of the Pure' 'Nomad Outpost']
+2020-02-04 22:23:29,576 - draft_guild - INFO: {'row': 1, 'message': <Message id=674379530843979776 channel=<DMChannel id=670023251153518616 recipient=<User id=411664250768195586 name='dxfl' discriminator='3480' bot=False>> type=<MessageType.default: 0> author=<ClientUser id=670014385762074624 name='DraftingTest' discriminator='1638' bot=True verified=True mfa_enabled=False>>, 'len': 2}
+2020-02-04 22:23:33,235 - draft_guild - INFO: Player 411664250768195586 reacted with 1 for row 1
+2020-02-04 22:23:33,239 - draft - INFO: Player 411664250768195586 picked Honor of the Pure
+2020-02-04 22:23:33,240 - draft - INFO: all players picked
+2020-02-04 22:23:33,240 - draft - INFO: [411664250768195586]
+2020-02-04 22:23:33,240 - draft - INFO: Nomad Outpost
+2020-02-04 22:23:33,240 - draft - INFO: pass booster
+2020-02-04 22:23:33,494 - draft_guild - INFO: ['Nomad Outpost']
+2020-02-04 22:23:33,838 - draft_guild - INFO: {'row': 1, 'message': <Message id=674379548678160434 channel=<DMChannel id=670023251153518616 recipient=<User id=411664250768195586 name='dxfl' discriminator='3480' bot=False>> type=<MessageType.default: 0> author=<ClientUser id=670014385762074624 name='DraftingTest' discriminator='1638' bot=True verified=True mfa_enabled=False>>, 'len': 1}
+2020-02-04 22:23:35,171 - draft_guild - INFO: Player 411664250768195586 reacted with 1 for row 1
+2020-02-04 22:23:35,175 - draft - INFO: Player 411664250768195586 picked Nomad Outpost
+2020-02-04 22:23:35,176 - draft - INFO: all players picked
+2020-02-04 22:23:35,176 - draft - INFO: [411664250768195586]
+2020-02-04 22:23:35,176 - draft - INFO: 
+2020-02-04 22:23:35,176 - draft - INFO: open new booster
+2020-02-04 22:23:35,176 - draft - INFO: Opening pack 2
+2020-02-04 22:23:35,412 - draft_guild - INFO: ['Saffi Eriksdotter' 'Phyrexian Devourer']
+2020-02-04 22:23:37,451 - draft_guild - INFO: {'row': 1, 'message': <Message id=674379563807146046 channel=<DMChannel id=670023251153518616 recipient=<User id=411664250768195586 name='dxfl' discriminator='3480' bot=False>> type=<MessageType.default: 0> author=<ClientUser id=670014385762074624 name='DraftingTest' discriminator='1638' bot=True verified=True mfa_enabled=False>>, 'len': 2}
+2020-02-04 22:23:40,091 - draft_guild - INFO: Player 411664250768195586 reacted with 1 for row 1
+2020-02-04 22:23:40,096 - draft - INFO: Player 411664250768195586 picked Saffi Eriksdotter
+2020-02-04 22:23:40,096 - draft - INFO: all players picked
+2020-02-04 22:23:40,096 - draft - INFO: [411664250768195586]
+2020-02-04 22:23:40,096 - draft - INFO: Phyrexian Devourer
+2020-02-04 22:23:40,096 - draft - INFO: pass booster
+2020-02-04 22:23:40,355 - draft_guild - INFO: ['Phyrexian Devourer']
+2020-02-04 22:23:40,697 - draft_guild - INFO: {'row': 1, 'message': <Message id=674379577497354260 channel=<DMChannel id=670023251153518616 recipient=<User id=411664250768195586 name='dxfl' discriminator='3480' bot=False>> type=<MessageType.default: 0> author=<ClientUser id=670014385762074624 name='DraftingTest' discriminator='1638' bot=True verified=True mfa_enabled=False>>, 'len': 1}
+2020-02-04 22:23:42,972 - draft_guild - INFO: Player 411664250768195586 reacted with 1 for row 1
+2020-02-04 22:23:42,980 - draft - INFO: Player 411664250768195586 picked Phyrexian Devourer
+2020-02-04 22:23:42,980 - draft - INFO: all players picked
+2020-02-04 22:23:42,980 - draft - INFO: [411664250768195586]
+2020-02-04 22:23:42,980 - draft - INFO: 
+2020-02-04 22:23:42,980 - draft - INFO: Draft finished
