@@ -3,7 +3,7 @@ import random
 from booster import Booster
 import utils
 
-PickReturn = Enum('PickReturn', 'pick_error, in_progress, next_booster, finished')
+PickReturn = Enum('PickReturn', 'pick_error, in_progress, next_booster, finished, next_booster_autopick')
 
 
 class Draft:
@@ -26,7 +26,9 @@ class Draft:
 		random.shuffle(self.cards)
 		self.booster_number = 0
 		self.open_boosters()
-		return self.state
+		if len(self.state[self.players[0]].cards) == 1: #autopick
+			return PickReturn.next_booster_autopick
+		return PickReturn.next_booster
 
 	def open_boosters(self):
 		for player in self.players:
@@ -60,15 +62,26 @@ class Draft:
 			if len(self.state[self.players[0]].cards) > 0:
 				print("pass booster")
 				self.pass_boosters()
+				if len(self.state[self.players[0]].cards) == 1: #autopick
+					return PickReturn.next_booster_autopick
 				return PickReturn.next_booster
 			elif self.booster_number < self.number_of_packs:
 				print("open new booster")
 				self.open_boosters()
+				if len(self.state[self.players[0]].cards) == 1: #autopick
+					return PickReturn.next_booster_autopick
 				return PickReturn.next_booster
 			else:
 				print("Draft finished")
 				return PickReturn.finished
 		return PickReturn.in_progress
+
+	def autopick(self):
+		if len(self.state[self.players[0]].cards) != 1:
+			print(f"Error, can't autopick. Pack is: {self.state[self.players[0]].cards}")
+		for player in self.players:
+			state = self.pick(player, position=0)
+		return state
 
 	def pass_boosters(self):
 		if self.booster_number % 2 == 0:

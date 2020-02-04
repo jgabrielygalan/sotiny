@@ -58,12 +58,19 @@ class DraftGuild:
         card_list = await get_card_list(cube)
         self.started = True
         self.draft = Draft(list(self.players.keys()), card_list)
-        self.draft.start(packs, cards,cube)
         for p in self.players.values():
             self.messages_by_player[p.id] = {}
         await ctx.send("Starting the draft with {p}".format(p=", ".join([p.display_name for p in self.get_players()])))
-        intro = "Draft has started. Here is your first pack. Click on the numbers below the cards or type: _>pick <cardname>_ to make your pick"
-        await asyncio.gather(*[self.send_packs_to_player(intro, p, p.id) for p in self.get_players()])
+        state = self.draft.start(packs, cards,cube)
+        if state != PickReturn.next_booster_autopick:
+            intro = "Draft has started. Here is your first pack. Click on the numbers below the cards"
+            await asyncio.gather(*[self.send_packs_to_player(intro, p, p.id) for p in self.get_players()])
+        else:
+            intro = "Draft has started"
+            await asyncio.gather(*[self.send_packs_to_player(intro, p, p.id, False) for p in self.get_players()])
+            state = self.draft.autopick()
+            return await self.handle_pick_response(state, None)
+
 
     async def pick(self, player_id, card_name=None, message_id=None, emoji=None):
         if card_name is not None:
@@ -88,7 +95,7 @@ class DraftGuild:
                 image_file = await image_fetcher.download_image_async(l)
                 await send_image_with_retry(messageable, image_file)
 
-    async def send_packs_to_player(self, intro, messageable, player_id):
+    async def send_packs_to_player(self, intro, messageable, player_id, reactions=True):
         self.messages_by_player[player_id].clear()
         async with messageable.typing():
             await messageable.send(intro)
@@ -100,18 +107,21 @@ class DraftGuild:
                 if l is not None and len(l)>0:
                     image_file = await image_fetcher.download_image_async(l)
                     message = await send_image_with_retry(messageable, image_file)
-                    self.messages_by_player[player_id][message.id] = {"row": i, "message": message, "len": len(l)}
+                    if reactions: 
+                        self.messages_by_player[player_id][message.id] = {"row": i, "message": message, "len": len(l)}
                     i += 1
-            for message_info in self.messages_by_player[player_id].values():
-                print(message_info)
-                for i in range(1,message_info["len"] + 1):
-                    await message_info["message"].add_reaction(EMOJIS_BY_NUMBER[i])
+            if reactions: 
+                for message_info in self.messages_by_player[player_id].values():
+                    print(message_info)
+                    for i in range(1,message_info["len"] + 1):
+                        await message_info["message"].add_reaction(EMOJIS_BY_NUMBER[i])
 
     async def handle_pick_response(self, state, player_id):
         if state == PickReturn.pick_error:
             await self.players[player_id].send("That card is not in the booster")
         else:
-            self.messages_by_player[player_id].clear()
+            if player_id:
+                self.messages_by_player[player_id].clear()
             if state == PickReturn.in_progress:
                 pending = self.draft.get_pending_players()
                 players = [self.players[x] for x in pending]
@@ -119,6 +129,10 @@ class DraftGuild:
                 await self.players[player_id].send(f"Waiting for other players to make their picks: {list}")
             elif state == PickReturn.next_booster:
                 await asyncio.gather(*[self.send_packs_to_player("Your picks: \n{picks}\nNext pack:".format(picks=", ".join(self.draft.deck_of(p.id))), p, p.id) for p in self.players.values()])
+            elif state == PickReturn.next_booster_autopick:
+                await asyncio.gather(*[self.send_packs_to_player("Your picks: \n{picks}\nNext pack:".format(picks=", ".join(self.draft.deck_of(p.id))), p, p.id, False) for p in self.players.values()])
+                state = self.draft.autopick()
+                return await self.handle_pick_response(state, player_id)
             else: # end of draft
                 for player in self.players.values():
                     await player.send("The draft finished")
