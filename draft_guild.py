@@ -5,13 +5,13 @@ import discord
 from draft import Draft
 from discord import File
 import image_fetcher
+import logging
 import numpy
 from draft import PickReturn
 import urllib.request
-from cog_exceptions import UserFeedbackException
 import time
-import logging
-
+from cog_exceptions import UserFeedbackException
+import uuid
 
 # create logger with 'spam_application'
 logger = logging.getLogger('draft_guild')
@@ -75,13 +75,16 @@ class DraftGuild:
             await player.add_roles(self.role)
 
     async def start(self, ctx, packs, cards, cube):
+        self.uuid = uuid.uuid4().hex
         card_list = await get_card_list(cube)
         self.started = True
+        player_list = ", ".join([p.display_name for p in self.get_players()])
+        logger.info(f"Starting draft {self.uuid}, cube: {cube}, players: {player_list}")
         self.draft = Draft(list(self.players.keys()), card_list)
         self.draft.start(packs, cards,cube)
         for p in self.players.values():
             self.messages_by_player[p.id] = {}
-        await ctx.send("Starting the draft with {p}".format(p=", ".join([p.display_name for p in self.get_players()])))
+        await ctx.send("Starting the draft with {p}".format(p=player_list))
         intro = "Draft has started. Here is your first pack. Click on the numbers below the cards or type: _>pick <cardname>_ to make your pick"
         await asyncio.gather(*[self.send_packs_to_player(intro, p, p.id) for p in self.get_players()])
 

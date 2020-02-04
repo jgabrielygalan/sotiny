@@ -66,7 +66,7 @@ class Draft:
 			elif position is not None:
 				card = self.state[player].pick_by_position(position)
 			else:
-				logger.info("Both card_name and position are None")
+				logger.error("Both card_name and position are None")
 				return PickReturn.pick_error
 			logger.info("Player {p} picked {c}".format(p=player,c=card))
 			if card is None:

@@ -34,7 +34,7 @@ DEFAULT_CARD_NUMBER = 15
 def inject_draft_guild(func):
     async def decorator(self, ctx, *args, **kwargs):
         if not ctx.guild:
-            logger.info("Context doesn't have a guild")
+            logger.warning("Context doesn't have a guild")
             return
 
         draft_guild = self.guilds_by_id[ctx.guild.id]
