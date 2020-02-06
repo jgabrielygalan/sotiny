@@ -57,11 +57,17 @@ class DraftGuild:
         else:
             return None
     
-
     async def add_player(self, player):
         self.players[player.id] = player
         if self.role is not None:
             await player.add_roles(self.role)
+
+    async def remove_player(self, player):
+        if self.role is not None:
+            await player.remove_roles(self.role)
+        if player.id in self.players:
+            del self.players[player.id]
+
 
     async def start(self, ctx, packs, cards, cube):
         card_list = await get_card_list(cube)

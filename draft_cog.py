@@ -75,6 +75,22 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
             print(f"{player.display_name} is already playing, not registering")
             await ctx.send("{mention}, you are already registered for the next draft".format(mention=ctx.author.mention))
 
+    @commands.command(name='cancel', help='Cancel your registration for the draft. Only allowed before it starts')
+    @inject_draft_guild
+    async def cancel(self, draft_guild, ctx):
+        player = ctx.author
+        if draft_guild.is_started():
+            await ctx.send("The draft is already in progress. You can't cancel now.")
+            return
+        if draft_guild.player_not_playing(player):
+            print(f"{player.display_name} is not playing, can't cancel")
+            await ctx.send("{mention}, you are not playing in the draft, I can't cancel".format(mention=ctx.author.mention))
+        else:
+            print(f"{player.display_name} cancels registration")
+            await draft_guild.remove_player(player)
+            await ctx.send("{mention}, you are no longer registered for the next draft".format(mention=ctx.author.mention))
+
+
     @commands.command(name='players', help='List registered players for the next draft')
     @inject_draft_guild
     async def players(self, draft_guild, ctx):
