@@ -132,7 +132,7 @@ class DraftGuild:
             if player_id:
                 self.messages_by_player[player_id].clear()
             if state == PickReturn.in_progress:
-                list = self.get_pending_players()
+                list = ", ".join([p.display_name for p in self.get_pending_players()])
                 await self.players[player_id].send(f"Waiting for other players to make their picks: {list}")
             elif state == PickReturn.next_booster:
                 await asyncio.gather(*[self.send_packs_to_player("Your picks: \n{picks}\nNext pack:".format(picks=", ".join(self.draft.deck_of(p.id))), p, p.id) for p in self.players.values()])
