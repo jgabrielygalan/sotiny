@@ -61,7 +61,7 @@ class DraftGuild:
         for p in self.players.values():
             self.messages_by_player[p.id] = {}
         await ctx.send("Starting the draft with {p}".format(p=", ".join([p.display_name for p in self.get_players()])))
-        intro = "Draft has started. Here is your first pack. Click on the numbers below the cards or type: _>pick <cardname>_ to make your pick"
+        intro = f"Draft in {self.guild.name} has started. Here is your first pack. Click on the numbers below the cards or type: _>pick <cardname>_ to make your pick"
         await asyncio.gather(*[self.send_packs_to_player(intro, p, p.id) for p in self.get_players()])
 
     async def pick(self, player_id, card_name=None, message_id=None, emoji=None):
@@ -105,10 +105,10 @@ class DraftGuild:
             if state == PickReturn.in_progress:
                 await self.players[player_id].send("Waiting for other players to make their picks")
             elif state == PickReturn.next_booster:
-                await asyncio.gather(*[self.send_packs_to_player("Your picks: \n{picks}\nNext pack:".format(picks=", ".join(self.draft.deck_of(p.id))), p, p.id) for p in self.players.values()])
+                await asyncio.gather(*[self.send_packs_to_player("Drafting in {guild}, Your picks: \n{picks}\nNext pack:".format(guild=self.guild.name, picks=", ".join(self.draft.deck_of(p.id))), p, p.id) for p in self.players.values()])
             else:
                 for player in self.players.values():
-                    await player.send("The draft finished")
+                    await player.send(f"The draft in {self.guild.name} has finished")
                     content = generate_file_content(self.draft.deck_of(player.id))
                     file=BytesIO(bytes(content, 'utf-8'))
                     await player.send(content="Your picks", file=File(fp=file, filename=f"picks_{time.strftime('%Y%m%d')}.txt"))
