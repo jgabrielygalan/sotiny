@@ -20,6 +20,9 @@ class Draft:
 	def deck_of(self, player_id):
 		return self.decks[player_id]
 
+	def get_pick_number(self):
+		return self.pick_number
+
 	def start(self, number_of_packs, cards_per_booster, cube=None):
 		self.number_of_packs = number_of_packs
 		self.cards_per_booster = cards_per_booster
@@ -31,6 +34,7 @@ class Draft:
 		return PickReturn.next_booster
 
 	def open_boosters(self):
+		self.pick_number = 1
 		for player in self.players:
 			card_list = [self.cards.pop() for _ in range(0,self.cards_per_booster)]
 			self.state[player] = Booster(card_list)
@@ -84,6 +88,7 @@ class Draft:
 		return state
 
 	def pass_boosters(self):
+		self.pick_number += 1
 		if self.booster_number % 2 == 0:
 			last = self.state[self.players[-1]]
 			for i in range(len(self.players)-1, 0, -1):
