@@ -141,7 +141,7 @@ class DraftGuild:
                 list = ", ".join([p.display_name for p in self.get_pending_players()])
                 await self.players[player_id].send(f"Waiting for other players to make their picks: {list}")
             elif state == PickReturn.next_booster:
-                await asyncio.gather(*[self.send_packs_to_player("[{guild}]. Pack {pack_num}, Pick {pick_num} \nDeck: \n{picks}\n".format(guild=self.guild.name, pick_num=self.draft.get_pick_number(), pack_num=self.draft.booster_number, picks=", ".join(self.draft.deck_of(p.id))), p, p.id) for p in self.players.values()])
+                await asyncio.gather(*[self.send_packs_to_player("[{guild}] Pack {pack_num}, Pick {pick_num} \nDeck: \n{picks}\n".format(guild=self.guild.name, pick_num=self.draft.get_pick_number(), pack_num=self.draft.booster_number, picks=", ".join(self.draft.deck_of(p.id))), p, p.id) for p in self.players.values()])
             elif state == PickReturn.next_booster_autopick:
                 await asyncio.gather(*[self.send_packs_to_player("Last card of the pack:", p, p.id, False) for p in self.players.values()])
                 state = self.draft.autopick()
