@@ -78,7 +78,7 @@ class DraftGuild:
         await ctx.send("Starting the draft with {p}".format(p=", ".join([p.display_name for p in self.get_players()])))
         state = self.draft.start(packs, cards,cube)
         if state != PickReturn.next_booster_autopick:
-            intro = f"Draft in {self.guild.name} has started. Here is your first pack. Click on the numbers below the cards"
+            intro = f"Draft in {self.guild.name} has started. Pack {self.draft.get_pick_number()}, Pick {self.draft.booster_number}:"
             await asyncio.gather(*[self.send_packs_to_player(intro, p, p.id) for p in self.get_players()])
         else:
             intro = "Draft has started"
@@ -141,9 +141,9 @@ class DraftGuild:
                 list = ", ".join([p.display_name for p in self.get_pending_players()])
                 await self.players[player_id].send(f"Waiting for other players to make their picks: {list}")
             elif state == PickReturn.next_booster:
-                await asyncio.gather(*[self.send_packs_to_player("Drafting in {guild}. Pack {pack_num}, Pick {pick_num} \nPrevious picks: \n{picks}\nNext pack:".format(guild=self.guild.name, pick_num=self.draft.get_pick_number(), pack_num=self.draft.booster_number, picks=", ".join(self.draft.deck_of(p.id))), p, p.id) for p in self.players.values()])
+                await asyncio.gather(*[self.send_packs_to_player("[{guild}]. Pack {pack_num}, Pick {pick_num} \nDeck: \n{picks}\n".format(guild=self.guild.name, pick_num=self.draft.get_pick_number(), pack_num=self.draft.booster_number, picks=", ".join(self.draft.deck_of(p.id))), p, p.id) for p in self.players.values()])
             elif state == PickReturn.next_booster_autopick:
-                await asyncio.gather(*[self.send_packs_to_player("Your picks: \n{picks}\nNext pack:".format(picks=", ".join(self.draft.deck_of(p.id))), p, p.id, False) for p in self.players.values()])
+                await asyncio.gather(*[self.send_packs_to_player("Last card of the pack:", p, p.id, False) for p in self.players.values()])
                 state = self.draft.autopick()
                 return await self.handle_pick_response(state, player_id)
             else: # end of draft
@@ -151,7 +151,7 @@ class DraftGuild:
                     await player.send(f"The draft in {self.guild.name} has finished")
                     content = generate_file_content(self.draft.deck_of(player.id))
                     file=BytesIO(bytes(content, 'utf-8'))
-                    await player.send(content="Your picks", file=File(fp=file, filename=f"picks_{time.strftime('%Y%m%d')}.txt"))
+                    await player.send(content="Your deck", file=File(fp=file, filename=f"picks_{time.strftime('%Y%m%d')}.txt"))
                     if discord.utils.find(lambda m: m.name == 'CubeDrafter', player.roles):
                         await player.remove_roles(self.role)
                 self.players.clear()
