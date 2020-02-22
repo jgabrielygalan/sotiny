@@ -13,6 +13,7 @@ import time
 
 EMOJIS_BY_NUMBER = {1 : '1⃣', 2 : '2⃣', 3 : '3⃣', 4 : '4⃣', 5 : '5⃣'}
 NUMBERS_BY_EMOJI = {'1⃣' : 1, '2⃣' : 2, '3⃣' : 3, '4⃣' : 4, '5⃣' : 5}
+DEFAULT_CUBE_CUBECOBRA_ID = "4rx"
  
 class FetchException(Exception):
     pass
@@ -209,11 +210,21 @@ async def fetch(session, url):
 
 async def get_card_list(cube_name):
     if cube_name is None:
-        return get_cards()
-    url = f'https://cubecobra.com/cube/api/cubelist/{cube_name}'
+        try:
+            return await load_cubecobra_cube(DEFAULT_CUBE_CUBECOBRA_ID)
+        except Exception as e:
+            print(e)
+            return get_cards()
+    else:
+        return await load_cubecobra_cube(cube_name)
+
+
+async def load_cubecobra_cube(cubecobra_id):
+    url = f'https://cubecobra.com/cube/api/cubelist/{cubecobra_id}'
     print(f'Async fetching {url}')
     try:
-        async with aiohttp.ClientSession() as aios:
+        timeout = aiohttp.ClientTimeout(total=10)
+        async with aiohttp.ClientSession(timeout=timeout) as aios:
             response = (await fetch(aios, url)).split("\n")
             print(response)
             print(f"{type(response)}")
