@@ -10,6 +10,7 @@ from draft import PickReturn
 import urllib.request
 from cog_exceptions import UserFeedbackException
 import time
+import uuid
 
 EMOJIS_BY_NUMBER = {1 : '1⃣', 2 : '2⃣', 3 : '3⃣', 4 : '4⃣', 5 : '5⃣'}
 NUMBERS_BY_EMOJI = {'1⃣' : 1, '2⃣' : 2, '3⃣' : 3, '4⃣' : 4, '5⃣' : 5}
@@ -19,30 +20,27 @@ class FetchException(Exception):
     pass
 
 
-class DraftGuild:
-    def __init__(self, guild):
-        self.players = {}
-        self.started = False
-        self.messages_by_player = {}
-        self.picks_message_by_player = {}
+class GuildDraft:
+    def __init__(self, guild, packs, cards, cube, players):
         self.guild = guild
-        self.role = get_cubedrafter_role(guild)
-        print(f"Initialized draft guild. Role: {self.role}")
+        self.packs = packs
+        self.cards = cards
+        self.cube = cube
+        self.players = players
+        self.messages_by_player = {}
+        self.uuid = str(uuid.uuid4())
 
-    def is_started(self):
-        return self.started
+    def id(self):
+        return self.uuid
 
-    def player_not_playing(self, player):
-        return player.id not in self.players
-
-    def is_empty(self):
-        return len(self.players) == 0
+    def id_with_guild(self):
+        return f"{self.guild.name}:{self.uuid}"
 
     def get_players(self):
         return self.players.values()
 
-    def has_player(self, player_id):
-        return player_id in self.players
+    def has_player(self, player):
+        return player.id in self.players
 
     def has_message(self, message_id):
         for _, messages in self.messages_by_player.items():
@@ -51,38 +49,22 @@ class DraftGuild:
         return False
 
     def get_pending_players(self):
-        if self.started:
-            pending = self.draft.get_pending_players()
-            players = [self.players[x] for x in pending]
-            return players
-        else:
-            return None
-    
-    async def add_player(self, player):
-        self.players[player.id] = player
-        if self.role is not None:
-            await player.add_roles(self.role)
+        pending = self.draft.get_pending_players()
+        players = [self.players[x] for x in pending]
+        return players
 
-    async def remove_player(self, player):
-        if self.role is not None:
-            await player.remove_roles(self.role)
-        if player.id in self.players:
-            del self.players[player.id]
-
-
-    async def start(self, ctx, packs, cards, cube):
-        card_list = await get_card_list(cube)
-        self.started = True
+    async def start(self, ctx):
+        card_list = await get_card_list(self.cube)
         self.draft = Draft(list(self.players.keys()), card_list)
         for p in self.players.values():
             self.messages_by_player[p.id] = {}
         await ctx.send("Starting the draft with {p}".format(p=", ".join([p.display_name for p in self.get_players()])))
-        state = self.draft.start(packs, cards,cube)
+        state = self.draft.start(self.packs, self.cards, self.cube)
         if state != PickReturn.next_booster_autopick:
-            intro = f"[{self.guild.name}] The draft has started. Pack {self.draft.get_pick_number()}, Pick {self.draft.booster_number}:"
+            intro = f"[{self.id_with_guild()}] The draft has started. Pack {self.draft.get_pick_number()}, Pick {self.draft.booster_number}:"
             await asyncio.gather(*[self.send_packs_to_player(intro, p, p.id) for p in self.get_players()])
         else:
-            intro = "Draft has started"
+            intro = f"[{self.id_with_guild()}] The draft has started"
             await asyncio.gather(*[self.send_packs_to_player(intro, p, p.id, False) for p in self.get_players()])
             state = self.draft.autopick()
             return await self.handle_pick_response(state, None)
@@ -100,11 +82,15 @@ class DraftGuild:
             print(f"Missing card_name ({card_name}) or message_id({message_id} + emoji({emoji})")
             return
 
-        await self.handle_pick_response(state, player_id)
+        return await self.handle_pick_response(state, player_id)
 
 
     async def picks(self, messageable, player_id):
         cards = self.draft.deck_of(player_id)
+        if len(cards) == 0:
+            await messageable.send(f"[{self.id_with_guild()}] You haven't picked any card yet")
+        else:
+            await messageable.send(f"[{self.id_with_guild()}] Deck: ")
         for page in range(0,int(len(cards)/5)+1):
             l = cards[5*page:5*page+5]
             if l is not None and len(l)>0:
@@ -132,41 +118,30 @@ class DraftGuild:
                     for i in range(1,message_info["len"] + 1):
                         await message_info["message"].add_reaction(EMOJIS_BY_NUMBER[i])
 
-    async def handle_pick_response(self, state, player_id):
-        if state == PickReturn.pick_error:
+    async def handle_pick_response(self, pick_return, player_id):
+        if pick_return == PickReturn.pick_error:
             await self.players[player_id].send("That card is not in the booster")
         else:
             if player_id:
                 self.messages_by_player[player_id].clear()
-            if state == PickReturn.in_progress:
+            if pick_return == PickReturn.in_progress:
                 list = ", ".join([p.display_name for p in self.get_pending_players()])
-                await self.players[player_id].send(f"[{self.guild.name}] Waiting for other players to make their picks: {list}")
-            elif state == PickReturn.next_booster:
-                await asyncio.gather(*[self.send_packs_to_player("[{guild}] Deck: {picks}\n[{guild}] Pack {pack_num}, Pick {pick_num}:\n".format(guild=self.guild.name, pick_num=self.draft.get_pick_number(), pack_num=self.draft.booster_number, picks=", ".join(self.draft.deck_of(p.id))), p, p.id) for p in self.players.values()])
-            elif state == PickReturn.next_booster_autopick:
-                await asyncio.gather(*[self.send_packs_to_player(f"[{self.guild.name}] Last card of the pack:", p, p.id, False) for p in self.players.values()])
-                state = self.draft.autopick()
-                return await self.handle_pick_response(state, player_id)
+                await self.players[player_id].send(f"[{self.id_with_guild()}] Waiting for other players to make their picks: {list}")
+            elif pick_return == PickReturn.next_booster:
+                await asyncio.gather(*[self.send_packs_to_player("[{guild}] Deck: {picks}\n[{guild}] Pack {pack_num}, Pick {pick_num}:\n".format(guild=self.id_with_guild(), pick_num=self.draft.get_pick_number(), pack_num=self.draft.booster_number, picks=", ".join(self.draft.deck_of(p.id))), p, p.id) for p in self.players.values()])
+            elif pick_return == PickReturn.next_booster_autopick:
+                await asyncio.gather(*[self.send_packs_to_player(f"[{self.id_with_guild()}] Last card of the pack:", p, p.id, False) for p in self.players.values()])
+                pick_return = self.draft.autopick()
+                return await self.handle_pick_response(pick_return, player_id)
             else: # end of draft
                 for player in self.players.values():
-                    await player.send(f"[{self.guild.name}] The draft has finished")
+                    await player.send(f"[{self.id_with_guild()}] The draft has finished")
                     content = generate_file_content(self.draft.deck_of(player.id))
                     file=BytesIO(bytes(content, 'utf-8'))
-                    await player.send(content=f"[{self.guild.name}] Your deck", file=File(fp=file, filename=f"{self.guild.name}_{time.strftime('%Y%m%d')}.txt"))
-                    if discord.utils.find(lambda m: m.name == 'CubeDrafter', player.roles):
-                        await player.remove_roles(self.role)
+                    await player.send(content=f"[{self.id_with_guild()}] Your deck", file=File(fp=file, filename=f"{self.guild.name}_{time.strftime('%Y%m%d')}.txt"))
                 self.players.clear()
                 self.messages_by_player.clear()
-                self.picks_message_by_player.clear()
-                self.started = False
-
-def get_cubedrafter_role(guild):
-    role = discord.utils.find(lambda m: m.name == 'CubeDrafter', guild.roles)
-    if role:
-        print("Guild {n} has the CubeDrafter role with id: {i}".format(n=guild.name,i=role.id))
-    else:
-        print("Guild {n} doesn't have the CubeDrafter role".format(n=guild.name))
-    return role
+                return pick_return
 
 async def send_image_with_retry(user, image_file: str, text: str = '') -> None:
     message = await send(user, file=File(image_file), content=text)

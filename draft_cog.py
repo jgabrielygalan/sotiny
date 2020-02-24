@@ -1,5 +1,6 @@
 from discord.ext import commands
-from draft_guild import DraftGuild
+from draft_guild import GuildDraft
+from guild import Guild
 import inspect
 from cog_exceptions import UserFeedbackException
 import traceback
@@ -10,15 +11,16 @@ DEFAULT_PACK_NUMBER = 3
 DEFAULT_CARD_NUMBER = 15
 
 
-def inject_draft_guild(func):
+def inject_guild(func):
     async def decorator(self, ctx, *args, **kwargs):
         if not ctx.guild:
             print("Context doesn't have a guild")
+            await ctx.send("You can't use this command in a private message")
             return
 
-        draft_guild = self.guilds_by_id[ctx.guild.id]
-        print(f"Found guild: {draft_guild}")
-        await func(self, draft_guild, ctx, *args, **kwargs)
+        guild = self.guilds_by_id[ctx.guild.id]
+        print(f"Found guild: {guild}")
+        await func(self, guild, ctx, *args, **kwargs)
 
     decorator.__name__ = func.__name__
     sig = inspect.signature(func)
@@ -46,132 +48,123 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
         for guild in self.bot.guilds:
             print("Ready on guild: {n}".format(n=guild.name))
             if not guild.id in self.guilds_by_id:
-                self.guilds_by_id[guild.id] = DraftGuild(guild)
+                self.guilds_by_id[guild.id] = Guild(guild)
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
         print("Joined {n}: {r}".format(n=guild.name, r=guild.roles))
         if not guild.id in self.guilds_by_id:
-            self.guilds_by_id[guild.id] = DraftGuild(guild)
+            self.guilds_by_id[guild.id] = Guild(guild)
 
     @commands.Cog.listener()
     async def on_guild_remove(self, guild):
-        print("Removed from {n}: {r}".format(n=guild.name))
+        print("Removed from {n}".format(n=guild.name))
         if guild.id in self.guilds_by_id:
             del self.guilds_by_id[guild.id]
 
     @commands.command(name='play', help='Register to play a draft')
-    @inject_draft_guild
-    async def play(self, draft_guild, ctx):
+    @inject_guild
+    async def play(self, guild: Guild, ctx):
         player = ctx.author
-        if draft_guild.is_started():
-            await ctx.send("A draft is already in progress. Try later when it's over")
-            return
-        if draft_guild.player_not_playing(player):
-            print(f"{player.display_name} is not playing, registering")
-            await draft_guild.add_player(player)
-            await ctx.send("{mention}, I have registered you for the next draft".format(mention=ctx.author.mention))
-        else:
-            print(f"{player.display_name} is already playing, not registering")
-            await ctx.send("{mention}, you are already registered for the next draft".format(mention=ctx.author.mention))
+        print(f"Registering {player.display_name} for the next draft")
+        await guild.add_player(player)
+        await ctx.send("{mention}, I have registered you for the next draft".format(mention=ctx.author.mention))
 
     @commands.command(name='cancel', help='Cancel your registration for the draft. Only allowed before it starts')
-    @inject_draft_guild
-    async def cancel(self, draft_guild, ctx):
+    @inject_guild
+    async def cancel(self, guild: Guild, ctx):
         player = ctx.author
-        if draft_guild.is_started():
-            await ctx.send("The draft is already in progress. You can't cancel now.")
-            return
-        if draft_guild.player_not_playing(player):
-            print(f"{player.display_name} is not playing, can't cancel")
-            await ctx.send("{mention}, you are not playing in the draft, I can't cancel".format(mention=ctx.author.mention))
-        else:
+        if guild.is_player_registered(player):
             print(f"{player.display_name} cancels registration")
-            await draft_guild.remove_player(player)
+            await guild.remove_player(player)
             await ctx.send("{mention}, you are no longer registered for the next draft".format(mention=ctx.author.mention))
-
+        else:
+            print(f"{player.display_name} is not registered, can't cancel")
+            await ctx.send("{mention}, you are not registered for the draft, I can't cancel".format(mention=ctx.author.mention))
 
     @commands.command(name='players', help='List registered players for the next draft')
-    @inject_draft_guild
-    async def players(self, draft_guild, ctx):
-        if draft_guild.is_started():
-            await ctx.send("Draft in progress. Players: {p}".format(p=", ".join([p.display_name for p in draft_guild.get_players()])))
+    @inject_guild
+    async def players(self, guild, ctx):
+        if guild.no_registered_players():
+            await ctx.send("No players registered for the next draft")
         else:
-            players = draft_guild.get_players()
-            if len(players) == 0:
-                await ctx.send("No players registered for the next draft")
-            else:
-                await ctx.send("The following players are registered for the next draft: {p}".format(p=", ".join([p.display_name for p in players])))
+            await ctx.send("The following players are registered for the next draft: {p}".format(p=", ".join([p.display_name for p in guild.get_registered_players()])))
 
     @commands.command(name='start', help="Start the draft with the registered players. Packs is the number of packs to open per player (default 3). cards is the number of cards per booster (default 15). cube is the CubeCobra id of a Cube (default Penny Dreadful Eternal Cube).")
-    @inject_draft_guild
-    async def start(self, draft_guild, ctx, packs=None, cards=None, cube=None):
-        if draft_guild.is_started():
-            await ctx.send("Draft already started. Players: {p}".format(p=[p.display_name for p in draft_guild.get_players()]))
-            return
-        if draft_guild.is_empty():
+    @inject_guild
+    async def start(self, guild, ctx, packs=None, cards=None, cube=None):
+        if guild.no_registered_players():
             await ctx.send("Can't start the draft, there are no registered players")
             return
         async with ctx.typing():
             packs, cards = validate_and_cast_start_input(packs, cards)                
-            await draft_guild.start(ctx, packs, cards, cube)
-
-
-    #@commands.command(name='pick', help='Pick a card from the booster')
-    async def pick(self, ctx, *, card):
-        draft = next((x for x in self.guilds_by_id.values() if x.has_player(ctx.author.id)), None)
-        if draft is None:
-            await ctx.send("You are not registered for a draft")
-            return
-
-        await draft.pick(ctx.author.id, card_name=card)
-
-    @commands.command(name='pending', help='Show players who still haven\'t picked')
-    async def pending(self, ctx):
-        if ctx.guild:
-            draft = self.guilds_by_id[ctx.guild.id]
-        else:
-            draft = next((x for x in self.guilds_by_id.values() if x.has_player(ctx.author.id)), None)
-        if draft is None:
-            await ctx.send("You are not registered in any draft")
-
-        players = draft.get_pending_players()
-        if players:
-            list = ", ".join([player.display_name for player in players])
-            await ctx.send(f"Pending players: {list}")
-        else:
-            await ctx.send("No pending players")
-
-    @commands.dm_only()
-    @commands.command(name='picks', help="Show your current picks as images")
-    async def my_picks(self, ctx):
-        draft = next((x for x in self.guilds_by_id.values() if x.has_player(ctx.author.id)), None)
-        if draft is None:
-            await ctx.send("You are not playing any draft")
-            return
-
-        await draft.picks(ctx, ctx.author.id)
-
-    @commands.dm_only()
-    @commands.command(name='pack', help="Resend your current pack")
-    async def my_pack(self, ctx):
-        draft = next((x for x in self.guilds_by_id.values() if x.has_player(ctx.author.id)), None)
-        if draft is None:
-            await ctx.send("You are not playing any draft")
-            return
-
-        await draft.send_packs_to_player("Your pack:", ctx, ctx.author.id)
+            await guild.start(ctx, packs, cards, cube)
 
     @commands.Cog.listener()
     async def on_reaction_add(self, reaction, author) -> None:
         if author == self.bot.user:
             return
-        draft = next((x for x in self.guilds_by_id.values() if x.has_message(reaction.message.id)), None)
-        if draft is None:
-            print("Discarded reaction: {m}".format(m=reaction.message))
-            return 
+        for guild in self.guilds_by_id.values():
+            handled = await guild.try_pick_with_reaction(reaction, author)
+            if handled:
+                return
 
-        await draft.pick(author.id, message_id=reaction.message.id, emoji=reaction.emoji)
+    @commands.command(name='pending', help='Show players who still haven\'t picked')
+    async def pending(self, ctx, draft_id = None):
+        draft = await self.find_draft_or_send_error(ctx, draft_id)
+        if draft is not None:
+            players = draft.get_pending_players()
+            if players:
+                list = ", ".join([player.display_name for player in players])
+                await ctx.send(f"Pending players: {list}")
+            else:
+                await ctx.send("No pending players")
+
+    @commands.dm_only()
+    @commands.command(name='deck', help="Show your current deck as images")
+    async def my_deck(self, ctx, draft_id = None):
+        draft = await self.find_draft_or_send_error(ctx, draft_id)
+        if draft is not None:
+            await draft.picks(ctx, ctx.author.id)
+
+    @commands.dm_only()
+    @commands.command(name='pack', help="Resend your current pack")
+    async def my_pack(self, ctx, draft_id = None):
+        draft = await self.find_draft_or_send_error(ctx, draft_id)
+        if draft is not None:
+            await draft.send_packs_to_player("Your pack:", ctx, ctx.author.id)
+
+    async def find_draft_or_send_error(self, ctx, draft_id=None):
+        drafts = None
+        if draft_id is None:
+            drafts = self.find_drafts_by_player(ctx.author)
+            if len(drafts) > 1:
+                list = "\n".join([f"{x.id_with_guild()}" for x in drafts])
+                await ctx.send("You are playing in several drafts. Please specify the draft id:")
+                await ctx.send(f"```{list}```")            
+                return None
+            elif len(drafts) == 0:
+                await ctx.send("You are not playing any draft")
+                return None
+            else:
+                return drafts[0]
+        else:
+            draft = self.find_draft_by_id(draft_id)
+            if draft is None:
+                await ctx.send("You are not playing any draft")
+            return draft
+
+    def find_drafts_by_player(self, player):
+        drafts = []
+        [drafts.extend(guild.get_drafts_for_player(player)) for guild in self.guilds_by_id.values()]
+        return drafts
+
+    def find_draft_by_id(self, draft_id):
+        for guild in self.guilds_by_id.values():
+            draft = guild.get_draft_by_id(draft_id)
+            if draft is not None:
+                return draft
+        return None
 
 
 def validate_and_cast_start_input(packs, cards):
