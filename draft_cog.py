@@ -28,8 +28,9 @@ def inject_guild(func):
     return decorator
 
 class DraftCog(commands.Cog, name="CubeDrafter"):
-    def __init__(self, bot):
+    def __init__(self, bot, cfg):
         self.bot = bot
+        self.cfg = cfg
         self.guilds_by_id = {}
 
     async def cog_command_error(self, ctx, error):
@@ -139,9 +140,9 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
         if draft_id is None:
             drafts = self.find_drafts_by_player(ctx.author)
             if len(drafts) > 1:
-                list = "\n".join([f"{x.id_with_guild()}" for x in drafts])
+                list = "\n".join([f"{x.guild.name}: **{x.id()}**" for x in drafts])
                 await ctx.send("You are playing in several drafts. Please specify the draft id:")
-                await ctx.send(f"```{list}```")            
+                await ctx.send(f"{list}")            
                 return None
             elif len(drafts) == 0:
                 await ctx.send("You are not playing any draft")

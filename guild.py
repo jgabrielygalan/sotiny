@@ -6,6 +6,7 @@ from draft import PickReturn
 
 class Guild:
     def __init__(self, guild):
+        self.guild = guild
         self.id = guild.id
         self.name = guild.name
         self.role = get_cubedrafter_role(guild)
@@ -77,8 +78,15 @@ class Guild:
 
 def get_cubedrafter_role(guild):
     role = discord.utils.find(lambda m: m.name == 'CubeDrafter', guild.roles)
+    top_role = guild.me.top_role
+    print(f"{role.name} at {role.position}. {top_role.name} at {top_role.position}")
     if role:
-        print("Guild {n} has the CubeDrafter role with id: {i}".format(n=guild.name,i=role.id))
+        if role.position < top_role.position:
+            print("Guild {n} has the CubeDrafter role with id: {i}".format(n=guild.name,i=role.id))
+            return role
+        else:
+            print("Guild {n} has the CubeDrafter role with id: {i}, but with higher position than the bot, can't manage it".format(n=guild.name,i=role.id))
+            return None
     else:
         print("Guild {n} doesn't have the CubeDrafter role".format(n=guild.name))
     return role

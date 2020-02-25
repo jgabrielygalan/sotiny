@@ -28,13 +28,13 @@ class GuildDraft:
         self.cube = cube
         self.players = players
         self.messages_by_player = {}
-        self.uuid = str(uuid.uuid4())
+        self.uuid = str(uuid.uuid4()).replace('-', '')
 
     def id(self):
         return self.uuid
-
+        
     def id_with_guild(self):
-        return f"{self.guild.name}:{self.uuid}"
+        return f"{self.guild.name}: {self.uuid}"
 
     def get_players(self):
         return self.players.values()
@@ -100,7 +100,7 @@ class GuildDraft:
     async def send_packs_to_player(self, intro, messageable, player_id, reactions=True):
         self.messages_by_player[player_id].clear()
         async with messageable.typing():
-            await messageable.send(intro)
+            await messageable.send(f"[{self.id_with_guild()}] {intro}")
             cards = self.draft.pack_of(player_id).cards
             print(numpy.array(cards))
             list = numpy.array_split(numpy.array(cards),[5,10]) #split at positions 5 and 10, defaulting to empty arrays

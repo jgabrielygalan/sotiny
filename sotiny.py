@@ -21,7 +21,7 @@ async def on_ready():
     print(f'{bot.user.name} has connected to Discord!')
 
 
-bot.add_cog(DraftCog(bot))
+bot.add_cog(DraftCog(bot, cfg))
 #bot.add_cog(ImageCog(bot))
 bot.run(TOKEN)
 
