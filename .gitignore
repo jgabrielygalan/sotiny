@@ -7,3 +7,4 @@ __pycache__
 .vscode
 *.log
 notes.txt
+.mypy_cache/
