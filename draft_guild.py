@@ -114,7 +114,6 @@ class GuildDraft:
                     i += 1
             if reactions: 
                 for message_info in self.messages_by_player[player_id].values():
-                    print(message_info)
                     for i in range(1,message_info["len"] + 1):
                         await message_info["message"].add_reaction(EMOJIS_BY_NUMBER[i])
 

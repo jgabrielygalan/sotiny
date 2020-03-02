@@ -135,6 +135,17 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
         if draft is not None:
             await draft.send_packs_to_player("Your pack:", ctx, ctx.author.id)
 
+    @commands.dm_only()
+    @commands.command(name='drafts', help="Show your in progress drafts")
+    async def my_drafts(self, ctx):
+        drafts = self.find_drafts_by_player(ctx.author)
+        if len(drafts) == 0:
+            await ctx.send("You are not playing any draft")
+        else:
+            divider = "\n"
+            list = divider.join([f"[{x.guild.name}:{x.id()}] {x.packs} packs ({x.cards} cards). {', '.join([p.display_name for p in x.get_players()])}" for x in drafts])
+            await ctx.send(f"{list}")            
+
     async def find_draft_or_send_error(self, ctx, draft_id=None):
         drafts = None
         if draft_id is None:
