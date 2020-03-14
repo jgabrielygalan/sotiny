@@ -43,7 +43,7 @@ class Guild:
     def get_registered_players(self) -> List[discord.Member]:
         return self.players.values()
 
-    def player_exists(self, player):
+    def player_exists(self, player) -> bool:
         return self.is_player_playing(player) or self.is_player_registered(player)
 
     def get_drafts_for_player(self, player) -> List[GuildDraft]:
@@ -82,7 +82,7 @@ class Guild:
                     await player.remove_roles(self.role)
 
 
-def get_cubedrafter_role(guild: discord.Guild):
+def get_cubedrafter_role(guild: discord.Guild) -> discord.Role:
     role = discord.utils.find(lambda m: m.name == 'CubeDrafter', guild.roles)
     if role is None:
         print("Guild {n} doesn't have the CubeDrafter role".format(n=guild.name))

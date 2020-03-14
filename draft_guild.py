@@ -23,6 +23,9 @@ class FetchException(Exception):
 
 
 class GuildDraft:
+    """
+    Discord-aware wrapper for a Draft.
+    """
     def __init__(self, guild, packs, cards, cube, players):
         self.guild = guild
         self.packs = packs
