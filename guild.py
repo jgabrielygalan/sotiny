@@ -1,8 +1,11 @@
 from copy import copy
-import discord
-from draft_guild import GuildDraft
-from draft import PickReturn
 from typing import List
+
+import discord
+
+from draft import PickReturn
+from draft_guild import GuildDraft
+
 
 class Guild:
     """

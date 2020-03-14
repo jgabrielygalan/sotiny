@@ -1,9 +1,10 @@
-from enum import Enum
 import random
-from booster import Booster
-import utils
-
+from enum import Enum
 from typing import List, Optional
+
+import utils
+from booster import Booster
+
 PickReturn = Enum('PickReturn', 'pick_error, in_progress, next_booster, finished, next_booster_autopick')
 
 

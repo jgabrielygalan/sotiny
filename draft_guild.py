@@ -1,16 +1,18 @@
-import aiohttp
 import asyncio
-from io import BytesIO
-import discord
-from draft import Draft
-from discord import File
-import image_fetcher
-import numpy
-from draft import PickReturn
-import urllib.request
-from cog_exceptions import UserFeedbackException
 import time
+import urllib.request
 import uuid
+from io import BytesIO
+from typing import List
+
+import aiohttp
+import discord
+import numpy
+from discord import File
+
+import image_fetcher
+from cog_exceptions import UserFeedbackException
+from draft import Draft, PickReturn
 
 EMOJIS_BY_NUMBER = {1 : '1⃣', 2 : '2⃣', 3 : '3⃣', 4 : '4⃣', 5 : '5⃣'}
 NUMBERS_BY_EMOJI = {'1⃣' : 1, '2⃣' : 2, '3⃣' : 3, '4⃣' : 4, '5⃣' : 5}

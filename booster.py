@@ -1,4 +1,6 @@
 from typing import List
+
+
 class Booster(object):
 	def __init__(self, cards: List[str]) -> None:
 		super(Booster, self).__init__()

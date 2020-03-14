@@ -1,6 +1,8 @@
 from discord import File
 from discord.ext import commands
+
 import image_fetcher
+
 
 class ImageCog(commands.Cog):
     def __init__(self, bot):

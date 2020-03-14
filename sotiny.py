@@ -1,12 +1,12 @@
 #sotiny.py
 
-import os
 import json
+import os
+
+from discord.ext import commands
 
 from draft_cog import DraftCog
 from image_cog import ImageCog
-
-from discord.ext import commands
 
 cfg = json.load(open('config.json'))
 TOKEN = cfg['DISCORD_TOKEN']
@@ -24,4 +24,3 @@ async def on_ready() -> None:
 bot.add_cog(DraftCog(bot, cfg))
 #bot.add_cog(ImageCog(bot))
 bot.run(TOKEN)
-

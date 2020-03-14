@@ -1,11 +1,12 @@
 import asyncio
-import aiohttp
 import hashlib
-from PIL import Image
 import os
 import re
 import unicodedata
 import urllib.request
+
+import aiohttp
+from PIL import Image
 
 CARD_BACK=Image.open("./card_back.jpg")
 STANDALONE="standalone"
