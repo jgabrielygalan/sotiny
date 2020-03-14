@@ -41,7 +41,7 @@ async def download_scryfall_card_image(c, filepath: str, version: str = '') -> b
         await store_async(scryfall_image(c, version=version), filepath)
     except FetchException as e:
         print('Error: {e}'.format(e=e))
-    return acceptable_file(filepath)    
+    return acceptable_file(filepath)
 
 
 def scryfall_image(card, version: str = '') -> str:
@@ -128,3 +128,9 @@ def escape(str_input: str, skip_double_slash: bool = False) -> str:
     if skip_double_slash:
         s = s.replace('-split-', '//')
     return s
+
+if not os.path.exists('./images'):
+    os.mkdir('./images')
+for dirname in [STANDALONE, COMPOSITE]:
+    if not os.path.exists(f'./images/{dirname}'):
+        os.mkdir(f'./images/{dirname}')
