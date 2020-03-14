@@ -5,7 +5,7 @@ from draft import PickReturn
 
 
 class Guild:
-    def __init__(self, guild):
+    def __init__(self, guild) -> None:
         self.guild = guild
         self.id = guild.id
         self.name = guild.name
@@ -76,7 +76,7 @@ class Guild:
                     await player.remove_roles(self.role)
 
 
-def get_cubedrafter_role(guild):
+def get_cubedrafter_role(guild: discord.Guild):
     role = discord.utils.find(lambda m: m.name == 'CubeDrafter', guild.roles)
     if role is None:
         print("Guild {n} doesn't have the CubeDrafter role".format(n=guild.name))

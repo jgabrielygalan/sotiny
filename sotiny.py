@@ -17,7 +17,7 @@ if 'BOT_PREFIX' in cfg:
 bot = commands.Bot(command_prefix=PREFIX)
 
 @bot.event
-async def on_ready():
+async def on_ready() -> None:
     print(f'{bot.user.name} has connected to Discord!')
 
 

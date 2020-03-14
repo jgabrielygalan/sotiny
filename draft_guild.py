@@ -150,7 +150,7 @@ async def send_image_with_retry(user, image_file: str, text: str = '') -> None:
         message = await send(user, file=File(image_file), content=text)
     return message
 
-async def send(user, content: str, file = None):
+async def send(user, content: str, file = None) -> discord.Message:
     new_s = escape_underscores(content)
     return await user.send(file=file, content=new_s)
 
