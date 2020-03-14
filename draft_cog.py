@@ -31,7 +31,7 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
     def __init__(self, bot, cfg):
         self.bot = bot
         self.cfg = cfg
-        self.guilds_by_id = {}
+        self.guilds_by_id: dict[int, Guild] = {}
 
     async def cog_command_error(self, ctx, error):
         print(error)
@@ -50,6 +50,10 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
             print("Ready on guild: {n}".format(n=guild.name))
             if not guild.id in self.guilds_by_id:
                 self.guilds_by_id[guild.id] = Guild(guild)
+                if self.guilds_by_id[guild.id].role is None and guild.me.guild_permissions.manage_roles:
+                    print(f'Creating CubeDrafter Role for {guild.name}')
+                    role = await guild.create_role(name='CubeDrafter', reason='A role assigned to anyone currently drafting a cube')
+                    self.guilds_by_id[guild.id].role = role
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
