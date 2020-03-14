@@ -3,27 +3,28 @@ import random
 from booster import Booster
 import utils
 
+from typing import List, Optional
 PickReturn = Enum('PickReturn', 'pick_error, in_progress, next_booster, finished, next_booster_autopick')
 
 
 class Draft:
-	def __init__(self, players, card_list):
+	def __init__(self, players: List[int], card_list: List[str]) -> None:
 		self.cards = card_list
 		self.players = players
 		random.shuffle(self.players)
 		self.state = {}
 		self.decks = { player:[] for player in players }
 
-	def pack_of(self, player_id):
+	def pack_of(self, player_id: int) -> Booster:
 		return self.state[player_id]
 
-	def deck_of(self, player_id):
+	def deck_of(self, player_id: int) -> List[str]:
 		return self.decks[player_id]
 
-	def get_pick_number(self):
+	def get_pick_number(self) -> int:
 		return self.pick_number
 
-	def start(self, number_of_packs, cards_per_booster, cube=None):
+	def start(self, number_of_packs: int, cards_per_booster: int, cube: None = None) -> PickReturn:
 		self.number_of_packs = number_of_packs
 		self.cards_per_booster = cards_per_booster
 		random.shuffle(self.cards)
@@ -33,7 +34,7 @@ class Draft:
 			return PickReturn.next_booster_autopick
 		return PickReturn.next_booster
 
-	def open_boosters(self):
+	def open_boosters(self) -> None:
 		self.pick_number = 1
 		for player in self.players:
 			card_list = [self.cards.pop() for _ in range(0,self.cards_per_booster)]
@@ -45,7 +46,7 @@ class Draft:
 	def get_pending_players(self):
 		return (set(self.players).difference(set(self.picked)))
 
-	def pick(self, player, card_name=None, position=None):
+	def pick(self, player: int, card_name: None = None, position: Optional[int] = None) -> PickReturn:
 		if player not in self.picked:
 			if card_name is not None:
 				card = self.state[player].pick(card_name)
@@ -80,14 +81,14 @@ class Draft:
 				return PickReturn.finished
 		return PickReturn.in_progress
 
-	def autopick(self):
+	def autopick(self) -> PickReturn:
 		if len(self.state[self.players[0]].cards) != 1:
 			print(f"Error, can't autopick. Pack is: {self.state[self.players[0]].cards}")
 		for player in self.players:
 			state = self.pick(player, position=0)
 		return state
 
-	def pass_boosters(self):
+	def pass_boosters(self) -> None:
 		self.pick_number += 1
 		if self.booster_number % 2 == 0:
 			last = self.state[self.players[-1]]

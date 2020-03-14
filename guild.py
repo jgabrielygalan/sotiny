@@ -2,9 +2,12 @@ from copy import copy
 import discord
 from draft_guild import GuildDraft
 from draft import PickReturn
-
+from typing import List
 
 class Guild:
+    """
+    Maintains state about a Guild, and handles draft registration
+    """
     def __init__(self, guild) -> None:
         self.guild = guild
         self.id = guild.id
@@ -13,37 +16,37 @@ class Guild:
         self.drafts_in_progress = []
         self.players = {} # players registered for the next draft
 
-    async def add_player(self, player):
+    async def add_player(self, player: discord.Member) -> None:
         self.players[player.id] = player
         if self.role is not None:
             await player.add_roles(self.role)
 
-    async def remove_player(self, player):
+    async def remove_player(self, player: discord.Member) -> None:
         if self.role is not None:
             await player.remove_roles(self.role)
         if player.id in self.players:
             del self.players[player.id]
 
-    def is_player_registered(self, player):
+    def is_player_registered(self, player: discord.Member) -> bool:
         return player.id in self.players
 
-    def is_player_playing(self, player):
+    def is_player_playing(self, player: discord.Member) -> bool:
         draft = next((x for x in self.drafts_in_progress if x.has_player(player.id)), None)
         return draft != None
 
-    def no_registered_players(self):
+    def no_registered_players(self) -> bool:
         return len(self.players) == 0
 
-    def get_registered_players(self):
+    def get_registered_players(self) -> List[discord.Member]:
         return self.players.values()
 
     def player_exists(self, player):
         return self.is_player_playing(player) or self.is_player_registered(player)
 
-    def get_drafts_for_player(self, player):
+    def get_drafts_for_player(self, player) -> List[GuildDraft]:
         return [x for x in self.drafts_in_progress if x.has_player(player)]
 
-    def get_draft_by_id(self, draft_id):
+    def get_draft_by_id(self, draft_id) -> GuildDraft:
         for x in self.drafts_in_progress:
             if x.id() == draft_id:
                 return x
@@ -71,7 +74,7 @@ class Guild:
         if self.role is None:
             return
         for player in draft.get_players():
-            if not self.player_exists(player):        
+            if not self.player_exists(player):
                 if discord.utils.find(lambda m: m.name == 'CubeDrafter', player.roles):
                     await player.remove_roles(self.role)
 
@@ -88,5 +91,5 @@ def get_cubedrafter_role(guild: discord.Guild):
         return role
     else:
         print("Guild {n} has the CubeDrafter role with id: {i}, but with higher position than the bot, can't manage it".format(n=guild.name,i=role.id))
-        return None        
+        return None
     return role

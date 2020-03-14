@@ -5,13 +5,15 @@ import inspect
 from cog_exceptions import UserFeedbackException
 import traceback
 import utils
+from typing import Dict
 
 
+from discord.ext.commands.bot import Bot
 DEFAULT_PACK_NUMBER = 3
 DEFAULT_CARD_NUMBER = 15
 
 
-def inject_guild(func):
+def inject_guild(func: Callable) -> Callable:
     async def decorator(self, ctx, *args, **kwargs):
         if not ctx.guild:
             print("Context doesn't have a guild")
@@ -28,10 +30,10 @@ def inject_guild(func):
     return decorator
 
 class DraftCog(commands.Cog, name="CubeDrafter"):
-    def __init__(self, bot, cfg):
+    def __init__(self, bot: Bot, cfg: Dict[str, str]) -> None:
         self.bot = bot
         self.cfg = cfg
-        self.guilds_by_id: dict[int, Guild] = {}
+        self.guilds_by_id: Dict[int, Guild] = {}
 
     async def cog_command_error(self, ctx, error):
         print(error)
@@ -102,7 +104,7 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
             await ctx.send("Can't start the draft, there are no registered players")
             return
         async with ctx.typing():
-            packs, cards = validate_and_cast_start_input(packs, cards)                
+            packs, cards = validate_and_cast_start_input(packs, cards)
             await guild.start(ctx, packs, cards, cube)
 
     @commands.Cog.listener()
@@ -114,8 +116,11 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
             if handled:
                 return
 
-    @commands.command(name='pending', help='Show players who still haven\'t picked')
+    @commands.command(name='pending')
     async def pending(self, ctx, draft_id = None):
+        """
+        Show players who still haven't picked
+        """
         draft = await self.find_draft_or_send_error(ctx, draft_id)
         if draft is not None:
             players = draft.get_pending_players()
@@ -148,7 +153,7 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
         else:
             divider = "\n"
             list = divider.join([f"[{x.guild.name}:{x.id()}] {x.packs} packs ({x.cards} cards). {', '.join([p.display_name for p in x.get_players()])}" for x in drafts])
-            await ctx.send(f"{list}")            
+            await ctx.send(f"{list}")
 
     async def find_draft_or_send_error(self, ctx, draft_id=None):
         drafts = None
@@ -157,7 +162,7 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
             if len(drafts) > 1:
                 list = "\n".join([f"{x.guild.name}: **{x.id()}**" for x in drafts])
                 await ctx.send("You are playing in several drafts. Please specify the draft id:")
-                await ctx.send(f"{list}")            
+                await ctx.send(f"{list}")
                 return None
             elif len(drafts) == 0:
                 await ctx.send("You are not playing any draft")

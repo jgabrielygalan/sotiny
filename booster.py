@@ -1,9 +1,10 @@
+from typing import List
 class Booster(object):
-	def __init__(self, cards):
+	def __init__(self, cards: List[str]) -> None:
 		super(Booster, self).__init__()
 		self.cards = cards
 	
-	def __str__(self):
+	def __str__(self) -> str:
 		return ", ".join(self.cards)
 		
 	def __repr__(self):
@@ -16,7 +17,7 @@ class Booster(object):
 		else:
 			return None
 
-	def pick_by_position(self, position):
+	def pick_by_position(self, position: int) -> str:
 		print("position: {p}".format(p=position))
 		print(len(self.cards))
 		print(self.cards[position-1])

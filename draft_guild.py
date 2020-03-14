@@ -15,7 +15,7 @@ import uuid
 EMOJIS_BY_NUMBER = {1 : '1⃣', 2 : '2⃣', 3 : '3⃣', 4 : '4⃣', 5 : '5⃣'}
 NUMBERS_BY_EMOJI = {'1⃣' : 1, '2⃣' : 2, '3⃣' : 3, '4⃣' : 4, '5⃣' : 5}
 DEFAULT_CUBE_CUBECOBRA_ID = "4rx"
- 
+
 class FetchException(Exception):
     pass
 
@@ -32,8 +32,8 @@ class GuildDraft:
 
     def id(self):
         return self.uuid
-        
-    def id_with_guild(self):
+
+    def id_with_guild(self) -> str:
         return f"{self.guild.name}: {self.uuid}"
 
     def get_players(self):
@@ -42,7 +42,7 @@ class GuildDraft:
     def has_player(self, player):
         return player.id in self.players
 
-    def has_message(self, message_id):
+    def has_message(self, message_id: int) -> bool:
         for _, messages in self.messages_by_player.items():
             if message_id in messages:
                 return True
@@ -109,10 +109,10 @@ class GuildDraft:
                 if l is not None and len(l)>0:
                     image_file = await image_fetcher.download_image_async(l)
                     message = await send_image_with_retry(messageable, image_file)
-                    if reactions: 
+                    if reactions:
                         self.messages_by_player[player_id][message.id] = {"row": i, "message": message, "len": len(l)}
                     i += 1
-            if reactions: 
+            if reactions:
                 for message_info in self.messages_by_player[player_id].values():
                     for i in range(1,message_info["len"] + 1):
                         await message_info["message"].add_reaction(EMOJIS_BY_NUMBER[i])
@@ -182,7 +182,7 @@ async def fetch(session, url):
             raise UserFeedbackException(f"Unable to load cube list from {url}")
         return await response.text()
 
-async def get_card_list(cube_name):
+async def get_card_list(cube_name) -> List[str]:
     if cube_name is None:
         try:
             return await load_cubecobra_cube(DEFAULT_CUBE_CUBECOBRA_ID)
@@ -193,7 +193,7 @@ async def get_card_list(cube_name):
         return await load_cubecobra_cube(cube_name)
 
 
-async def load_cubecobra_cube(cubecobra_id):
+async def load_cubecobra_cube(cubecobra_id: str) -> List[str]:
     url = f'https://cubecobra.com/cube/api/cubelist/{cubecobra_id}'
     print(f'Async fetching {url}')
     try:
@@ -208,7 +208,7 @@ async def load_cubecobra_cube(cubecobra_id):
         raise UserFeedbackException(f"Unable to load cube list from {url}")
 
 
-def get_cards(file_name='EternalPennyDreadfulCube.txt'):
+def get_cards(file_name='EternalPennyDreadfulCube.txt') -> List[str]:
 	with open(file_name) as f:
 		read_cards = f.read().splitlines()
 
