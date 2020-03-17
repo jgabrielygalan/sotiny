@@ -57,10 +57,10 @@ class Guild:
 
     async def start(self, ctx, packs, cards, cube):
         players = copy(self.players)
-        self.players = {}
         draft = GuildDraft(self, packs, cards, cube, players)
-        self.drafts_in_progress.append(draft)
         await draft.start(ctx)
+        self.players = {}
+        self.drafts_in_progress.append(draft)
 
     async def try_pick_with_reaction(self, reaction, player):
         draft = next((x for x in self.drafts_in_progress if x.has_message(reaction.message.id)), None)
