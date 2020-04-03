@@ -58,12 +58,13 @@ class GuildDraft:
         players = [self.players[x] for x in pending]
         return players
 
-    async def start(self, ctx):
+    async def start(self, channel:discord.TextChannel):
         card_list = await get_card_list(self.cube)
         self.draft = Draft(list(self.players.keys()), card_list)
+        self.start_channel_id = channel.id
         for p in self.players.values():
             self.messages_by_player[p.id] = {}
-        await ctx.send("Starting the draft with {p}".format(p=", ".join([p.display_name for p in self.get_players()])))
+        await channel.send("Starting the draft with {p}".format(p=", ".join([p.display_name for p in self.get_players()])))
         state = self.draft.start(self.packs, self.cards, self.cube)
         if state != PickReturn.next_booster_autopick:
             intro = f"[{self.id_with_guild()}] The draft has started. Pack {self.draft.get_pick_number()}, Pick {self.draft.booster_number}:"
@@ -138,6 +139,7 @@ class GuildDraft:
                 pick_return = self.draft.autopick()
                 return await self.handle_pick_response(pick_return, player_id)
             else: # end of draft
+                await self.guild.guild.get_channel(self.start_channel_id).send("Finished the draft with {p}".format(p=", ".join([p.display_name for p in self.get_players()])))
                 for player in self.players.values():
                     await player.send(f"[{self.id_with_guild()}] The draft has finished")
                     content = generate_file_content(self.draft.deck_of(player.id))
