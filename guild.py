@@ -58,7 +58,7 @@ class Guild:
     async def start(self, ctx, packs, cards, cube):
         players = copy(self.players)
         draft = GuildDraft(self, packs, cards, cube, players)
-        await draft.start(ctx)
+        await draft.start(ctx.channel)
         self.players = {}
         self.drafts_in_progress.append(draft)
 

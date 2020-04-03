@@ -1,6 +1,7 @@
 import inspect
 import traceback
 from typing import Dict
+from typing import Callable
 
 from discord.ext import commands
 from discord.ext.commands.bot import Bot
