@@ -13,6 +13,7 @@ from discord import File
 import image_fetcher
 from cog_exceptions import UserFeedbackException
 from draft import Draft, PickReturn
+from draft_player import DraftPlayer
 
 EMOJIS_BY_NUMBER = {1 : '1⃣', 2 : '2⃣', 3 : '3⃣', 4 : '4⃣', 5 : '5⃣'}
 NUMBERS_BY_EMOJI = {'1⃣' : 1, '2⃣' : 2, '3⃣' : 3, '4⃣' : 4, '5⃣' : 5}
@@ -64,30 +65,28 @@ class GuildDraft:
         for p in self.players.values():
             self.messages_by_player[p.id] = {}
         await ctx.send("Starting the draft with {p}".format(p=", ".join([p.display_name for p in self.get_players()])))
-        state = self.draft.start(self.packs, self.cards, self.cube)
-        if state != PickReturn.next_booster_autopick:
-            intro = f"[{self.id_with_guild()}] The draft has started. Pack {self.draft.get_pick_number()}, Pick {self.draft.booster_number}:"
-            await asyncio.gather(*[self.send_packs_to_player(intro, p, p.id) for p in self.get_players()])
-        else:
-            intro = f"[{self.id_with_guild()}] The draft has started"
-            await asyncio.gather(*[self.send_packs_to_player(intro, p, p.id, False) for p in self.get_players()])
-            state = self.draft.autopick()
-            return await self.handle_pick_response(state, None)
+        players_to_update = self.draft.start(self.packs, self.cards, self.cube)
+        #if state != PickReturn.next_booster_autopick:
+        intro = f"The draft has started. Pack 1, Pick 1:"
+        await asyncio.gather(*[self.send_pack_to_player(intro, p) for p in players_to_update])
+        #else:
+        #    intro = f"[{self.id_with_guild()}] The draft has started"
+        #    await asyncio.gather(*[self.send_packs_to_player(intro, p, p.id, False) for p in self.get_players()])
+        #    state = self.draft.autopick()
+        #    return await self.handle_pick_response(state, None)
 
 
-    async def pick(self, player_id, card_name=None, message_id=None, emoji=None):
-        if card_name is not None:
-            state = self.draft.pick(player_id, card_name=card_name)
-        elif message_id is not None and emoji is not None:
+    async def pick(self, player_id, message_id=None, emoji=None):
+        if message_id is not None and emoji is not None:
             page_number = self.messages_by_player[player_id][message_id]["row"]
             item_number = NUMBERS_BY_EMOJI[emoji]
             print("Player {u} reacted with {n} for row {i}".format(u=player_id, n=item_number, i=page_number))
-            state = self.draft.pick(player_id, position=item_number+(5*(page_number-1)))
+            players_to_update = self.draft.pick(player_id, position=item_number+(5*(page_number-1)))
         else:
-            print(f"Missing card_name ({card_name}) or message_id({message_id} + emoji({emoji})")
+            print(f"Missing message_id({message_id} + emoji({emoji})")
             return
 
-        return await self.handle_pick_response(state, player_id)
+        return await self.handle_pick_response(players_to_update, player_id)
 
 
     async def picks(self, messageable, player_id):
@@ -102,7 +101,9 @@ class GuildDraft:
                 image_file = await image_fetcher.download_image_async(l)
                 await send_image_with_retry(messageable, image_file)
 
-    async def send_packs_to_player(self, intro, messageable, player_id, reactions=True):
+    async def send_pack_to_player(self, intro: str, player: DraftPlayer, reactions=True):
+        player_id = player.id
+        messageable = self.players[player_id]
         self.messages_by_player[player_id].clear()
         async with messageable.typing():
             await messageable.send(f"[{self.id_with_guild()}] {intro}")
@@ -122,30 +123,33 @@ class GuildDraft:
                     for i in range(1,message_info["len"] + 1):
                         await message_info["message"].add_reaction(EMOJIS_BY_NUMBER[i])
 
-    async def handle_pick_response(self, pick_return, player_id):
-        if pick_return == PickReturn.pick_error:
-            await self.players[player_id].send("That card is not in the booster")
-        else:
-            if player_id:
-                self.messages_by_player[player_id].clear()
-            if pick_return == PickReturn.in_progress:
-                list = ", ".join([p.display_name for p in self.get_pending_players()])
-                await self.players[player_id].send(f"[{self.id_with_guild()}] Waiting for other players to make their picks: {list}")
-            elif pick_return == PickReturn.next_booster:
-                await asyncio.gather(*[self.send_packs_to_player("[{guild}] Deck: {picks}\n[{guild}] Pack {pack_num}, Pick {pick_num}:\n".format(guild=self.id_with_guild(), pick_num=self.draft.get_pick_number(), pack_num=self.draft.booster_number, picks=", ".join(self.draft.deck_of(p.id))), p, p.id) for p in self.players.values()])
-            elif pick_return == PickReturn.next_booster_autopick:
-                await asyncio.gather(*[self.send_packs_to_player(f"[{self.id_with_guild()}] Last card of the pack:", p, p.id, False) for p in self.players.values()])
-                pick_return = self.draft.autopick()
-                return await self.handle_pick_response(pick_return, player_id)
-            else: # end of draft
-                for player in self.players.values():
-                    await player.send(f"[{self.id_with_guild()}] The draft has finished")
-                    content = generate_file_content(self.draft.deck_of(player.id))
-                    file=BytesIO(bytes(content, 'utf-8'))
-                    await player.send(content=f"[{self.id_with_guild()}] Your deck", file=File(fp=file, filename=f"{self.guild.name}_{time.strftime('%Y%m%d')}.txt"))
-                self.players.clear()
-                self.messages_by_player.clear()
-                return pick_return
+    async def handle_pick_response(self, players_to_update, player_id):
+        if player_id:
+            self.messages_by_player[player_id].clear()
+        
+        current_player_has_next_booster = False
+        coroutines = []
+        for player in players_to_update:
+            if player.id == player_id:
+                current_player_has_next_booster = True
+            deck = ", ".join(player.deck)
+            intro = f"[{self.id_with_guild()}] Deck: {deck}\n[{self.id_with_guild()}] Pack {player.current_pack.number}, Pick {player.current_pack.pick_number}:\n"
+            coroutines.append(self.send_pack_to_player(intro, player))
+
+        if not current_player_has_next_booster:
+            list = self.draft.get_pending_players()
+            coroutines.append(self.players[player_id].send(f"[{self.id_with_guild()}] Waiting for other players to make their picks: {list}"))
+            
+        await asyncio.gather(*coroutines)
+        
+        if self.draft.is_draft_finished():
+            for player in self.players.values():
+                await player.send(f"[{self.id_with_guild()}] The draft has finished")
+                content = generate_file_content(self.draft.deck_of(player.id))
+                file=BytesIO(bytes(content, 'utf-8'))
+                await player.send(content=f"[{self.id_with_guild()}] Your deck", file=File(fp=file, filename=f"{self.guild.name}_{time.strftime('%Y%m%d')}.txt"))
+            self.players.clear()
+            self.messages_by_player.clear()
 
 async def send_image_with_retry(user, image_file: str, text: str = '') -> None:
     message = await send(user, file=File(image_file), content=text)
