@@ -73,11 +73,9 @@ class Draft:
             print(self.state[self.players[0]])
             self.num_cards_picked += 1
             print(f'>>>>>>>>>>>>>> {self.num_cards_picked}')
-            
+
             if self.num_cards_picked >= self.num_cards_to_pick:
                 print("open new booster")
-                print(f"****************\nbooster_number: {self.booster_number}\nnumber_of_packs: {self.number_of_packs}\nnum_cards_picked: {self.num_cards_picked}\nnum_cards_to_pick: {self.num_cards_to_pick}")
-                print("****************")
                 self.num_cards_picked = 0
                 self.open_boosters()
                 if self.booster_number > self.number_of_packs:
@@ -92,7 +90,7 @@ class Draft:
                 if len(self.state[self.players[0]].cards) == 1: #autopick
                     return PickReturn.next_booster_autopick
                 return PickReturn.next_booster
-            
+
             else:
                 print("Draft finished")
                 return PickReturn.finished
