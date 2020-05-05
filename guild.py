@@ -62,12 +62,12 @@ class Guild:
         self.players = {}
         self.drafts_in_progress.append(draft)
 
-    async def try_pick_with_reaction(self, reaction, player):
-        draft = next((x for x in self.drafts_in_progress if x.has_message(reaction.message.id)), None)
+    async def try_pick_with_reaction(self, message_id: int, emoji, player: int) -> bool:
+        draft = next((x for x in self.drafts_in_progress if x.has_message(message_id)), None)
         if draft is None:
             return False
         else:
-            pick_return = await draft.pick(player.id, message_id=reaction.message.id, emoji=reaction.emoji)
+            pick_return = await draft.pick(player, message_id=message_id, emoji=emoji)
             if pick_return == PickReturn.finished:
                 self.drafts_in_progress.remove(draft)
                 await self.remove_role(draft)
