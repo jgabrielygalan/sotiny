@@ -1,7 +1,8 @@
 import inspect
 import traceback
-from typing import Dict, Callable
-
+from typing import Dict
+from typing import Callable
+import discord.utils
 from discord.ext import commands
 from discord.ext.commands.bot import Bot
 
@@ -109,11 +110,14 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
             await guild.start(ctx, packs, cards, cube)
 
     @commands.Cog.listener()
-    async def on_reaction_add(self, reaction, author) -> None:
-        if author == self.bot.user:
+    async def on_raw_reaction_add(self, payload: discord.RawReactionActionEvent) -> None:
+        channel = self.bot.get_channel(payload.channel_id)
+        # if isinstance(channel, discord.DMChannel):
+        # msg: discord.Message = discord.utils.get(self.bot.cached_messages, id=payload.message_id) or await channel.fetch_message(payload.message_id)
+        if payload.user_id == self.bot.user.id:
             return
         for guild in self.guilds_by_id.values():
-            handled = await guild.try_pick_with_reaction(reaction, author)
+            handled = await guild.try_pick_with_reaction(payload.message_id, payload.emoji.name, payload.user_id)
             if handled:
                 return
 
