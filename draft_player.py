@@ -38,7 +38,7 @@ class DraftPlayer:
         return current_pack
 
     def autopick(self):
-        return self.pick(0)
+        return self.pick(1)
 
     def last_pick(self):
         return self.deck[-1]
@@ -48,3 +48,6 @@ class DraftPlayer:
 
     def has_queued_packs(self):
         return len(self.queue) > 0
+
+    def has_one_card_in_current_pack(self):
+        return self.has_current_pack() and self.current_pack.number_of_cards() == 1        

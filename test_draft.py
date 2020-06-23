@@ -2,7 +2,7 @@ import unittest
 from draft_player import DraftPlayer
 from booster import Booster
 
-class TestDraftPlayer(unittest.TestCase):
+class TestDraft(unittest.TestCase):
     def setUp(self):
         self.player = DraftPlayer(1, 2, 3)
 

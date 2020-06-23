@@ -2,8 +2,10 @@ import random
 from booster import Booster
 from draft_player import DraftPlayer
 from enum import Enum
-from typing import List, Optional
+from typing import Any, Dict, List, Optional
+from cog_exceptions import UserFeedbackException
 import utils
+
 
 PickReturn = Enum('PickReturn', 'pick_error, in_progress, next_booster, finished, next_booster_autopick')
 
@@ -28,6 +30,8 @@ class Draft:
         return self.state[player_id].deck
 
     def start(self, number_of_packs: int, cards_per_booster: int, cube: None = None) -> PickReturn:
+        if number_of_packs * cards_per_booster * len(self.players) > len(self.cards):
+            raise UserFeedbackException(f"Not enough cards {len(self.cards)} for {len(self.players)} with {number_of_packs} of {cards_per_booster}")
         self.number_of_packs = number_of_packs
         self.cards_per_booster = cards_per_booster
         random.shuffle(self.cards)
@@ -50,7 +54,7 @@ class Draft:
     def is_draft_finished(self):
         return len(self.get_pending_players()) == 0
 
-    def pick(self, player_id: int, position: int):
+    def pick(self, player_id: int, position: int) -> List[Dict[str, Any]]:
         users_to_update = []
         player = self.state[player_id]
         pack = player.pick(position)
@@ -58,37 +62,37 @@ class Draft:
             return users_to_update
 
         print(f"Player {player_id} picked {player.last_pick()}")
-        final_pack = pack
-        if just_one_card_in_current_pack(player):
-            # Autopick
-            final_pack = player.autopick()
 
-        if was_last_pick_of_pack(final_pack):
-            if self.number_of_packs > pack.number:
-                self.open_booster(player, pack.number + 1)
-        else:
+        # push to next player
+        if not was_last_pick_of_pack(pack):
             next_player_id = get_next_player(player, pack)
             next_player = self.state[next_player_id]
-            is_current = next_player.push_pack(pack)
-            if is_current:
+            has_new_pack = next_player.push_pack(pack)
+            if has_new_pack:
                 users_to_update.append(next_player)
-
-
+        
         if player.has_current_pack() and player not in users_to_update:
             users_to_update.append(player)
+
+        result = []
+        for player in users_to_update:
+            updates = {'player': player, 'autopicks': []}
+            if player.has_one_card_in_current_pack():
+                self.autopick(player)
+                updates['autopicks'].append(player.last_pick())
+            result.append(updates)
 
         if self.is_draft_finished():
             print("Draft finished")
 
-        return users_to_update
+        return result
 
-    def autopick(self) -> PickReturn:
-        if len(self.state[self.players[0]].cards) != 1:
-            print(f"Error, can't autopick. Pack is: {self.state[self.players[0]].cards}")
-            return PickReturn.pick_error
-        for player in self.players:
-            state = self.pick(player, position=0)
-        return state
+    def autopick(self, player: DraftPlayer):
+        if player.has_one_card_in_current_pack():
+            pack = player.autopick()
+            if self.number_of_packs > pack.number:
+                self.open_booster(player, pack.number + 1)
+
 
 def get_next_player(player: DraftPlayer, pack: Booster):
     if pack.number % 2 == 1:
@@ -97,6 +101,3 @@ def get_next_player(player: DraftPlayer, pack: Booster):
 
 def was_last_pick_of_pack(pack: Booster):
     return pack.is_empty()
-
-def just_one_card_in_current_pack(player: DraftPlayer):
-    return player.has_current_pack() and player.current_pack.number_of_cards() == 1

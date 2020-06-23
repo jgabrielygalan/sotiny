@@ -29,18 +29,21 @@ class TestBooster(unittest.TestCase):
         result = booster.pick_by_position(1)
         self.assertEqual('a', result)
         self.assertEqual(2, booster.number_of_cards())
+        self.assertEqual(['b', 'c'], booster.cards)
 
     def test_last_card(self):
         booster = Booster(['a', 'b', 'c'], 1)
         result = booster.pick_by_position(3)
         self.assertEqual('c', result)
         self.assertEqual(2, booster.number_of_cards())
+        self.assertEqual(['a', 'b'], booster.cards)
 
     def test_middle_card(self):
         booster = Booster(['a', 'b', 'c'], 1)
         result = booster.pick_by_position(2)
         self.assertEqual('b', result)
         self.assertEqual(2, booster.number_of_cards())
+        self.assertEqual(['a', 'c'], booster.cards)
 
     def test_pick_from_empty(self):
         booster = Booster([], 1)

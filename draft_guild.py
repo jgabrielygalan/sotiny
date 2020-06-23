@@ -56,7 +56,7 @@ class GuildDraft:
 
     def get_pending_players(self):
         pending = self.draft.get_pending_players()
-        players = [self.players[x] for x in pending]
+        players = [self.players[x.id] for x in pending]
         return players
 
     async def start(self, ctx):
@@ -81,12 +81,12 @@ class GuildDraft:
             page_number = self.messages_by_player[player_id][message_id]["row"]
             item_number = NUMBERS_BY_EMOJI[emoji]
             print("Player {u} reacted with {n} for row {i}".format(u=player_id, n=item_number, i=page_number))
-            players_to_update = self.draft.pick(player_id, position=item_number+(5*(page_number-1)))
+            updates = self.draft.pick(player_id, item_number+(5*(page_number-1)))
         else:
             print(f"Missing message_id({message_id} + emoji({emoji})")
             return
 
-        return await self.handle_pick_response(players_to_update, player_id)
+        return await self.handle_pick_response(updates, player_id)
 
 
     async def picks(self, messageable, player_id):
@@ -123,21 +123,32 @@ class GuildDraft:
                     for i in range(1,message_info["len"] + 1):
                         await message_info["message"].add_reaction(EMOJIS_BY_NUMBER[i])
 
-    async def handle_pick_response(self, players_to_update, player_id):
+    async def handle_pick_response(self, updates, player_id):
         if player_id:
             self.messages_by_player[player_id].clear()
         
         current_player_has_next_booster = False
         coroutines = []
-        for player in players_to_update:
-            if player.id == player_id:
-                current_player_has_next_booster = True
-            deck = ", ".join(player.deck)
-            intro = f"[{self.id_with_guild()}] Deck: {deck}\n[{self.id_with_guild()}] Pack {player.current_pack.number}, Pick {player.current_pack.pick_number}:\n"
-            coroutines.append(self.send_pack_to_player(intro, player))
+        for update in updates:
+            deck = ''
+            current_pack = ''
+            autopicks = ''
+            player = update['player']
+            messageable = self.players[player.id]
+            if len(update['autopicks']) > 0:
+                autopicks = ', '.join(update['autopicks'])
+                coroutines.append(messageable.send(f'[{self.id_with_guild()}] Autopicks: {autopicks}'))
 
-        if not current_player_has_next_booster:
-            list = self.draft.get_pending_players()
+            if player.has_current_pack():
+                if player.id == player_id:
+                    current_player_has_next_booster = True
+                deck = f'Deck: {", ".join(player.deck)}\n'
+                current_pack = f'Pack {player.current_pack.number}, Pick {player.current_pack.pick_number}:\n'
+                intro = f"{deck}{current_pack}"
+                coroutines.append(self.send_pack_to_player(intro, player))
+
+        if not current_player_has_next_booster and not self.draft.is_draft_finished():
+            list = ", ".join([p.display_name for p in self.get_pending_players()])
             coroutines.append(self.players[player_id].send(f"[{self.id_with_guild()}] Waiting for other players to make their picks: {list}"))
             
         await asyncio.gather(*coroutines)
