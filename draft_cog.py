@@ -3,9 +3,10 @@ import traceback
 from typing import Dict
 from typing import Callable
 
+import discord
 import discord.utils
-from discord.ext import commands
-from discord.ext.commands.bot import Bot
+from discord.ext import commands, tasks
+from discord.ext.commands import Bot
 
 import utils
 from cog_exceptions import UserFeedbackException
@@ -59,6 +60,7 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
                     print(f'Creating CubeDrafter Role for {guild.name}')
                     role = await guild.create_role(name='CubeDrafter', reason='A role assigned to anyone currently drafting a cube')
                     self.guilds_by_id[guild.id].role = role
+        self.status.start()
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
@@ -192,6 +194,17 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
             if draft is not None:
                 return draft
         return None
+
+    @tasks.loop(seconds=60.0)
+    async def status(self) -> None:
+        drafts = []
+        count = 0
+        for guild in self.guilds_by_id.values():
+            if guild.drafts_in_progress:
+                drafts.extend(guild.drafts_in_progress)
+                count = count + 1
+        game = discord.Game(f'{len(drafts)} drafts across {count} guilds.')
+        await self.bot.change_presence(activity=game)
 
 
 def validate_and_cast_start_input(packs, cards):
