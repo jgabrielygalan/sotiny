@@ -2,7 +2,6 @@ import inspect
 import traceback
 from typing import Dict, Optional
 from typing import Callable
-
 import discord
 import discord.utils
 from discord.ext import commands, tasks, flags
@@ -228,6 +227,6 @@ def validate_and_cast_start_input(packs, cards):
     if packs_valid <= 0:
         raise UserFeedbackException("packs should be a number greater than 0")
     cards_valid = utils.safe_cast(cards, int, 0)
-    if cards_valid <= 0:
-        raise UserFeedbackException("cards should be a number greater than 0")
+    if cards_valid <= 1:
+        raise UserFeedbackException("cards should be a number greater than 1")
     return (packs_valid, cards_valid)
