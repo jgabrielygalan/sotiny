@@ -72,9 +72,11 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
         guild = self.get_guild(ctx)
         print(f"Registering {player.display_name} for the next draft")
         await guild.add_player(player)
+        msg = f"{ctx.author.mention}, I have registered you for the next draft"
+        if guild.pending_conf.max_players:
+            msg = msg + f'.  You are player {len(guild.players)} of {guild.pending_conf.max_players}'
         await ctx.send("{mention}, I have registered you for the next draft".format(mention=ctx.author.mention))
         if guild.pending_conf.max_players == len(guild.players):
-            await ctx.send(f"You're our {guild.pending_conf.max_players}th player.  Starting the draft!")
             await guild.start(ctx)
 
     @commands.command(name='cancel', help='Cancel your registration for the draft. Only allowed before it starts')
