@@ -161,7 +161,7 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
     @flags.add_flag('--packs', type=int, default=3)
     @flags.add_flag('--cards-per-pack', type=int, default=15)
     @flags.add_flag('--players', type=int, default=8)
-    @flags.command(name='draft')
+    @flags.command(name='setup')
     async def setup(self, ctx, cube: Optional[str], **flags) -> None:
         """Set up an upcoming draft"""
         guild = self.get_guild(ctx)
