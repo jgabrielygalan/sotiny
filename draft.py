@@ -20,6 +20,7 @@ class Draft:
         self.players = players
         random.shuffle(self.players)
         self.state = {}
+        self.opened_packs = 0
         for i, player in enumerate(players):
             self.state[player] = DraftPlayer(player, players[(i+1)%len(players)], players[i-1])
 
@@ -44,14 +45,18 @@ class Draft:
         player.push_pack(booster)
 
     def open_boosters_for_all_players(self) -> None:
+        self.opened_packs += 1
         for player in self.state.values():
-            self.open_booster(player, 1)
-        print("Opening pack 1 for all players")
+            self.open_booster(player, self.opened_packs)
+        print("Opening pack for all players")
 
     def get_pending_players(self):
         return [x for x in self.state.values() if x.has_current_pack()]
 
     def is_draft_finished(self):
+        return (self.is_pack_finished() and (self.opened_packs >= self.number_of_packs))
+
+    def is_pack_finished(self):
         return len(self.get_pending_players()) == 0
 
     def pick(self, player_id: int, position: int) -> List[Dict[str, Any]]:
@@ -90,8 +95,8 @@ class Draft:
     def autopick(self, player: DraftPlayer):
         if player.has_one_card_in_current_pack():
             pack = player.autopick()
-            if self.number_of_packs > pack.number:
-                self.open_booster(player, pack.number + 1)
+            if self.is_pack_finished() and not self.is_draft_finished():
+                self.open_boosters_for_all_players()
 
 
 def get_next_player(player: DraftPlayer, pack: Booster):
