@@ -67,10 +67,10 @@ class GuildDraft:
         await channel.send("Starting the draft with {p}".format(p=", ".join([p.display_name for p in self.get_players()])))
         state = self.draft.start(self.packs, self.cards, self.cube)
         if state != PickReturn.next_booster_autopick:
-            intro = f"[{self.id_with_guild()}] The draft has started. Pack {self.draft.get_pick_number()}, Pick {self.draft.booster_number}:"
+            intro = f"The draft has started. Pack {self.draft.get_pick_number()}, Pick {self.draft.booster_number}:"
             await asyncio.gather(*[self.send_packs_to_player(intro, p, p.id) for p in self.get_players()])
         else:
-            intro = f"[{self.id_with_guild()}] The draft has started"
+            intro = f"The draft has started"
             await asyncio.gather(*[self.send_packs_to_player(intro, p, p.id, False) for p in self.get_players()])
             state = self.draft.autopick()
             return await self.handle_pick_response(state, None)
