@@ -114,9 +114,6 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload: discord.RawReactionActionEvent) -> None:
-        channel = self.bot.get_channel(payload.channel_id)
-        # if isinstance(channel, discord.DMChannel):
-        # msg: discord.Message = discord.utils.get(self.bot.cached_messages, id=payload.message_id) or await channel.fetch_message(payload.message_id)
         if payload.user_id == self.bot.user.id:
             return
         for guild in self.guilds_by_id.values():
