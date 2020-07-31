@@ -1,11 +1,11 @@
 import inspect
 import traceback
-from typing import Dict
+from typing import Dict, Optional
 from typing import Callable
 
 import discord
 import discord.utils
-from discord.ext import commands, tasks
+from discord.ext import commands, tasks, flags
 from discord.ext.commands import Bot
 
 import utils
@@ -17,27 +17,17 @@ DEFAULT_PACK_NUMBER = 3
 DEFAULT_CARD_NUMBER = 15
 
 
-def inject_guild(func: Callable) -> Callable:
-    async def decorator(self, ctx, *args, **kwargs):
-        if not ctx.guild:
-            print("Context doesn't have a guild")
-            await ctx.send("You can't use this command in a private message")
-            return
-
-        guild = self.guilds_by_id[ctx.guild.id]
-        print(f"Found guild: {guild}")
-        await func(self, guild, ctx, *args, **kwargs)
-
-    decorator.__name__ = func.__name__
-    sig = inspect.signature(func)
-    decorator.__signature__ = sig.replace(parameters=tuple(sig.parameters.values())[1:])  # from ctx onward
-    return decorator
-
 class DraftCog(commands.Cog, name="CubeDrafter"):
     def __init__(self, bot: Bot, cfg: Dict[str, str]) -> None:
         self.bot = bot
         self.cfg = cfg
         self.guilds_by_id: Dict[int, Guild] = {}
+
+    def get_guild(self, ctx: commands.Context) -> Guild:
+        if not ctx.guild:
+            raise commands.NoPrivateMessage()
+
+        return self.guilds_by_id[ctx.guild.id]
 
     async def cog_command_error(self, ctx, error):
         print(error)
@@ -46,6 +36,8 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
             await ctx.send(f"{ctx.author.mention}: {error}")
         elif isinstance(error, commands.PrivateMessageOnly):
             await ctx.send("That command can only be used in Private Message with the bot")
+        elif isinstance(error, commands.NoPrivateMessage):
+            await ctx.send("You can't use this command in a private message")
         else:
             await ctx.send("There was an error processing your command")
 
@@ -75,17 +67,20 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
             del self.guilds_by_id[guild.id]
 
     @commands.command(name='play', help='Register to play a draft')
-    @inject_guild
-    async def play(self, guild: Guild, ctx):
+    async def play(self, ctx):
         player = ctx.author
+        guild = self.get_guild(ctx)
         print(f"Registering {player.display_name} for the next draft")
         await guild.add_player(player)
         await ctx.send("{mention}, I have registered you for the next draft".format(mention=ctx.author.mention))
+        if guild.pending_conf.max_players == len(guild.players):
+            await ctx.send(f"You're our {guild.pending_conf.max_players}th player.  Starting the draft!")
+            await guild.start(ctx)
 
     @commands.command(name='cancel', help='Cancel your registration for the draft. Only allowed before it starts')
-    @inject_guild
-    async def cancel(self, guild: Guild, ctx):
+    async def cancel(self, ctx):
         player = ctx.author
+        guild = self.get_guild(ctx)
         if guild.is_player_registered(player):
             print(f"{player.display_name} cancels registration")
             await guild.remove_player(player)
@@ -95,22 +90,24 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
             await ctx.send("{mention}, you are not registered for the draft, I can't cancel".format(mention=ctx.author.mention))
 
     @commands.command(name='players', help='List registered players for the next draft')
-    @inject_guild
-    async def players(self, guild, ctx):
+    async def players(self, ctx):
+        guild = self.get_guild(ctx)
+
         if guild.no_registered_players():
             await ctx.send("No players registered for the next draft")
         else:
             await ctx.send("The following players are registered for the next draft: {p}".format(p=", ".join([p.display_name for p in guild.get_registered_players()])))
 
     @commands.command(name='start', help="Start the draft with the registered players. Packs is the number of packs to open per player (default 3). cards is the number of cards per booster (default 15). cube is the CubeCobra id of a Cube (default Penny Dreadful Eternal Cube).")
-    @inject_guild
-    async def start(self, guild, ctx, packs=None, cards=None, cube=None):
+    async def start(self, ctx, packs=None, cards=None, cube=None):
+        guild = self.get_guild(ctx)
         if guild.no_registered_players():
             await ctx.send("Can't start the draft, there are no registered players")
             return
         async with ctx.typing():
             packs, cards = validate_and_cast_start_input(packs, cards)
-            await guild.start(ctx, packs, cards, cube)
+            await guild.setup(ctx, packs, cards, cube)
+            await guild.start(ctx)
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload: discord.RawReactionActionEvent) -> None:
@@ -159,6 +156,21 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
             divider = "\n"
             list = divider.join([f"[{x.guild.name}:{x.id()}] {x.packs} packs ({x.cards} cards). {', '.join([p.display_name for p in x.get_players()])}" for x in drafts])
             await ctx.send(f"{list}")
+
+    @flags.add_flag('--packs', type=int, default=3)
+    @flags.add_flag('--cards-per-pack', type=int, default=15)
+    @flags.add_flag('--players', type=int, default=8)
+    @flags.command(name='draft')
+    async def setup(self, ctx, cube: Optional[str], **flags) -> None:
+        """Set up an upcoming draft"""
+        guild = self.get_guild(ctx)
+        packs, cards = validate_and_cast_start_input(flags['packs'], flags['cards_per_pack'])
+        guild.setup(packs, cards, cube, flags['players'])
+        if cube:
+            await ctx.send(f"Okay. I'll start a draft of {cube} when we have {flags['players']} players")
+        else:
+            await ctx.send(f"Okay. I'll start a draft when we have {flags['players']} players")
+
 
     async def find_draft_or_send_error(self, ctx, draft_id=None):
         drafts = None

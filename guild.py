@@ -1,10 +1,18 @@
 from copy import copy
-from typing import List
+from typing import List, Optional
 
+import attr
 import discord
 
 from draft import PickReturn
 from draft_guild import GuildDraft
+
+@attr.s(auto_attribs=True)
+class DraftSettings:
+    number_of_packs: int
+    cards_per_booster: int
+    max_players: int
+    cube_id: Optional[str]
 
 
 class Guild:
@@ -18,6 +26,7 @@ class Guild:
         self.role = get_cubedrafter_role(guild)
         self.drafts_in_progress = []
         self.players = {} # players registered for the next draft
+        self.pending_conf: DraftSettings = DraftSettings(3, 15, 0, None)
 
     async def add_player(self, player: discord.Member) -> None:
         self.players[player.id] = player
@@ -49,15 +58,18 @@ class Guild:
     def get_drafts_for_player(self, player) -> List[GuildDraft]:
         return [x for x in self.drafts_in_progress if x.has_player(player)]
 
-    def get_draft_by_id(self, draft_id) -> GuildDraft:
+    def get_draft_by_id(self, draft_id) -> Optional[GuildDraft]:
         for x in self.drafts_in_progress:
             if x.id() == draft_id:
                 return x
         return None
 
-    async def start(self, ctx, packs, cards, cube):
+    def setup(self, packs: int, cards: int, cube: Optional[str], players: int) -> None:
+        self.pending_conf = DraftSettings(packs, cards, players, cube)
+
+    async def start(self, ctx):
         players = copy(self.players)
-        draft = GuildDraft(self, packs, cards, cube, players)
+        draft = GuildDraft(self, self.pending_conf.number_of_packs, self.pending_conf.cards_per_booster, self.pending_conf.cube_id, players)
         await draft.start(ctx.channel)
         self.players = {}
         self.drafts_in_progress.append(draft)
