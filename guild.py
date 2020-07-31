@@ -26,7 +26,7 @@ class Guild:
         self.role = get_cubedrafter_role(guild)
         self.drafts_in_progress = []
         self.players = {} # players registered for the next draft
-        self.pending_conf: DraftSettings = DraftSettings(3, 15, 0, None)
+        self.pending_conf: DraftSettings = DraftSettings(3, 15, 8, None)
 
     async def add_player(self, player: discord.Member) -> None:
         self.players[player.id] = player

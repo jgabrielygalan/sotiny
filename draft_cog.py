@@ -213,7 +213,10 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
             if guild.drafts_in_progress:
                 drafts.extend(guild.drafts_in_progress)
                 count = count + 1
-        game = discord.Game(f'{len(drafts)} drafts across {count} guilds.')
+        if count == 0:
+            game = discord.Game('>play to start drafting')
+        else:
+            game = discord.Game(f'{len(drafts)} drafts across {count} guilds.')
         await self.bot.change_presence(activity=game)
 
 
