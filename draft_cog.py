@@ -74,7 +74,7 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
         msg = f"{ctx.author.mention}, I have registered you for the next draft"
         if guild.pending_conf.max_players:
             msg = msg + f'.  You are player {len(guild.players)} of {guild.pending_conf.max_players}'
-        await ctx.send("{mention}, I have registered you for the next draft".format(mention=ctx.author.mention))
+        await ctx.send(msg)
         if guild.pending_conf.max_players == len(guild.players):
             await guild.start(ctx)
 
