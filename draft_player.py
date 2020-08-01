@@ -1,3 +1,4 @@
+from typing import List
 from booster import Booster
 
 class DraftPlayer:
@@ -6,27 +7,30 @@ class DraftPlayer:
         self.next = next
         self.previous = previous
         self.queue = []
-        self.deck = []
+        self.deck: List[str] = []
         self.current_pack = None
         self.booster_number = 0
 
     def __str__(self) -> str:
         return self.id
-		
+
     def __repr__(self):
         return self.id.__repr__()
 
-    def push_pack(self, booster: Booster) -> None:
+    def push_pack(self, booster: Booster, front_of_queue: bool = False) -> bool:
         if self.current_pack is None:
             self.current_pack = booster
             return True # review interface
+        elif front_of_queue:
+            self.queue.insert(0, booster)
+            return False
         else:
             self.queue.append(booster)
             return False
 
     def pick(self, position: int):
         if self.current_pack is None:
-            return None        
+            return None
         card = self.current_pack.pick_by_position(position)
         if card is None:
             return None
@@ -50,4 +54,4 @@ class DraftPlayer:
         return len(self.queue) > 0
 
     def has_one_card_in_current_pack(self):
-        return self.has_current_pack() and self.current_pack.number_of_cards() == 1        
+        return self.has_current_pack() and self.current_pack.number_of_cards() == 1

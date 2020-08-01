@@ -2,13 +2,12 @@ import random
 from booster import Booster
 from draft_player import DraftPlayer
 from enum import Enum
-from typing import Any, Dict, List, Optional
+from typing import Any, Dict, List, Optional, Iterable, Tuple
 from cog_exceptions import UserFeedbackException
 import utils
 
-
+DraftEffect = Enum('DraftEffect', 'add_booster_to_draft')
 PickReturn = Enum('PickReturn', 'pick_error, in_progress, next_booster, finished, next_booster_autopick')
-
 
 class Draft:
     """
@@ -19,7 +18,7 @@ class Draft:
         self.cards = card_list
         self.players = players
         random.shuffle(self.players)
-        self.state = {}
+        self.state: Dict[int, DraftPlayer] = {}
         self.opened_packs = 0
         for i, player in enumerate(players):
             self.state[player] = DraftPlayer(player, players[(i+1)%len(players)], players[i-1])
@@ -33,7 +32,7 @@ class Draft:
     def deck_of(self, player_id: int) -> List[str]:
         return self.state[player_id].deck
 
-    def start(self, number_of_packs: int, cards_per_booster: int, cube: None = None) -> PickReturn:
+    def start(self, number_of_packs: int, cards_per_booster: int, cube: None = None) -> Iterable[DraftPlayer]:
         if number_of_packs * cards_per_booster * len(self.players) > len(self.cards):
             raise UserFeedbackException(f"Not enough cards {len(self.cards)} for {len(self.players)} with {number_of_packs} of {cards_per_booster}")
         self.number_of_packs = number_of_packs
@@ -45,7 +44,8 @@ class Draft:
     def open_booster(self, player: DraftPlayer, number: int) -> Booster:
         card_list = [self.cards.pop() for _ in range(0,self.cards_per_booster)]
         booster = Booster(card_list, number)
-        player.push_pack(booster)
+        player.push_pack(booster, True)
+        return booster
 
     def open_boosters_for_all_players(self) -> None:
         self.opened_packs += 1
@@ -62,14 +62,17 @@ class Draft:
     def is_pack_finished(self):
         return len(self.get_pending_players()) == 0
 
-    def pick(self, player_id: int, position: int) -> List[Dict[str, Any]]:
-        users_to_update = []
+    def pick(self, player_id: int, position: int) -> Tuple[List[Dict[str, Any]], Optional[Tuple[str, DraftEffect]]]:
         player = self.state[player_id]
         pack = player.pick(position)
         if pack is None:
-            return users_to_update
+            return [], None
+
+        users_to_update: List[DraftPlayer] = []
 
         print(f"Player {player_id} picked {player.last_pick()}")
+
+        pick_effect = self.check_if_draft_matters(player, pack)
 
         # push to next player
         if not was_last_pick_of_pack(pack):
@@ -78,7 +81,7 @@ class Draft:
             has_new_pack = next_player.push_pack(pack)
             if has_new_pack:
                 users_to_update.append(next_player)
-        
+
         if player.has_current_pack() and player not in users_to_update:
             users_to_update.append(player)
 
@@ -93,7 +96,15 @@ class Draft:
         if self.is_draft_finished():
             print("Draft finished")
 
-        return result
+        return result, pick_effect
+
+    def check_if_draft_matters(self, player: DraftPlayer, pack: Booster) -> Optional[Tuple[str, DraftEffect]]:
+        pick = player.last_pick()
+        if pick == 'Lore Seeker': # Reveal Lore Seeker as you draft it. After you draft Lore Seeker, you may add a booster pack to the draft
+            self.open_booster(player, pack.number)
+            return (pick, DraftEffect.add_booster_to_draft)
+
+        return None
 
     def autopick(self, player: DraftPlayer):
         if player.has_one_card_in_current_pack():

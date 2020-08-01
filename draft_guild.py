@@ -12,7 +12,7 @@ from discord import File
 
 import image_fetcher
 from cog_exceptions import UserFeedbackException
-from draft import Draft, PickReturn
+from draft import Draft, DraftEffect
 from draft_player import DraftPlayer
 
 EMOJIS_BY_NUMBER = {1 : '1⃣', 2 : '2⃣', 3 : '3⃣', 4 : '4⃣', 5 : '5⃣'}
@@ -82,12 +82,12 @@ class GuildDraft:
             page_number = self.messages_by_player[player_id][message_id]["row"]
             item_number = NUMBERS_BY_EMOJI[emoji]
             print("Player {u} reacted with {n} for row {i}".format(u=player_id, n=item_number, i=page_number))
-            updates = self.draft.pick(player_id, item_number+(5*(page_number-1)))
+            updates, effect = self.draft.pick(player_id, item_number+(5*(page_number-1)))
         else:
             print(f"Missing message_id({message_id} + emoji({emoji})")
             return
 
-        return await self.handle_pick_response(updates, player_id)
+        return await self.handle_pick_response(updates, player_id, effect)
 
 
     async def picks(self, messageable, player_id):
@@ -128,12 +128,19 @@ class GuildDraft:
                     for i in range(1,message_info["len"] + 1):
                         await message_info["message"].add_reaction(EMOJIS_BY_NUMBER[i])
 
-    async def handle_pick_response(self, updates, player_id):
+    async def handle_pick_response(self, updates, player_id, effect):
         if player_id:
             self.messages_by_player[player_id].clear()
-        
+
         current_player_has_next_booster = False
         coroutines = []
+        if effect:
+            player_name = self.players[player_id].display_name
+            for player in self.players.values():
+                text = f'{player_name} drafts {effect[0]} face up'
+                if effect[1] == DraftEffect.add_booster_to_draft:
+                    text += ' and adds a new booster to the draft.'
+                coroutines.append(player.send(text))
         for update in updates:
             deck = ''
             current_pack = ''
@@ -155,9 +162,9 @@ class GuildDraft:
         if not current_player_has_next_booster and not self.draft.is_draft_finished():
             list = ", ".join([p.display_name for p in self.get_pending_players()])
             coroutines.append(self.players[player_id].send(f"[{self.id_with_guild()}] Waiting for other players to make their picks: {list}"))
-            
+
         await asyncio.gather(*coroutines)
-        
+
         if self.draft.is_draft_finished():
             await self.guild.guild.get_channel(self.start_channel_id).send("Finished the draft with {p}".format(p=", ".join([p.display_name for p in self.get_players()])))
             for player in self.players.values():
