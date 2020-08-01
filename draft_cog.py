@@ -37,6 +37,8 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
             await ctx.send("That command can only be used in Private Message with the bot")
         elif isinstance(error, commands.NoPrivateMessage):
             await ctx.send("You can't use this command in a private message")
+        elif isinstance(error, commands.CommandError):
+            return await ctx.send(f"Error executing command `{ctx.command.name}`: {str(error)}")
         else:
             await ctx.send("There was an error processing your command")
 
