@@ -109,7 +109,7 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
             return
         async with ctx.typing():
             packs, cards = validate_and_cast_start_input(packs, cards)
-            await guild.setup(ctx, packs, cards, cube)
+            guild.setup(ctx, packs, cards, cube)
             await guild.start(ctx)
 
     @commands.Cog.listener()
