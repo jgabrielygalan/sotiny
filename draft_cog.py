@@ -147,7 +147,7 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
     async def my_pack(self, ctx, draft_id = None):
         draft = await self.find_draft_or_send_error(ctx, draft_id)
         if draft is not None:
-            await draft.send_packs_to_player("Your pack:", ctx, ctx.author.id)
+            await draft.send_pack_to_player("Your pack:", ctx, ctx.author.id)
 
     @commands.dm_only()
     @commands.command(name='drafts', help="Show your in progress drafts")
@@ -175,7 +175,7 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
             await ctx.send(f"Okay. I'll start a draft when we have {flags['players']} players")
 
 
-    async def find_draft_or_send_error(self, ctx, draft_id=None):
+    async def find_draft_or_send_error(self, ctx, draft_id=None) -> GuildDraft:
         drafts = None
         if draft_id is None:
             drafts = self.find_drafts_by_player(ctx.author)
