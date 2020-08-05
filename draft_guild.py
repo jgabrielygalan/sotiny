@@ -102,6 +102,10 @@ class GuildDraft:
                 image_file = await image_fetcher.download_image_async(l)
                 await send_image_with_retry(messageable, image_file)
 
+    async def send_current_pack_to_player(self, intro: str, player_id: int):
+        player = self.draft.player_by_id(player_id)
+        await self.send_pack_to_player(intro, player)
+
     async def send_pack_to_player(self, intro: str, player: DraftPlayer, reactions=True):
         player_id = player.id
         messageable = self.players[player_id]

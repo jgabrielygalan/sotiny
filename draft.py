@@ -24,6 +24,9 @@ class Draft:
         for i, player in enumerate(players):
             self.state[player] = DraftPlayer(player, players[(i+1)%len(players)], players[i-1])
 
+    def player_by_id(self, player_id: int) -> DraftPlayer:
+        return self.state[player_id]
+
     def pack_of(self, player_id: int) -> Booster:
         return self.state[player_id].current_pack
 
