@@ -22,5 +22,6 @@ async def on_ready() -> None:
 
 
 bot.add_cog(DraftCog(bot, cfg))
+bot.load_extension('updater')
 #bot.add_cog(ImageCog(bot))
 bot.run(TOKEN)
