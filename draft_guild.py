@@ -12,7 +12,7 @@ from discord import File
 
 import image_fetcher
 from cog_exceptions import UserFeedbackException
-from draft import Draft, DraftEffect
+from draft import Draft, DraftEffect, player_card_drafteffect
 from draft_player import DraftPlayer
 
 EMOJIS_BY_NUMBER = {1 : '1⃣', 2 : '2⃣', 3 : '3⃣', 4 : '4⃣', 5 : '5⃣'}
@@ -67,14 +67,8 @@ class GuildDraft:
             self.messages_by_player[p.id] = {}
         await channel.send("Starting the draft with {p}".format(p=", ".join([p.display_name for p in self.get_players()])))
         players_to_update = self.draft.start(self.packs, self.cards, self.cube)
-        #if state != PickReturn.next_booster_autopick:
         intro = f"The draft has started. Pack 1, Pick 1:"
         await asyncio.gather(*[self.send_pack_to_player(intro, p) for p in players_to_update])
-        #else:
-        #    intro = f"[{self.id_with_guild()}] The draft has started"
-        #    await asyncio.gather(*[self.send_packs_to_player(intro, p, p.id, False) for p in self.get_players()])
-        #    state = self.draft.autopick()
-        #    return await self.handle_pick_response(state, None)
 
 
     async def pick(self, player_id, message_id=None, emoji=None):
@@ -82,12 +76,12 @@ class GuildDraft:
             page_number = self.messages_by_player[player_id][message_id]["row"]
             item_number = NUMBERS_BY_EMOJI[emoji]
             print("Player {u} reacted with {n} for row {i}".format(u=player_id, n=item_number, i=page_number))
-            updates, effect = self.draft.pick(player_id, item_number+(5*(page_number-1)))
+            info = self.draft.pick(player_id, item_number+(5*(page_number-1)))
         else:
             print(f"Missing message_id({message_id} + emoji({emoji})")
             return
 
-        return await self.handle_pick_response(updates, player_id, effect)
+        return await self.handle_pick_response(info.updates, player_id, info.draft_effect)
 
 
     async def picks(self, messageable, player_id):
@@ -114,9 +108,9 @@ class GuildDraft:
             await messageable.send(f"[{self.id_with_guild()}] {intro}")
             cards = self.draft.pack_of(player_id).cards
             print(numpy.array(cards))
-            list = numpy.array_split(numpy.array(cards),[5,10]) #split at positions 5 and 10, defaulting to empty arrays
+            rows = numpy.array_split(numpy.array(cards),[5,10]) #split at positions 5 and 10, defaulting to empty arrays
             i = 1
-            for l in list:
+            for l in rows:
                 if l is not None and len(l)>0:
                     image_file = await image_fetcher.download_image_async(l)
                     message = await send_image_with_retry(messageable, image_file)
@@ -124,20 +118,21 @@ class GuildDraft:
                         self.messages_by_player[player_id][message.id] = {"row": i, "message": message, "len": len(l)}
                     i += 1
             if reactions:
-                for message_info in self.messages_by_player[player_id].values():
+                players = list(self.messages_by_player[player_id].values())
+                for message_info in players:
                     for i in range(1,message_info["len"] + 1):
                         await message_info["message"].add_reaction(EMOJIS_BY_NUMBER[i])
 
-    async def handle_pick_response(self, updates, player_id, effect):
+    async def handle_pick_response(self, updates, player_id: int, effects: List[player_card_drafteffect]) -> None:
         if player_id:
             self.messages_by_player[player_id].clear()
 
         current_player_has_next_booster = False
         coroutines = []
-        if effect:
-            player_name = self.players[player_id].display_name
+        for effect in effects:
+            player_name = self.players[effect[0].id].display_name
             for player in self.players.values():
-                text = f'{player_name} drafts {effect[0]} face up'
+                text = f'{player_name} drafts {effect[1]} face up'
                 if effect[1] == DraftEffect.add_booster_to_draft:
                     text += ' and adds a new booster to the draft.'
                 coroutines.append(player.send(text))
@@ -175,7 +170,7 @@ class GuildDraft:
             self.players.clear()
             self.messages_by_player.clear()
 
-async def send_image_with_retry(user, image_file: str, text: str = '') -> None:
+async def send_image_with_retry(user, image_file: str, text: str = '') -> discord.Message:
     message = await send(user, file=File(image_file), content=text)
     if message and message.attachments and message.attachments[0].size == 0:
         print('Message size is zero so resending')
@@ -216,6 +211,8 @@ async def fetch(session, url):
         return await response.text()
 
 async def get_card_list(cube_name) -> List[str]:
+    if cube_name == '$':
+        return get_cards()
     if cube_name is None:
         try:
             return await load_cubecobra_cube(DEFAULT_CUBE_CUBECOBRA_ID)
@@ -236,8 +233,7 @@ async def load_cubecobra_cube(cubecobra_id: str) -> List[str]:
             print(response)
             print(f"{type(response)}")
             return response
-    # type: ignore # urllib isn't fully stubbed
-    except (urllib.error.HTTPError, aiohttp.ClientError):
+    except (urllib.error.HTTPError, aiohttp.ClientError): # type: ignore # urllib isn't fully stubbed
         raise UserFeedbackException(f"Unable to load cube list from {url}")
 
 
