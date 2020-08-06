@@ -102,14 +102,12 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
             await ctx.send("The following players are registered for the next draft: {p}".format(p=", ".join([p.display_name for p in guild.get_registered_players()])))
 
     @commands.command(name='start', help="Start the draft with the registered players. Packs is the number of packs to open per player (default 3). cards is the number of cards per booster (default 15). cube is the CubeCobra id of a Cube (default Penny Dreadful Eternal Cube).")
-    async def start(self, ctx, packs=None, cards=None, cube=None):
+    async def start(self, ctx):
         guild = self.get_guild(ctx)
         if guild.no_registered_players():
             await ctx.send("Can't start the draft, there are no registered players")
             return
         async with ctx.typing():
-            packs, cards = validate_and_cast_start_input(packs, cards)
-            guild.setup(packs, cards, cube, 8)
             await guild.start(ctx)
 
     @commands.Cog.listener()
