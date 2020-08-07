@@ -144,8 +144,14 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
     @commands.command(name='pack', help="Resend your current pack")
     async def my_pack(self, ctx, draft_id = None):
         draft = await self.find_draft_or_send_error(ctx, draft_id)
-        if draft is not None:
-            await draft.send_current_pack_to_player("Your pack:", ctx.author.id)
+        if draft is None:
+            return
+        player = draft.draft.player_by_id(ctx.id)
+        if player.current_pack is None:
+            await ctx.send("You don't have a pack in front of you.")
+            return
+
+        await draft.send_current_pack_to_player("Your pack:", ctx.author.id)
 
     @commands.dm_only()
     @commands.command(name='drafts', help="Show your in progress drafts")
