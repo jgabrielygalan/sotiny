@@ -1,10 +1,10 @@
 import inspect
 import traceback
-from typing import Dict, Optional
-from typing import Callable
+from typing import Callable, Dict, Optional
+
 import discord
 import discord.utils
-from discord.ext import commands, tasks, flags
+from discord.ext import commands, flags, tasks
 from discord.ext.commands import Bot
 
 import utils

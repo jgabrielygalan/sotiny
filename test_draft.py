@@ -1,6 +1,8 @@
 import unittest
-from draft_player import DraftPlayer
+
 from booster import Booster
+from draft_player import DraftPlayer
+
 
 class TestDraft(unittest.TestCase):
     def setUp(self):

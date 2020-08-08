@@ -6,6 +6,7 @@ import discord
 
 from draft_guild import GuildDraft
 
+
 @attr.s(auto_attribs=True)
 class DraftSettings:
     number_of_packs: int

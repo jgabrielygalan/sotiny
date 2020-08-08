@@ -1,5 +1,7 @@
 from typing import List
+
 from booster import Booster
+
 
 class DraftPlayer:
     def __init__(self, id, next, previous):

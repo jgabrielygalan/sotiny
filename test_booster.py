@@ -1,5 +1,7 @@
 import unittest
+
 from booster import Booster
+
 
 class TestBooster(unittest.TestCase):
 

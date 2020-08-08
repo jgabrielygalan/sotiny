@@ -1,11 +1,13 @@
 import random
-from booster import Booster
-from draft_player import DraftPlayer
 from enum import Enum
-from typing import Any, Dict, List, Optional, Iterable, Tuple
-from cog_exceptions import UserFeedbackException
-import utils
+from typing import Any, Dict, Iterable, List, Optional, Tuple
+
 import attr
+
+import utils
+from booster import Booster
+from cog_exceptions import UserFeedbackException
+from draft_player import DraftPlayer
 
 DraftEffect = Enum('DraftEffect', 'add_booster_to_draft')
 
