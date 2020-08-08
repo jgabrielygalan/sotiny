@@ -131,11 +131,13 @@ class GuildDraft:
         coroutines = []
         for effect in effects:
             player_name = self.players[effect[0].id].display_name
+            text = f'{player_name} drafts {effect[1]} face up'
+            if effect[1] == DraftEffect.add_booster_to_draft:
+                text += ' and adds a new booster to the draft.'
             for player in self.players.values():
-                text = f'{player_name} drafts {effect[1]} face up'
-                if effect[1] == DraftEffect.add_booster_to_draft:
-                    text += ' and adds a new booster to the draft.'
                 coroutines.append(player.send(text))
+            await self.guild.guild.get_channel(self.start_channel_id).send(text, file=discord.File(await image_fetcher.download_image_async([effect[1]])))
+
         for update in updates:
             deck = ''
             current_pack = ''
