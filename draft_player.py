@@ -10,6 +10,7 @@ class DraftPlayer:
         self.previous = previous
         self.queue = []
         self.deck: List[str] = []
+        self.face_up: List[str] = []
         self.current_pack = None
         self.booster_number = 0
 

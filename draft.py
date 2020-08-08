@@ -4,12 +4,13 @@ from draft_player import DraftPlayer
 from enum import Enum
 from typing import Any, Dict, List, Optional, Iterable, Tuple
 from cog_exceptions import UserFeedbackException
-import utils
 import attr
 
-DraftEffect = Enum('DraftEffect', 'add_booster_to_draft')
+DraftEffect = Enum('DraftEffect', 'no_immediate_effect add_booster_to_draft')
 
 player_card_drafteffect = Tuple[DraftPlayer, str, DraftEffect]
+
+CARDS_WITH_FUNCTION = ["Cogwork Librarian", "Leovold's Operative"]
 
 @attr.s(auto_attribs=True)
 class PickReturn():
@@ -77,10 +78,14 @@ class Draft:
 
         users_to_update: List[DraftPlayer] = []
 
-        print(f"Player {player_id} picked {player.last_pick()}")
+        pick = player.last_pick()
+        print(f"Player {player_id} picked {pick}")
 
         pick_effects = []
-        pick_effects.append(self.check_if_draft_matters(player, pack))
+        effect = self.check_if_draft_matters(player, pack)
+        if effect:
+            player.face_up.append(pick)
+            pick_effects.append(effect)
 
         # push to next player
         if not was_last_pick_of_pack(pack):
@@ -100,6 +105,7 @@ class Draft:
             if player.has_one_card_in_current_pack():
                 new_booster, effect = self.autopick(player)
                 if effect:
+                    player.face_up.append(player.last_pick())
                     pick_effects.append(effect)
                 updates['autopicks'].append(player.last_pick())
 
@@ -113,13 +119,15 @@ class Draft:
         if self.is_draft_finished():
             print("Draft finished")
 
-        return PickReturn(result, [e for e in pick_effects if e is not None])
+        return PickReturn(result, pick_effects)
 
     def check_if_draft_matters(self, player: DraftPlayer, pack: Booster) -> Optional[player_card_drafteffect]:
         pick = player.last_pick()
         if pick == 'Lore Seeker': # Reveal Lore Seeker as you draft it. After you draft Lore Seeker, you may add a booster pack to the draft
             self.open_booster(player, pack.number)
             return (player, pick, DraftEffect.add_booster_to_draft)
+        if pick in ['Cogwork Librarian', "Leovold's Operative"]:
+            return (player, pick, DraftEffect.no_immediate_effect)
 
         return None
 
