@@ -37,7 +37,7 @@ async def download_scryfall_image(cards, filepath: str, version: str = '') -> bo
     save_composite_image(image_filepaths, filepath)
     return acceptable_file(filepath)
 
-async def download_scryfall_card_image(c, filepath: str, version: str = '') -> bool:
+async def download_scryfall_card_image(c: str, filepath: str, version: str = '') -> bool:
     try:
         await store_async(scryfall_image(c, version=version), filepath)
     except FetchException as e:
@@ -45,7 +45,7 @@ async def download_scryfall_card_image(c, filepath: str, version: str = '') -> b
     return acceptable_file(filepath)
 
 
-def scryfall_image(card, version: str = '') -> str:
+def scryfall_image(card: str, version: str = '') -> str:
     u = 'https://api.scryfall.com/cards/named?exact={c}&format=image'.format(c=escape(card))
     if version:
         u += '&version={v}'.format(v=escape(version))
