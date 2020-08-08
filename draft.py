@@ -1,13 +1,11 @@
 import random
-from enum import Enum
-from typing import Any, Dict, Iterable, List, Optional, Tuple
-
-import attr
-
-import utils
 from booster import Booster
-from cog_exceptions import UserFeedbackException
 from draft_player import DraftPlayer
+from enum import Enum
+from typing import Any, Dict, List, Optional, Iterable, Tuple
+from cog_exceptions import UserFeedbackException
+import utils
+import attr
 
 DraftEffect = Enum('DraftEffect', 'add_booster_to_draft')
 
@@ -96,13 +94,21 @@ class Draft:
             users_to_update.append(player)
 
         result = []
+        new_booster = False
         for player in users_to_update:
             updates = {'player': player, 'autopicks': []}
             if player.has_one_card_in_current_pack():
-                pick_effects.append(self.autopick(player))
+                new_booster, effect = self.autopick(player)
+                if effect:
+                    pick_effects.append(effect)
                 updates['autopicks'].append(player.last_pick())
 
             result.append(updates)
+
+        if new_booster:
+            for player in self.state.values():
+                if player not in users_to_update:
+                    result.append({'player': player, 'autopicks': []})
 
         if self.is_draft_finished():
             print("Draft finished")
@@ -117,13 +123,16 @@ class Draft:
 
         return None
 
-    def autopick(self, player: DraftPlayer) -> Optional[player_card_drafteffect]:
+    def autopick(self, player: DraftPlayer) -> Tuple[bool, Optional[player_card_drafteffect]]:
         if player.has_one_card_in_current_pack():
             pack = player.autopick()
             pick_effect = self.check_if_draft_matters(player, pack)
+            nextbooster = False
             if self.is_pack_finished() and not self.is_draft_finished():
                 self.open_boosters_for_all_players()
-            return pick_effect
+                nextbooster = True
+            return nextbooster, pick_effect
+        return False, None
 
 
 def get_next_player(player: DraftPlayer, pack: Booster):
