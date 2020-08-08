@@ -3,6 +3,7 @@ import traceback
 from typing import Callable, Dict, Optional
 
 import discord
+from discord.ext.commands.errors import CheckFailure
 import discord.utils
 from discord.ext import commands, flags, tasks
 from discord.ext.commands import Bot, Context
@@ -25,7 +26,6 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
     def get_guild(self, ctx: commands.Context) -> Guild:
         if not ctx.guild:
             raise commands.NoPrivateMessage()
-
         return self.guilds_by_id[ctx.guild.id]
 
     async def cog_command_error(self, ctx, error):
@@ -37,6 +37,8 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
             await ctx.send("That command can only be used in Private Message with the bot")
         elif isinstance(error, commands.NoPrivateMessage):
             await ctx.send("You can't use this command in a private message")
+        elif isinstance(error, commands.CheckFailure):
+            await ctx.send(error)
         elif isinstance(error, commands.CommandError):
             return await ctx.send(f"Error executing command `{ctx.command.name}`: {str(error)}")
         else:
@@ -189,14 +191,13 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
                 await ctx.send(f"{list}")
                 return None
             elif len(drafts) == 0:
-                await ctx.send("You are not playing any draft")
-                return None
+                raise CheckFailure("You are not playing any draft")
             else:
                 return drafts[0]
         else:
             draft = self.find_draft_by_id(draft_id)
             if draft is None:
-                await ctx.send("You are not playing any draft")
+                raise CheckFailure("You are not playing any draft")
             return draft
 
     def find_drafts_by_player(self, player):
