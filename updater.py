@@ -10,10 +10,14 @@ class Updater(commands.Cog):
         self.bot = bot
         self.commit_id = subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode().strip()
         self.branch = subprocess.check_output(['git', 'rev-parse', '--abbrev-ref', 'HEAD']).strip().decode()
-        upstream = subprocess.check_output(['git', 'rev-parse', f'origin/{self.branch}']).decode().strip()
-        if upstream == self.commit_id:
-            print(f'Currently running {self.commit_id} on {self.branch}')
-            self.update.start()  # pylint: disable=no-member
+        try:
+            upstream = subprocess.check_output(['git', 'rev-parse', f'origin/{self.branch}']).decode().strip()
+            if upstream == self.commit_id:
+                print(f'Currently running {self.commit_id} on {self.branch}')
+                self.update.start()  # pylint: disable=no-member
+        except subprocess.CalledProcessError as e:
+            print(e)
+            pass
 
 
     @tasks.loop(minutes=5.0)

@@ -1,9 +1,9 @@
-import asyncio
 import hashlib
 import os
 import re
 import unicodedata
 import urllib.request
+from typing import List
 
 import aiohttp
 from PIL import Image
@@ -15,7 +15,7 @@ COMPOSITE="composite"
 class FetchException(Exception):
     pass
 
-async def download_image_async(cards):
+async def download_image_async(cards: List[str]):
     filepath = determine_filepath(cards, COMPOSITE)
     if acceptable_file(filepath):
         return filepath

@@ -141,10 +141,10 @@ class GuildDraft:
             current_pack = ''
             autopicks = ''
             player = update['player']
-            messageable = self.players[player.id]
+            messageable: discord.abc.Messageable = self.players[player.id]
             if len(update['autopicks']) > 0:
                 autopicks = ', '.join(update['autopicks'])
-                coroutines.append(messageable.send(f'[{self.id_with_guild()}] Autopicks: {autopicks}'))
+                coroutines.append(messageable.send(f'[{self.id_with_guild()}] Autopicks: {autopicks}', file=discord.File(await image_fetcher.download_image_async(update['autopicks']))))
 
             if player.has_current_pack():
                 if player.id == player_id:
