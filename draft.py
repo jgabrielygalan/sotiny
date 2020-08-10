@@ -10,7 +10,7 @@ DraftEffect = Enum('DraftEffect', 'no_immediate_effect add_booster_to_draft')
 
 player_card_drafteffect = Tuple[DraftPlayer, str, DraftEffect]
 
-CARDS_WITH_FUNCTION = ["Cogwork Librarian", "Leovold's Operative"]
+CARDS_WITH_FUNCTION = {"Cogwork Librarian", "Leovold's Operative"}
 
 @attr.s(auto_attribs=True)
 class PickReturn():

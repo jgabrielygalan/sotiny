@@ -12,7 +12,7 @@ from discord import File
 
 import image_fetcher
 from cog_exceptions import UserFeedbackException
-from draft import Draft, DraftEffect, player_card_drafteffect
+from draft import CARDS_WITH_FUNCTION, Draft, DraftEffect, player_card_drafteffect
 from draft_player import DraftPlayer
 
 EMOJIS_BY_NUMBER = {1 : '1⃣', 2 : '2⃣', 3 : '3⃣', 4 : '4⃣', 5 : '5⃣'}
@@ -110,10 +110,10 @@ class GuildDraft:
             await messageable.send(f"[{self.id_with_guild()}] {intro}")
             cards = self.draft.pack_of(player_id).cards
             print(numpy.array(cards))
-            rows = numpy.array_split(numpy.array(cards),[5,10]) #split at positions 5 and 10, defaulting to empty arrays
+            rows = numpy.array_split(numpy.array(cards), [5, 10]) # split at positions 5 and 10, defaulting to empty arrays
             i = 1
             for l in rows:
-                if l is not None and len(l)>0:
+                if l is not None and len(l) > 0:
                     image_file = await image_fetcher.download_image_async(l)
                     message = await send_image_with_retry(messageable, image_file)
                     if reactions:
@@ -122,8 +122,14 @@ class GuildDraft:
             if reactions:
                 players = list(self.messages_by_player[player_id].values())
                 for message_info in players:
-                    for i in range(1,message_info["len"] + 1):
+                    for i in range(1, message_info["len"] + 1):
                         await message_info["message"].add_reaction(EMOJIS_BY_NUMBER[i])
+            if actions := [a for a in player.face_up if a in CARDS_WITH_FUNCTION]:
+                emoji_cog = self.bot.get_cog('SelfGuild')
+                text = ''.join([f'{emoji_cog.get_emoji(a)} {a}' for a in actions])
+                message = await messageable.send(f'Optionally activate: {text}')
+                # TODO: Actually do it
+
 
     async def handle_pick_response(self, updates, player_id: int, effects: List[player_card_drafteffect]) -> None:
         if player_id:
