@@ -88,6 +88,7 @@ class GuildDraft:
         cards = self.draft.deck_of(player_id)
         if len(cards) == 0:
             await messageable.send(f"[{self.id_with_guild()}] You haven't picked any card yet")
+            return
         else:
             await messageable.send(f"[{self.id_with_guild()}] Deck: ")
         for page in range(0,int(len(cards)/5)+1):
@@ -95,6 +96,7 @@ class GuildDraft:
             if l is not None and len(l)>0:
                 image_file = await image_fetcher.download_image_async(l)
                 await send_image_with_retry(messageable, image_file)
+        self.send_deckfile_to_player(messageable, player_id)
 
     async def send_current_pack_to_player(self, intro: str, player_id: int):
         player = self.draft.player_by_id(player_id)
@@ -166,11 +168,14 @@ class GuildDraft:
             await self.guild.guild.get_channel(self.start_channel_id).send("Finished the draft with {p}".format(p=", ".join([p.display_name for p in self.get_players()])))
             for player in self.players.values():
                 await player.send(f"[{self.id_with_guild()}] The draft has finished")
-                content = generate_file_content(self.draft.deck_of(player.id))
-                file=BytesIO(bytes(content, 'utf-8'))
-                await player.send(content=f"[{self.id_with_guild()}] Your deck", file=File(fp=file, filename=f"{self.guild.name}_{time.strftime('%Y%m%d')}.txt"))
+                self.send_deckfile_to_player(player, player.id)
             self.players.clear()
             self.messages_by_player.clear()
+
+    async def send_deckfile_to_player(self, messagable: discord.abc.Messageable, player_id: int) -> None:
+        content = generate_file_content(self.draft.deck_of(player_id))
+        file=BytesIO(bytes(content, 'utf-8'))
+        await messagable.send(content=f"[{self.id_with_guild()}] Your deck", file=File(fp=file, filename=f"{self.guild.name}_{time.strftime('%Y%m%d')}.txt"))
 
 async def send_image_with_retry(user, image_file: str, text: str = '') -> discord.Message:
     message = await send(user, file=File(image_file), content=text)
