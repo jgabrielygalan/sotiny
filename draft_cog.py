@@ -1,6 +1,5 @@
-import inspect
 import traceback
-from typing import Callable, Dict, Optional
+from typing import Dict, Optional
 
 import discord
 from discord.ext.commands.errors import CheckFailure
