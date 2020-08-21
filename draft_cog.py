@@ -2,6 +2,7 @@ import traceback
 from typing import Dict, Optional
 
 import discord
+from discord.ext.commands.context import Context
 from discord.ext.commands.errors import CheckFailure
 import discord.utils
 from discord.ext import commands, flags, tasks
@@ -27,7 +28,7 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
             raise commands.NoPrivateMessage()
         return self.guilds_by_id[ctx.guild.id]
 
-    async def cog_command_error(self, ctx, error):
+    async def cog_command_error(self, ctx: Context, error) -> None:
         print(error)
         traceback.print_exception(type(error), error, error.__traceback__)
         if isinstance(error, UserFeedbackException):
@@ -39,7 +40,7 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
         elif isinstance(error, commands.CheckFailure):
             await ctx.send(error)
         elif isinstance(error, commands.CommandError):
-            return await ctx.send(f"Error executing command `{ctx.command.name}`: {str(error)}")
+            await ctx.send(f"Error executing command `{ctx.command.name}`: {str(error)}")
         else:
             await ctx.send("There was an error processing your command")
 
@@ -69,7 +70,7 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
             del self.guilds_by_id[guild.id]
 
     @commands.command(name='play', help='Register to play a draft')
-    async def play(self, ctx):
+    async def play(self, ctx: Context):
         player = ctx.author
         guild = self.get_guild(ctx)
         print(f"Registering {player.display_name} for the next draft")
@@ -185,10 +186,8 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
         if draft_id is None:
             drafts = self.find_drafts_by_player(ctx.author)
             if len(drafts) > 1:
-                list = "\n".join([f"{x.guild.name}: **{x.id()}**" for x in drafts])
-                await ctx.send("You are playing in several drafts. Please specify the draft id:")
-                await ctx.send(f"{list}")
-                return None
+                ids = "\n".join([f"{x.guild.name}: **{x.id()}**" for x in drafts])
+                raise CheckFailure("You are playing in several drafts. Please specify the draft id:\n" + ids)
             elif len(drafts) == 0:
                 raise CheckFailure("You are not playing any draft")
             else:
@@ -222,11 +221,11 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
         if count == 0:
             game = discord.Game('>play to start drafting')
         else:
-            game = discord.Game(f'{len(drafts)} drafts across {count} guilds.')
+            game = discord.Game(f'{len(drafts)} drafts across {len(self.guilds_by_id)} guilds.')
         await self.bot.change_presence(activity=game)
 
 
-def validate_and_cast_start_input(packs, cards):
+def validate_and_cast_start_input(packs: int, cards: int):
     if packs is None:
         packs = DEFAULT_PACK_NUMBER
     if cards is None:

@@ -4,7 +4,7 @@ from booster import Booster
 
 
 class DraftPlayer:
-    def __init__(self, id, next, previous):
+    def __init__(self, id: int, next: int, previous: int):
         self.id = id
         self.next = next
         self.previous = previous
@@ -15,7 +15,7 @@ class DraftPlayer:
         self.booster_number = 0
 
     def __str__(self) -> str:
-        return self.id
+        return str(self.id)
 
     def __repr__(self):
         return self.id.__repr__()
