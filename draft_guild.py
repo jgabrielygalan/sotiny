@@ -96,7 +96,7 @@ class GuildDraft:
             if l is not None and len(l)>0:
                 image_file = await image_fetcher.download_image_async(l)
                 await send_image_with_retry(messageable, image_file)
-        self.send_deckfile_to_player(messageable, player_id)
+        await self.send_deckfile_to_player(messageable, player_id)
 
     async def send_current_pack_to_player(self, intro: str, player_id: int):
         player = self.draft.player_by_id(player_id)
@@ -168,7 +168,7 @@ class GuildDraft:
             await self.guild.guild.get_channel(self.start_channel_id).send("Finished the draft with {p}".format(p=", ".join([p.display_name for p in self.get_players()])))
             for player in self.players.values():
                 await player.send(f"[{self.id_with_guild()}] The draft has finished")
-                self.send_deckfile_to_player(player, player.id)
+                await self.send_deckfile_to_player(player, player.id)
             self.players.clear()
             self.messages_by_player.clear()
 
