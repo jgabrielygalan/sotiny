@@ -126,7 +126,7 @@ class Draft:
         if pick == 'Lore Seeker': # Reveal Lore Seeker as you draft it. After you draft Lore Seeker, you may add a booster pack to the draft
             self.open_booster(player, pack.number)
             return (player, pick, DraftEffect.add_booster_to_draft)
-        if pick in ['Cogwork Librarian', "Leovold's Operative"]:
+        if pick in ['Cogwork Librarian', "Leovold's Operative"]: # Swap me into a later booster!
             return (player, pick, DraftEffect.no_immediate_effect)
 
         return None
@@ -143,7 +143,7 @@ class Draft:
         return False, None
 
 
-def get_next_player(player: DraftPlayer, pack: Booster):
+def get_next_player(player: DraftPlayer, pack: Booster) -> int:
     if pack.number % 2 == 1:
         return player.next
     return player.previous

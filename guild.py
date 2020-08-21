@@ -24,7 +24,7 @@ class Guild:
         self.id = guild.id
         self.name = guild.name
         self.role = get_cubedrafter_role(guild)
-        self.drafts_in_progress = []
+        self.drafts_in_progress: List[GuildDraft] = []
         self.players = {} # players registered for the next draft
         self.pending_conf: DraftSettings = DraftSettings(3, 15, 8, None)
 
