@@ -24,7 +24,7 @@ class Updater(commands.Cog):
     async def update(self) -> None:
         draft_cog = self.bot.get_cog('CubeDrafter')
         for guild in draft_cog.guilds_by_id.values():
-            if guild.drafts_in_progress:
+            if [d for d in guild.drafts_in_progress if d.players]:
                 return
         subprocess.check_output(['git', 'fetch']).decode()
         commit_id = subprocess.check_output(['git', 'rev-parse', f'origin/{self.branch}']).decode().strip()
