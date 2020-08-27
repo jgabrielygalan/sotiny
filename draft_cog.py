@@ -5,7 +5,7 @@ from typing import Callable, Dict, Optional
 import discord
 import discord.utils
 from discord.ext import commands, flags, tasks
-from discord.ext.commands import Bot
+from discord.ext.commands import Bot, Context
 
 import utils
 from cog_exceptions import UserFeedbackException
