@@ -128,7 +128,8 @@ class GuildDraft:
                 emoji_cog = self.bot.get_cog('SelfGuild')
                 text = ''.join([f'{emoji_cog.get_emoji(a)} {a}' for a in actions])
                 message = await messageable.send(f'Optionally activate: {text}')
-                # TODO: Actually do it
+                for a in actions:
+                    await message.add_reaction(emoji_cog.get_emoji(a))
 
 
     async def handle_pick_response(self, updates, player_id: int, effects: List[player_card_drafteffect]) -> None:
