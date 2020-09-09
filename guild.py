@@ -1,11 +1,11 @@
 from copy import copy
-from typing import List, Optional
+from typing import Dict, List, Optional
 
 import attr
 import discord
+import aioredis
 
-from draft_guild import GuildDraft
-
+from draft_guild import DEFAULT_CUBE_CUBECOBRA_ID, GuildDraft
 
 @attr.s(auto_attribs=True)
 class DraftSettings:
@@ -19,13 +19,14 @@ class Guild:
     """
     Maintains state about a Guild, and handles draft registration
     """
-    def __init__(self, guild) -> None:
+    def __init__(self, guild: discord.Guild, redis_client: aioredis.Redis) -> None:
+        self.redis = redis_client
         self.guild = guild
         self.id = guild.id
         self.name = guild.name
         self.role = get_cubedrafter_role(guild)
         self.drafts_in_progress: List[GuildDraft] = []
-        self.players = {} # players registered for the next draft
+        self.players: Dict[int, discord.Member] = {} # players registered for the next draft
         self.pending_conf: DraftSettings = DraftSettings(3, 15, 8, None)
 
     async def add_player(self, player: discord.Member) -> None:
@@ -65,6 +66,8 @@ class Guild:
         return None
 
     def setup(self, packs: int, cards: int, cube: Optional[str], players: int) -> None:
+        if cube is None:
+            cube = DEFAULT_CUBE_CUBECOBRA_ID
         self.pending_conf = DraftSettings(packs, cards, players, cube)
 
     async def start(self, ctx):
@@ -90,6 +93,37 @@ class Guild:
                 if discord.utils.find(lambda m: m.name == 'CubeDrafter', player.roles):
                     await player.remove_roles(self.role)
 
+    async def save_state(self) -> None:
+        if self.redis is None:
+            return
+        await self.redis.delete(f'sotiny:{self.guild.id}:players')
+        if self.players:
+            await self.redis.sadd(f'sotiny:{self.guild.id}:players', *self.players)
+        if self.pending_conf.cube_id:
+            await self.redis.set(f'sotiny:{self.guild.id}:cube_id', self.pending_conf.cube_id)
+        await self.redis.set(f'sotiny:{self.guild.id}:number_of_packs', self.pending_conf.number_of_packs)
+        await self.redis.set(f'sotiny:{self.guild.id}:cards_per_booster', self.pending_conf.cards_per_booster)
+        await self.redis.set(f'sotiny:{self.guild.id}:max_players', self.pending_conf.max_players)
+        # todo: Store in-progress drafts
+        pass
+
+    async def load_state(self) -> None:
+        if self.redis is None:
+            return
+        self.players.clear()
+        for uid in await self.redis.smembers(f'sotiny:{self.guild.id}:players'):
+            snowflake = int(uid)
+            member = self.guild.get_member(snowflake)
+            if member is not None:
+                self.players[snowflake] = member
+        self.setup(
+            await self.redis.get(f'sotiny:{self.guild.id}:number_of_packs'),
+            await self.redis.get(f'sotiny:{self.guild.id}:cards_per_booster'),
+            await self.redis.get(f'sotiny:{self.guild.id}:cube_id'),
+            await self.redis.get(f'sotiny:{self.guild.id}:max_players')
+            )
+    # todo later: load in-progress drafts
+
 
 def get_cubedrafter_role(guild: discord.Guild) -> discord.Role:
     role = discord.utils.find(lambda m: m.name == 'CubeDrafter', guild.roles)
@@ -104,4 +138,3 @@ def get_cubedrafter_role(guild: discord.Guild) -> discord.Role:
     else:
         print("Guild {n} has the CubeDrafter role with id: {i}, but with higher position than the bot, can't manage it".format(n=guild.name,i=role.id))
         return None
-    return role

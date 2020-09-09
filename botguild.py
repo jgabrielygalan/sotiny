@@ -28,5 +28,6 @@ class SelfGuild(commands.Cog):
         return emoji
 
 def setup(bot: commands.Bot) -> None:
-    os.mkdir('emoji_images')
+    if not os.path.exists('emoji_images'):
+        os.mkdir('emoji_images')
     bot.add_cog(SelfGuild(bot))

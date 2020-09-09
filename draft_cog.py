@@ -7,6 +7,7 @@ from discord.ext.commands.errors import CheckFailure
 import discord.utils
 from discord.ext import commands, flags, tasks
 from discord.ext.commands import Bot, Context
+import aioredis
 
 import utils
 from cog_exceptions import UserFeedbackException
@@ -46,22 +47,28 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
 
     @commands.Cog.listener()
     async def on_ready(self):
+        try:
+            self.redis = await aioredis.create_redis_pool('redis://localhost')
+        except ConnectionRefusedError:
+            self.redis = None
+
         print("Bot is ready (from the Cog)")
         for guild in self.bot.guilds:
             print("Ready on guild: {n}".format(n=guild.name))
             if not guild.id in self.guilds_by_id:
-                self.guilds_by_id[guild.id] = Guild(guild)
+                self.guilds_by_id[guild.id] = Guild(guild, self.redis)
                 if self.guilds_by_id[guild.id].role is None and guild.me.guild_permissions.manage_roles:
                     print(f'Creating CubeDrafter Role for {guild.name}')
                     role = await guild.create_role(name='CubeDrafter', reason='A role assigned to anyone currently drafting a cube')
                     self.guilds_by_id[guild.id].role = role
+                await self.guilds_by_id[guild.id].load_state()
         self.status.start()
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
         print("Joined {n}: {r}".format(n=guild.name, r=guild.roles))
         if not guild.id in self.guilds_by_id:
-            self.guilds_by_id[guild.id] = Guild(guild)
+            self.guilds_by_id[guild.id] = Guild(guild, self.redis)
 
     @commands.Cog.listener()
     async def on_guild_remove(self, guild):
@@ -81,6 +88,7 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
         await ctx.send(msg)
         if guild.pending_conf.max_players == len(guild.players):
             await guild.start(ctx)
+        await guild.save_state()
 
     @commands.command(name='cancel', help='Cancel your registration for the draft. Only allowed before it starts')
     async def cancel(self, ctx):
@@ -119,7 +127,7 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
         for guild in self.guilds_by_id.values():
             handled = await guild.try_pick_with_reaction(payload.message_id, payload.emoji.name, payload.user_id)
             if handled:
-                return
+                await guild.save_state()
 
     @commands.command(name='pending')
     async def pending(self, ctx, draft_id = None):
@@ -179,6 +187,7 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
             await ctx.send(f"Okay. I'll start a draft of {cube} when we have {flags['players']} players")
         else:
             await ctx.send(f"Okay. I'll start a draft when we have {flags['players']} players")
+        await guild.save_state()
 
 
     async def find_draft_or_send_error(self, ctx, draft_id=None) -> GuildDraft:
@@ -238,3 +247,6 @@ def validate_and_cast_start_input(packs: int, cards: int):
     if cards_valid <= 1:
         raise UserFeedbackException("cards should be a number greater than 1")
     return (packs_valid, cards_valid)
+
+def setup(bot):
+    bot.add_cog(DraftCog(bot, bot.cfg))
