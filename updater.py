@@ -32,7 +32,10 @@ class Updater(commands.Cog):
             print(f'origin/{self.branch} at {commit_id}')
             print('Update found, shutting down')
             subprocess.check_output(['git', 'pull']).decode()
-            # subprocess.check_output([sys.executable, '-m', 'pip', 'install', '-r', 'requirements.txt']).decode()
+            try:
+                subprocess.check_output([sys.executable, '-m', 'pip', 'install', '-r', 'requirements.txt']).decode()
+            except Exception as c:
+                print(c)
             await self.bot.close()
 
 def setup(bot: commands.Bot) -> None:

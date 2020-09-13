@@ -68,6 +68,20 @@ class Guild:
     def setup(self, packs: int, cards: int, cube: Optional[str], players: int) -> None:
         if cube is None:
             cube = DEFAULT_CUBE_CUBECOBRA_ID
+        if packs is None:
+            packs = 3
+        if cards is None:
+            cards = 15
+        if players is None:
+            players = 8
+        if isinstance(packs, bytes):
+            packs = int(packs.decode())
+        if isinstance(cards, bytes):
+            cards = int(cards.decode())
+        if isinstance(cube, bytes):
+            cube = cube.decode()
+        if isinstance(players, bytes):
+            players = int(players.decode())
         self.pending_conf = DraftSettings(packs, cards, players, cube)
 
     async def start(self, ctx):

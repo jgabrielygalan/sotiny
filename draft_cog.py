@@ -1,3 +1,4 @@
+import os
 import traceback
 from typing import Dict, Optional
 
@@ -19,9 +20,8 @@ DEFAULT_CARD_NUMBER = 15
 
 
 class DraftCog(commands.Cog, name="CubeDrafter"):
-    def __init__(self, bot: Bot, cfg: Dict[str, str]) -> None:
+    def __init__(self, bot: Bot) -> None:
         self.bot = bot
-        self.cfg = cfg
         self.guilds_by_id: Dict[int, Guild] = {}
 
     def get_guild(self, ctx: commands.Context) -> Guild:
@@ -48,27 +48,31 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
     @commands.Cog.listener()
     async def on_ready(self):
         try:
-            self.redis = await aioredis.create_redis_pool('redis://localhost')
+
+            self.redis = await aioredis.create_redis_pool(os.getenv('REDIS_URL', default='redis://localhost'), password=os.getenv('REDIS_PASSWORD'))
         except ConnectionRefusedError:
             self.redis = None
 
         print("Bot is ready (from the Cog)")
         for guild in self.bot.guilds:
             print("Ready on guild: {n}".format(n=guild.name))
-            if not guild.id in self.guilds_by_id:
-                self.guilds_by_id[guild.id] = Guild(guild, self.redis)
-                if self.guilds_by_id[guild.id].role is None and guild.me.guild_permissions.manage_roles:
-                    print(f'Creating CubeDrafter Role for {guild.name}')
-                    role = await guild.create_role(name='CubeDrafter', reason='A role assigned to anyone currently drafting a cube')
-                    self.guilds_by_id[guild.id].role = role
-                await self.guilds_by_id[guild.id].load_state()
+            await self.setup_guild(guild)
         self.status.start()
+
+    async def setup_guild(self, guild):
+        if not guild.id in self.guilds_by_id:
+            self.guilds_by_id[guild.id] = Guild(guild, self.redis)
+            if self.guilds_by_id[guild.id].role is None and guild.me.guild_permissions.manage_roles:
+                print(f'Creating CubeDrafter Role for {guild.name}')
+                role = await guild.create_role(name='CubeDrafter', reason='A role assigned to anyone currently drafting a cube')
+                self.guilds_by_id[guild.id].role = role
+            await self.guilds_by_id[guild.id].load_state()
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
         print("Joined {n}: {r}".format(n=guild.name, r=guild.roles))
         if not guild.id in self.guilds_by_id:
-            self.guilds_by_id[guild.id] = Guild(guild, self.redis)
+            await self.setup_guild(guild)
 
     @commands.Cog.listener()
     async def on_guild_remove(self, guild):
@@ -249,4 +253,4 @@ def validate_and_cast_start_input(packs: int, cards: int):
     return (packs_valid, cards_valid)
 
 def setup(bot):
-    bot.add_cog(DraftCog(bot, bot.cfg))
+    bot.add_cog(DraftCog(bot))
