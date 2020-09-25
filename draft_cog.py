@@ -86,11 +86,15 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
         guild = self.get_guild(ctx)
         print(f"Registering {player.display_name} for the next draft")
         await guild.add_player(player)
-        msg = f"{ctx.author.mention}, I have registered you for the next draft"
+        num_players = len(guild.players)
+        if num_players == 1:
+            msg = f"{ctx.author.mention}, I have registered you for a draft of https://cubecobra.com/cube/overview/{guild.pending_conf.cube_id}"
+        else:
+            msg = f"{ctx.author.mention}, I have registered you for the next draft"
         if guild.pending_conf.max_players:
-            msg = msg + f'.  You are player {len(guild.players)} of {guild.pending_conf.max_players}'
+            msg = msg + f'\nYou are player {num_players} of {guild.pending_conf.max_players}'
         await ctx.send(msg)
-        if guild.pending_conf.max_players == len(guild.players):
+        if guild.pending_conf.max_players == num_players:
             await guild.start(ctx)
         await guild.save_state()
 

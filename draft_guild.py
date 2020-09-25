@@ -65,7 +65,7 @@ class GuildDraft:
         self.start_channel_id = channel.id
         for p in self.players.values():
             self.messages_by_player[p.id] = {}
-        await channel.send("Starting the draft with {p}".format(p=", ".join([p.display_name for p in self.get_players()])))
+        await channel.send("Starting the draft of https://cubecobra.com/cube/overview/{cube_id} with {p}".format(p=", ".join([p.display_name for p in self.get_players()]), cube_id=self.cube))
         players_to_update = self.draft.start(self.packs, self.cards, self.cube)
         intro = f"The draft has started. Pack 1, Pick 1:"
         await asyncio.gather(*[self.send_pack_to_player(intro, p) for p in players_to_update])
