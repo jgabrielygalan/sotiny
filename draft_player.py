@@ -1,4 +1,4 @@
-from typing import List, Set
+from typing import List, Optional, Set
 
 from booster import Booster
 
@@ -8,10 +8,10 @@ class DraftPlayer:
         self.id = id
         self.next = next
         self.previous = previous
-        self.queue = []
+        self.queue: List[Booster] = []
         self.deck: List[str] = []
         self.face_up: List[str] = []
-        self.current_pack = None
+        self.current_pack: Optional[Booster] = None
         self.booster_number = 0
 
     def __str__(self) -> str:

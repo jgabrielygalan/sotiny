@@ -34,13 +34,13 @@ class Draft:
     def player_by_id(self, player_id: int) -> DraftPlayer:
         return self.state[player_id]
 
-    def pack_of(self, player_id: int) -> Booster:
+    def pack_of(self, player_id: int) -> Optional[Booster]:
         return self.state[player_id].current_pack
 
     def deck_of(self, player_id: int) -> List[str]:
         return self.state[player_id].deck
 
-    def start(self, number_of_packs: int, cards_per_booster: int, cube: None = None) -> Iterable[DraftPlayer]:
+    def start(self, number_of_packs: int, cards_per_booster: int) -> Iterable[DraftPlayer]:
         if number_of_packs * cards_per_booster * len(self.players) > len(self.cards):
             raise UserFeedbackException(f"Not enough cards {len(self.cards)} for {len(self.players)} with {number_of_packs} of {cards_per_booster}")
         self.number_of_packs = number_of_packs

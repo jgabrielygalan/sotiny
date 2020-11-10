@@ -3,7 +3,7 @@ import time
 import urllib.request
 import uuid
 from io import BytesIO
-from typing import List
+from typing import Dict, List
 
 import aiohttp
 import discord
@@ -27,7 +27,7 @@ class GuildDraft:
     """
     Discord-aware wrapper for a Draft.
     """
-    def __init__(self, guild, packs, cards, cube, players):
+    def __init__(self, guild, packs: int, cards: int, cube: str, players: Dict[int, discord.Member]):
         self.guild = guild
         self.packs = packs
         self.cards = cards
@@ -66,7 +66,7 @@ class GuildDraft:
         for p in self.players.values():
             self.messages_by_player[p.id] = {}
         await channel.send("Starting the draft of https://cubecobra.com/cube/overview/{cube_id} with {p}".format(p=", ".join([p.display_name for p in self.get_players()]), cube_id=self.cube))
-        players_to_update = self.draft.start(self.packs, self.cards, self.cube)
+        players_to_update = self.draft.start(self.packs, self.cards)
         intro = f"The draft has started. Pack 1, Pick 1:"
         await asyncio.gather(*[self.send_pack_to_player(intro, p) for p in players_to_update])
 
@@ -108,7 +108,8 @@ class GuildDraft:
         self.messages_by_player[player_id].clear()
         async with messageable.typing():
             await messageable.send(f"[{self.id_with_guild()}] {intro}")
-            cards = self.draft.pack_of(player_id).cards
+            pack = self.draft.pack_of(player_id)
+            cards = pack.cards
             print(numpy.array(cards))
             rows = numpy.array_split(numpy.array(cards), [5, 10]) # split at positions 5 and 10, defaulting to empty arrays
             i = 1
