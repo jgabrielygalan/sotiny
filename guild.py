@@ -92,7 +92,7 @@ class Guild:
         self.drafts_in_progress.append(draft)
 
     async def try_pick_with_reaction(self, message_id: int, emoji, player: int) -> bool:
-        draft: GuildDraft = next((x for x in self.drafts_in_progress if x.has_message(message_id)), None)
+        draft: Optional[GuildDraft] = next((x for x in self.drafts_in_progress if x.has_message(message_id)), None)
         if draft is None:
             return False
         else:
