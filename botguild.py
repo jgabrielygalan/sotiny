@@ -1,7 +1,10 @@
 import os
+
 import discord
 from discord.ext import commands
+
 import image_fetcher
+
 
 class SelfGuild(commands.Cog):
     def __init__(self, bot: commands.Bot) -> None:

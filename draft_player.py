@@ -1,24 +1,21 @@
 from typing import List, Optional, Set
 
+import attr
+
 from booster import Booster
 
 
+@attr.s(auto_attribs=True)
+
 class DraftPlayer:
-    def __init__(self, id: int, next: int, previous: int):
-        self.id = id
-        self.next = next
-        self.previous = previous
-        self.queue: List[Booster] = []
-        self.deck: List[str] = []
-        self.face_up: List[str] = []
-        self.current_pack: Optional[Booster] = None
-        self.booster_number = 0
-
-    def __str__(self) -> str:
-        return str(self.id)
-
-    def __repr__(self):
-        return self.id.__repr__()
+    id: int
+    next: int
+    previous: int
+    queue: List[Booster] = attr.ib(factory=list)
+    deck: List[str] = attr.ib(factory=list)
+    face_up: List[str] = attr.ib(factory=list)
+    current_pack: Optional[Booster] = None
+    booster_number = 0
 
     def push_pack(self, booster: Booster, front_of_queue: bool = False) -> bool:
         if self.current_pack is None:

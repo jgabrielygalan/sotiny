@@ -3,10 +3,13 @@
 import json
 import os
 
-from discord.ext import commands
 import dotenv
+from discord.ext import commands
 
 dotenv.load_dotenv()
+
+if not os.path.exists('drafts'):
+    os.mkdir('drafts')
 
 PREFIX = os.getenv('BOT_PREFIX', default='>')
 bot = commands.Bot(command_prefix=commands.when_mentioned_or(PREFIX))

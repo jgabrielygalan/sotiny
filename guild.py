@@ -1,11 +1,12 @@
 from copy import copy
 from typing import Dict, List, Optional
 
+import aioredis
 import attr
 import discord
-import aioredis
 
 from draft_guild import DEFAULT_CUBE_CUBECOBRA_ID, GuildDraft
+
 
 @attr.s(auto_attribs=True)
 class DraftSettings:
@@ -118,8 +119,10 @@ class Guild:
         await self.redis.set(f'sotiny:{self.guild.id}:number_of_packs', self.pending_conf.number_of_packs)
         await self.redis.set(f'sotiny:{self.guild.id}:cards_per_booster', self.pending_conf.cards_per_booster)
         await self.redis.set(f'sotiny:{self.guild.id}:max_players', self.pending_conf.max_players)
-        # todo: Store in-progress drafts
-        pass
+        if self.drafts_in_progress:
+            await self.redis.sadd(f'sotiny:{self.guild.id}:active_drafts', *[d.uuid for d in self.drafts_in_progress])
+        for draft in self.drafts_in_progress:
+            await draft.save_state(self.redis)
 
     async def load_state(self) -> None:
         if self.redis is None:
