@@ -1,10 +1,12 @@
 import random
-from booster import Booster
-from draft_player import DraftPlayer
 from enum import Enum
-from typing import Any, Dict, List, Optional, Iterable, Tuple
-from cog_exceptions import UserFeedbackException
+from typing import Any, Dict, Iterable, List, Optional, Tuple
+
 import attr
+
+from booster import Booster
+from cog_exceptions import UserFeedbackException
+from draft_player import DraftPlayer
 
 DraftEffect = Enum('DraftEffect', 'no_immediate_effect add_booster_to_draft')
 
@@ -14,22 +16,19 @@ CARDS_WITH_FUNCTION = {"Cogwork Librarian", "Leovold's Operative"}
 
 @attr.s(auto_attribs=True)
 class PickReturn():
-    updates: List[Dict[str, Any]]
+    updates: Dict[DraftPlayer, List[str]]
     draft_effect: List[player_card_drafteffect]
 
+@attr.s(auto_attribs=True)
 class Draft:
     """
     The internals of a draft.  This represents the abstract state of the draft.
     This is where all the logic of a Booster Draft happens.
     """
-    def __init__(self, players: List[int], card_list: List[str]) -> None:
-        self.cards = card_list
-        self.players = players
-        random.shuffle(self.players)
-        self.state: Dict[int, DraftPlayer] = {}
-        self.opened_packs = 0
-        for i, player in enumerate(players):
-            self.state[player] = DraftPlayer(player, players[(i+1)%len(players)], players[i-1])
+    players: List[int]
+    cards: List[str]
+    state: Dict[int, DraftPlayer] = attr.ib(factory=dict)
+    opened_packs = 0
 
     def player_by_id(self, player_id: int) -> DraftPlayer:
         return self.state[player_id]
@@ -45,7 +44,10 @@ class Draft:
             raise UserFeedbackException(f"Not enough cards {len(self.cards)} for {len(self.players)} with {number_of_packs} of {cards_per_booster}")
         self.number_of_packs = number_of_packs
         self.cards_per_booster = cards_per_booster
+        random.shuffle(self.players)
         random.shuffle(self.cards)
+        for i, player in enumerate(self.players):
+            self.state[player] = DraftPlayer(player, self.players[(i+1)%len(self.players)], self.players[i-1])
         self.open_boosters_for_all_players()
         return self.state.values() # return all players to update
 
@@ -74,7 +76,7 @@ class Draft:
         player = self.state[player_id]
         pack = player.pick(position)
         if pack is None:
-            return PickReturn([], [])
+            return PickReturn({}, [])
 
         users_to_update: List[DraftPlayer] = []
 
@@ -98,23 +100,22 @@ class Draft:
         if player.has_current_pack() and player not in users_to_update:
             users_to_update.append(player)
 
-        result = []
+        result: Dict[DraftPlayer, List[str]] = {}
         new_booster = False
         for player in users_to_update:
-            updates = {'player': player, 'autopicks': []}
+            result[player] = []
             if player.has_one_card_in_current_pack():
                 new_booster, effect = self.autopick(player)
                 if effect:
                     player.face_up.append(player.last_pick())
                     pick_effects.append(effect)
-                updates['autopicks'].append(player.last_pick())
+                result[player].append(player.last_pick())
 
-            result.append(updates)
 
         if new_booster:
             for player in self.state.values():
                 if player not in users_to_update:
-                    result.append({'player': player, 'autopicks': []})
+                    result[player].append([])
 
         if self.is_draft_finished():
             print("Draft finished")

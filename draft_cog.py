@@ -2,13 +2,13 @@ import os
 import traceback
 from typing import Dict, Optional
 
+import aioredis
 import discord
-from discord.ext.commands.context import Context
-from discord.ext.commands.errors import CheckFailure
 import discord.utils
 from discord.ext import commands, flags, tasks
 from discord.ext.commands import Bot, Context
-import aioredis
+from discord.ext.commands.context import Context
+from discord.ext.commands.errors import CheckFailure
 
 import utils
 from cog_exceptions import UserFeedbackException
@@ -127,6 +127,7 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
             return
         async with ctx.typing():
             await guild.start(ctx)
+        await guild.save_state()
 
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload: discord.RawReactionActionEvent) -> None:

@@ -1,18 +1,13 @@
 from typing import List
 
+import attr
 
+
+@attr.s(auto_attribs=True)
 class Booster(object):
-    def __init__(self, cards: List[str], number: int) -> None:
-        super(Booster, self).__init__()
-        self.cards = cards
-        self.number = number
-        self.pick_number = 1
-
-    def __str__(self) -> str:
-        return ", ".join(self.cards)
-		
-    def __repr__(self):
-        return self.cards.__repr__()
+    cards: List[str]
+    number: int
+    pick_number = 1
 
     def is_empty(self):
         return self.number_of_cards() == 0

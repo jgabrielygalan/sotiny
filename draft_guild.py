@@ -1,4 +1,6 @@
 import asyncio
+import json
+import os
 import time
 import urllib.request
 import uuid
@@ -6,13 +8,16 @@ from io import BytesIO
 from typing import Dict, List
 
 import aiohttp
+import attr
 import discord
 import numpy
+from aioredis.commands import Redis
 from discord import File
 
 import image_fetcher
 from cog_exceptions import UserFeedbackException
-from draft import CARDS_WITH_FUNCTION, Draft, DraftEffect, player_card_drafteffect
+from draft import (CARDS_WITH_FUNCTION, Draft, DraftEffect,
+                   player_card_drafteffect)
 from draft_player import DraftPlayer
 
 EMOJIS_BY_NUMBER = {1 : '1⃣', 2 : '2⃣', 3 : '3⃣', 4 : '4⃣', 5 : '5⃣'}
@@ -109,6 +114,8 @@ class GuildDraft:
         async with messageable.typing():
             await messageable.send(f"[{self.id_with_guild()}] {intro}")
             pack = self.draft.pack_of(player_id)
+            if pack is None:
+                return
             cards = pack.cards
             print(numpy.array(cards))
             rows = numpy.array_split(numpy.array(cards), [5, 10]) # split at positions 5 and 10, defaulting to empty arrays
@@ -133,7 +140,7 @@ class GuildDraft:
                     await message.add_reaction(emoji_cog.get_emoji(a))
 
 
-    async def handle_pick_response(self, updates, player_id: int, effects: List[player_card_drafteffect]) -> None:
+    async def handle_pick_response(self, updates: Dict[DraftPlayer, List[str]], player_id: int, effects: List[player_card_drafteffect]) -> None:
         if player_id:
             self.messages_by_player[player_id].clear()
 
@@ -148,15 +155,14 @@ class GuildDraft:
                 coroutines.append(player.send(text))
             await self.guild.guild.get_channel(self.start_channel_id).send(text, file=discord.File(await image_fetcher.download_image_async([effect[1]])))
 
-        for update in updates:
+        for player, autopicks in updates.items():
             deck = ''
             current_pack = ''
-            autopicks = ''
-            player = update['player']
+
             messageable: discord.abc.Messageable = self.players[player.id]
-            if len(update['autopicks']) > 0:
-                autopicks = ', '.join(update['autopicks'])
-                coroutines.append(messageable.send(f'[{self.id_with_guild()}] Autopicks: {autopicks}', file=discord.File(await image_fetcher.download_image_async(update['autopicks']))))
+            if autopicks:
+                autopick_str = ', '.join(autopicks)
+                coroutines.append(messageable.send(f'[{self.id_with_guild()}] Autopicks: {autopick_str}', file=discord.File(await image_fetcher.download_image_async(autopicks))))
 
             if player.has_current_pack():
                 if player.id == player_id:
@@ -184,6 +190,15 @@ class GuildDraft:
         content = generate_file_content(self.draft.deck_of(player_id))
         file=BytesIO(bytes(content, 'utf-8'))
         await messagable.send(content=f"[{self.id_with_guild()}] Your deck", file=File(fp=file, filename=f"{self.guild.name}_{time.strftime('%Y%m%d')}.txt"))
+
+    async def save_state(self, redis: Redis) -> None:
+        state = json.dumps(attr.asdict(self.draft))
+        with open(os.path.join('drafts', f'{self.uuid}.json'), 'w') as f:
+            f.write(state)
+        await redis.set(f'draft:{self.uuid}', state)
+
+    async def load_state(self, redis: Redis) -> None:
+        pass
 
 async def send_image_with_retry(user, image_file: str, text: str = '') -> discord.Message:
     message = await send(user, file=File(image_file), content=text)
