@@ -101,7 +101,7 @@ def save_composite_image(in_filepaths, out_filepath: str) -> None:
     images = list(map(Image.open, in_filepaths))
     for image in images:
         aspect_ratio = image.width / image.height       # (0.7059 for 480x680)
-        image.thumbnail([aspect_ratio * 445, 445])      # (314.1255x445)
+        image.thumbnail((aspect_ratio * 445, 445))      # (314.1255x445)
     widths, heights = zip(*(i.size for i in images))
     #total_width = sum(widths)
     max_height = max(heights)

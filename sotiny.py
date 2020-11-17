@@ -1,6 +1,5 @@
 #sotiny.py
 
-import json
 import os
 
 import dotenv
@@ -13,6 +12,7 @@ if not os.path.exists('drafts'):
 
 PREFIX = os.getenv('BOT_PREFIX', default='>')
 bot = commands.Bot(command_prefix=commands.when_mentioned_or(PREFIX))
+bot.owner_ids = {154363842451734528, 323861986356232204, 411664250768195586}
 
 @bot.event
 async def on_ready() -> None:
