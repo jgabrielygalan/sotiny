@@ -115,7 +115,7 @@ class Draft:
         if new_booster:
             for player in self.state.values():
                 if player not in users_to_update:
-                    result[player].append([])
+                    result[player] = []
 
         if self.is_draft_finished():
             print("Draft finished")

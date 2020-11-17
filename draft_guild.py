@@ -38,7 +38,7 @@ class GuildDraft:
         self.cards = cards
         self.cube = cube
         self.players = players
-        self.messages_by_player = {}
+        self.messages_by_player: Dict[int, dict] = {}
         self.uuid = str(uuid.uuid4()).replace('-', '')
 
     def id(self):

@@ -64,8 +64,7 @@ async def store_async(url: str, path: str) -> aiohttp.ClientResponse:
                         break
                     fout.write(chunk)
             return response
-    # type: ignore # urllib isn't fully stubbed
-    except (urllib.error.HTTPError, aiohttp.ClientError) as e:
+    except aiohttp.ClientError as e:
         raise FetchException(e)
 
 
