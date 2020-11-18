@@ -2,13 +2,15 @@ import asyncio
 import json
 import os
 import time
+import traceback
 import urllib.request
 import uuid
 from io import BytesIO
-from typing import Dict, List
+from typing import Dict, List, Optional, TYPE_CHECKING
 
 import aiohttp
 import attr
+import cattr
 import discord
 import numpy
 from aioredis.commands import Redis
@@ -20,6 +22,9 @@ from draft import (CARDS_WITH_FUNCTION, Draft, DraftEffect,
                    player_card_drafteffect)
 from draft_player import DraftPlayer
 
+if TYPE_CHECKING:
+    from guild import Guild
+
 EMOJIS_BY_NUMBER = {1 : '1⃣', 2 : '2⃣', 3 : '3⃣', 4 : '4⃣', 5 : '5⃣'}
 NUMBERS_BY_EMOJI = {'1⃣' : 1, '2⃣' : 2, '3⃣' : 3, '4⃣' : 4, '5⃣' : 5}
 DEFAULT_CUBE_CUBECOBRA_ID = "4rx"
@@ -27,19 +32,17 @@ DEFAULT_CUBE_CUBECOBRA_ID = "4rx"
 class FetchException(Exception):
     pass
 
-
+@attr.s(auto_attribs=True)
 class GuildDraft:
     """
     Discord-aware wrapper for a Draft.
     """
-    def __init__(self, guild, packs: int, cards: int, cube: str, players: Dict[int, discord.Member]):
-        self.guild = guild
-        self.packs = packs
-        self.cards = cards
-        self.cube = cube
-        self.players = players
-        self.messages_by_player: Dict[int, dict] = {}
-        self.uuid = str(uuid.uuid4()).replace('-', '')
+    guild: 'Guild'
+    players: Dict[int, discord.Member] = attr.ib(factory=dict)
+    uuid: str = ''
+    messages_by_player: Dict[int, dict] = attr.ib(factory=dict)
+    draft: Optional[Draft] = None
+    start_channel_id: Optional[int] = None
 
     def id(self):
         return self.uuid
@@ -64,14 +67,16 @@ class GuildDraft:
         players = [self.players[x.id] for x in pending]
         return players
 
-    async def start(self, channel:discord.TextChannel):
-        card_list = await get_card_list(self.cube)
+    async def start(self, channel:discord.TextChannel, packs: int, cards: int, cube: str):
+        if not self.uuid:
+            self.uuid = str(uuid.uuid4()).replace('-', '')
+        card_list = await get_card_list(cube)
         self.draft = Draft(list(self.players.keys()), card_list)
         self.start_channel_id = channel.id
         for p in self.players.values():
             self.messages_by_player[p.id] = {}
-        await channel.send("Starting the draft of https://cubecobra.com/cube/overview/{cube_id} with {p}".format(p=", ".join([p.display_name for p in self.get_players()]), cube_id=self.cube))
-        players_to_update = self.draft.start(self.packs, self.cards)
+        await channel.send("Starting the draft of https://cubecobra.com/cube/overview/{cube_id} with {p}".format(p=", ".join([p.display_name for p in self.get_players()]), cube_id=cube))
+        players_to_update = self.draft.start(packs, cards)
         intro = f"The draft has started. Pack 1, Pick 1:"
         await asyncio.gather(*[self.send_pack_to_player(intro, p) for p in players_to_update])
 
@@ -104,10 +109,14 @@ class GuildDraft:
         await self.send_deckfile_to_player(messageable, player_id)
 
     async def send_current_pack_to_player(self, intro: str, player_id: int):
+        if self.draft is None:
+            return
         player = self.draft.player_by_id(player_id)
         await self.send_pack_to_player(intro, player)
 
     async def send_pack_to_player(self, intro: str, player: DraftPlayer, reactions=True):
+        if self.draft is None:
+            return
         player_id = player.id
         messageable = self.players[player_id]
         self.messages_by_player[player_id].clear()
@@ -133,7 +142,7 @@ class GuildDraft:
                     for i in range(1, message_info["len"] + 1):
                         await message_info["message"].add_reaction(EMOJIS_BY_NUMBER[i])
             if actions := [a for a in player.face_up if a in CARDS_WITH_FUNCTION]:
-                emoji_cog = self.bot.get_cog('SelfGuild')
+                emoji_cog = self.guild.bot.get_cog('SelfGuild')
                 text = ''.join([f'{emoji_cog.get_emoji(a)} {a}' for a in actions])
                 message = await messageable.send(f'Optionally activate: {text}')
                 for a in actions:
@@ -141,6 +150,8 @@ class GuildDraft:
 
 
     async def handle_pick_response(self, updates: Dict[DraftPlayer, List[str]], player_id: int, effects: List[player_card_drafteffect]) -> None:
+        if self.draft is None:
+            return
         if player_id:
             self.messages_by_player[player_id].clear()
 
@@ -187,18 +198,36 @@ class GuildDraft:
             self.messages_by_player.clear()
 
     async def send_deckfile_to_player(self, messagable: discord.abc.Messageable, player_id: int) -> None:
+        if self.draft is None:
+            return
         content = generate_file_content(self.draft.deck_of(player_id))
         file=BytesIO(bytes(content, 'utf-8'))
         await messagable.send(content=f"[{self.id_with_guild()}] Your deck", file=File(fp=file, filename=f"{self.guild.name}_{time.strftime('%Y%m%d')}.txt"))
 
     async def save_state(self, redis: Redis) -> None:
-        state = json.dumps(attr.asdict(self.draft))
+        state = json.dumps(cattr.unstructure(self.draft))
         with open(os.path.join('drafts', f'{self.uuid}.json'), 'w') as f:
             f.write(state)
-        await redis.set(f'draft:{self.uuid}', state)
+        await redis.set(f'draft:{self.uuid}', state, expire=604800)
 
     async def load_state(self, redis: Redis) -> None:
-        pass
+        state = await redis.get(f'draft:{self.uuid}')
+        if state is None:
+            print(f'{self.uuid} could not be found')
+            return
+        try:
+            self.draft = cattr.structure(json.loads(state.decode()), Draft)
+        except TypeError as e:
+            print(f'{self.uuid} failed to reload\n{e}')
+            traceback.print_exc()
+            return
+
+        if self.draft is None:
+            print(f'{self.uuid} failed to reload?')
+            return
+        await self.guild.guild.query_members(user_ids=self.draft.players)
+        for player in self.draft.players:
+            self.players[player] = self.guild.guild.get_member(player)
 
 async def send_image_with_retry(user, image_file: str, text: str = '') -> discord.Message:
     message = await send(user, file=File(image_file), content=text)
@@ -240,7 +269,7 @@ async def fetch(session, url):
             raise UserFeedbackException(f"Unable to load cube list from {url}")
         return await response.text()
 
-async def get_card_list(cube_name) -> List[str]:
+async def get_card_list(cube_name: str) -> List[str]:
     if cube_name == '$':
         return get_cards()
     if cube_name is None:

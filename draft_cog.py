@@ -19,15 +19,20 @@ DEFAULT_PACK_NUMBER = 3
 DEFAULT_CARD_NUMBER = 15
 
 
-class DraftCog(commands.Cog, name="CubeDrafter"):
+class CubeDrafter(commands.Cog):
     def __init__(self, bot: Bot) -> None:
         self.bot = bot
         self.guilds_by_id: Dict[int, Guild] = {}
+        self.redis = None
 
-    def get_guild(self, ctx: commands.Context) -> Guild:
+    async def get_guild(self, ctx: commands.Context) -> Guild:
         if not ctx.guild:
             raise commands.NoPrivateMessage()
-        return self.guilds_by_id[ctx.guild.id]
+        guild = self.guilds_by_id.get(ctx.guild.id)
+        if guild is None:
+
+            guild = await self.setup_guild(ctx.guild)
+        return guild
 
     async def cog_command_error(self, ctx: Context, error) -> None:
         print(error)
@@ -48,10 +53,10 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
     @commands.Cog.listener()
     async def on_ready(self):
         try:
-
             self.redis = await aioredis.create_redis_pool(os.getenv('REDIS_URL', default='redis://localhost'), password=os.getenv('REDIS_PASSWORD'))
         except ConnectionRefusedError:
             self.redis = None
+            print('Could not connect to redis')
 
         print("Bot is ready (from the Cog)")
         for guild in self.bot.guilds:
@@ -59,7 +64,7 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
             await self.setup_guild(guild)
         self.status.start()
 
-    async def setup_guild(self, guild):
+    async def setup_guild(self, guild: discord.Guild) -> Guild:
         if not guild.id in self.guilds_by_id:
             self.guilds_by_id[guild.id] = Guild(guild, self.redis)
             if self.guilds_by_id[guild.id].role is None and guild.me.guild_permissions.manage_roles:
@@ -67,6 +72,7 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
                 role = await guild.create_role(name='CubeDrafter', reason='A role assigned to anyone currently drafting a cube')
                 self.guilds_by_id[guild.id].role = role
             await self.guilds_by_id[guild.id].load_state()
+        return self.guilds_by_id[guild.id]
 
     @commands.Cog.listener()
     async def on_guild_join(self, guild):
@@ -83,7 +89,7 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
     @commands.command(name='play', help='Register to play a draft')
     async def play(self, ctx: Context):
         player = ctx.author
-        guild = self.get_guild(ctx)
+        guild = await self.get_guild(ctx)
         print(f"Registering {player.display_name} for the next draft")
         await guild.add_player(player)
         num_players = len(guild.players)
@@ -101,7 +107,7 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
     @commands.command(name='cancel', help='Cancel your registration for the draft. Only allowed before it starts')
     async def cancel(self, ctx):
         player = ctx.author
-        guild = self.get_guild(ctx)
+        guild = await self.get_guild(ctx)
         if guild.is_player_registered(player):
             print(f"{player.display_name} cancels registration")
             await guild.remove_player(player)
@@ -112,7 +118,7 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
 
     @commands.command(name='players', help='List registered players for the next draft')
     async def players(self, ctx):
-        guild = self.get_guild(ctx)
+        guild = await self.get_guild(ctx)
 
         if guild.no_registered_players():
             await ctx.send("No players registered for the next draft")
@@ -121,7 +127,7 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
 
     @commands.command(name='start', help="Start the draft with the registered players. Packs is the number of packs to open per player (default 3). cards is the number of cards per booster (default 15). cube is the CubeCobra id of a Cube (default Penny Dreadful Eternal Cube).")
     async def start(self, ctx):
-        guild = self.get_guild(ctx)
+        guild = await self.get_guild(ctx)
         if guild.no_registered_players():
             await ctx.send("Can't start the draft, there are no registered players")
             return
@@ -189,7 +195,7 @@ class DraftCog(commands.Cog, name="CubeDrafter"):
     @flags.command(name='setup')
     async def setup(self, ctx, cube: Optional[str], **flags) -> None:
         """Set up an upcoming draft"""
-        guild = self.get_guild(ctx)
+        guild = await self.get_guild(ctx)
         packs, cards = validate_and_cast_start_input(flags['packs'], flags['cards_per_pack'])
         guild.setup(packs, cards, cube, flags['players'])
         if cube:
@@ -257,5 +263,5 @@ def validate_and_cast_start_input(packs: int, cards: int):
         raise UserFeedbackException("cards should be a number greater than 1")
     return (packs_valid, cards_valid)
 
-def setup(bot):
-    bot.add_cog(DraftCog(bot))
+def setup(bot: commands.Bot):
+    bot.add_cog(CubeDrafter(bot))

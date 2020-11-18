@@ -5,17 +5,21 @@ import attr
 from booster import Booster
 
 
-@attr.s(auto_attribs=True)
-
+@attr.s(auto_attribs=True, hash=False)
 class DraftPlayer:
     id: int
-    next: int
-    previous: int
+    seat: int
     queue: List[Booster] = attr.ib(factory=list)
     deck: List[str] = attr.ib(factory=list)
     face_up: List[str] = attr.ib(factory=list)
     current_pack: Optional[Booster] = None
-    booster_number = 0
+
+    def __init__(self, id: int, seat: int) -> None:
+        self.id = id
+        self.seat = seat
+
+    def __hash__(self) -> int:
+        return id.__hash__()
 
     def push_pack(self, booster: Booster, front_of_queue: bool = False) -> bool:
         if self.current_pack is None:

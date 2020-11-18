@@ -27,19 +27,22 @@ class Draft:
     """
     players: List[int]
     cards: List[str]
-    state: Dict[int, DraftPlayer] = attr.ib(factory=dict)
+    state: List[DraftPlayer] = attr.ib(factory=list)
     opened_packs = 0
 
     def player_by_id(self, player_id: int) -> DraftPlayer:
-        return self.state[player_id]
+        return self.state[self.players.index(player_id)]
 
     def pack_of(self, player_id: int) -> Optional[Booster]:
-        return self.state[player_id].current_pack
+        try:
+            return self.state[self.players.index(player_id)].current_pack
+        except IndexError as e:
+            return None
 
     def deck_of(self, player_id: int) -> List[str]:
-        return self.state[player_id].deck
+        return self.state[self.players.index(player_id)].deck
 
-    def start(self, number_of_packs: int, cards_per_booster: int) -> Iterable[DraftPlayer]:
+    def start(self, number_of_packs: int, cards_per_booster: int) -> List[DraftPlayer]:
         if number_of_packs * cards_per_booster * len(self.players) > len(self.cards):
             raise UserFeedbackException(f"Not enough cards {len(self.cards)} for {len(self.players)} with {number_of_packs} of {cards_per_booster}")
         self.number_of_packs = number_of_packs
@@ -47,9 +50,9 @@ class Draft:
         random.shuffle(self.players)
         random.shuffle(self.cards)
         for i, player in enumerate(self.players):
-            self.state[player] = DraftPlayer(player, self.players[(i+1)%len(self.players)], self.players[i-1])
+            self.state.append(DraftPlayer(player, i))
         self.open_boosters_for_all_players()
-        return self.state.values() # return all players to update
+        return self.state # return all players to update
 
     def open_booster(self, player: DraftPlayer, number: int) -> Booster:
         card_list = [self.cards.pop() for _ in range(0,self.cards_per_booster)]
@@ -59,12 +62,12 @@ class Draft:
 
     def open_boosters_for_all_players(self) -> None:
         self.opened_packs += 1
-        for player in self.state.values():
+        for player in self.state:
             self.open_booster(player, self.opened_packs)
         print("Opening pack for all players")
 
     def get_pending_players(self):
-        return [x for x in self.state.values() if x.has_current_pack()]
+        return [x for x in self.state if x.has_current_pack()]
 
     def is_draft_finished(self):
         return (self.is_pack_finished() and (self.opened_packs >= self.number_of_packs))
@@ -73,7 +76,7 @@ class Draft:
         return len(self.get_pending_players()) == 0
 
     def pick(self, player_id: int, position: int) -> PickReturn:
-        player = self.state[player_id]
+        player = self.player_by_id(player_id)
         pack = player.pick(position)
         if pack is None:
             return PickReturn({}, [])
@@ -91,8 +94,8 @@ class Draft:
 
         # push to next player
         if not was_last_pick_of_pack(pack):
-            next_player_id = get_next_player(player, pack)
-            next_player = self.state[next_player_id]
+            next_player_id = self.get_next_player(player, pack)
+            next_player = self.player_by_id(next_player_id)
             has_new_pack = next_player.push_pack(pack)
             if has_new_pack:
                 users_to_update.append(next_player)
@@ -113,7 +116,7 @@ class Draft:
 
 
         if new_booster:
-            for player in self.state.values():
+            for player in self.state:
                 if player not in users_to_update:
                     result[player] = []
 
@@ -144,10 +147,11 @@ class Draft:
         return False, None
 
 
-def get_next_player(player: DraftPlayer, pack: Booster) -> int:
-    if pack.number % 2 == 1:
-        return player.next
-    return player.previous
+    def get_next_player(self, player: DraftPlayer, pack: Booster) -> int:
+        i = player.seat
+        if pack.number % 2 == 1:
+            return self.players[(i+1)%len(self.players)]
+        return self.players[i-1]
 
 def was_last_pick_of_pack(pack: Booster):
     return pack.is_empty()

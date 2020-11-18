@@ -13,7 +13,7 @@ class DraftSettings:
     number_of_packs: int
     cards_per_booster: int
     max_players: int
-    cube_id: Optional[str]
+    cube_id: str
 
 
 class Guild:
@@ -28,7 +28,7 @@ class Guild:
         self.role = get_cubedrafter_role(guild)
         self.drafts_in_progress: List[GuildDraft] = []
         self.players: Dict[int, discord.Member] = {} # players registered for the next draft
-        self.pending_conf: DraftSettings = DraftSettings(3, 15, 8, None)
+        self.pending_conf: DraftSettings = DraftSettings(3, 15, 8, DEFAULT_CUBE_CUBECOBRA_ID)
 
     async def add_player(self, player: discord.Member) -> None:
         self.players[player.id] = player
@@ -52,7 +52,7 @@ class Guild:
         return len(self.players) == 0
 
     def get_registered_players(self) -> List[discord.Member]:
-        return self.players.values()
+        return list(self.players.values())
 
     def player_exists(self, player) -> bool:
         return self.is_player_playing(player) or self.is_player_registered(player)
@@ -68,13 +68,13 @@ class Guild:
 
     def setup(self, packs: int, cards: int, cube: Optional[str], players: int) -> None:
         if cube is None:
-            cube = DEFAULT_CUBE_CUBECOBRA_ID
+            cube = self.pending_conf.cube_id
         if packs is None:
-            packs = 3
+            packs = self.pending_conf.number_of_packs
         if cards is None:
-            cards = 15
+            cards = self.pending_conf.cards_per_booster
         if players is None:
-            players = 8
+            players = self.pending_conf.max_players
         if isinstance(packs, bytes):
             packs = int(packs.decode())
         if isinstance(cards, bytes):
@@ -87,8 +87,8 @@ class Guild:
 
     async def start(self, ctx):
         players = copy(self.players)
-        draft = GuildDraft(self, self.pending_conf.number_of_packs, self.pending_conf.cards_per_booster, self.pending_conf.cube_id, players)
-        await draft.start(ctx.channel)
+        draft = GuildDraft(self, players)
+        await draft.start(ctx.channel, self.pending_conf.number_of_packs, self.pending_conf.cards_per_booster, self.pending_conf.cube_id)
         self.players = {}
         self.drafts_in_progress.append(draft)
 
@@ -139,7 +139,17 @@ class Guild:
             await self.redis.get(f'sotiny:{self.guild.id}:cube_id'),
             await self.redis.get(f'sotiny:{self.guild.id}:max_players')
             )
-    # todo later: load in-progress drafts
+
+        for bdraft_id in await self.redis.smembers(f'sotiny:{self.guild.id}:active_drafts'):
+            draft_id = bdraft_id.decode()
+            print(f'Loading {draft_id}')
+            draft = GuildDraft(self, dict())
+            draft.uuid = draft_id
+            await draft.load_state(self.redis)
+            if draft.draft is None or draft.draft.is_draft_finished():
+                # await self.redis.srem(f'sotiny:{self.guild.id}:active_drafts', bdraft_id)
+                continue
+            self.drafts_in_progress.append(draft)
 
 
 def get_cubedrafter_role(guild: discord.Guild) -> discord.Role:

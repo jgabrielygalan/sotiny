@@ -4,13 +4,15 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
+aioredis = "*"
 attrs = "*"
+cattrs = "*"
 "discord.py" = "*"
+discord-flags = "*"
 pillow = "*"
 numpy = "*"
-discord-flags = "*"
-aioredis = "*"
 jishaku = "*"
+python-dotenv = "*"
 
 [dev-packages]
 mypy = "*"
