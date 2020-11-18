@@ -149,18 +149,21 @@ class CubeDrafter(commands.Cog):
                 await guild.save_state()
 
     @commands.command(name='pending')
-    async def pending(self, ctx, draft_id = None):
+    async def pending(self, ctx):
         """
         Show players who still haven't picked
         """
-        draft = await self.find_draft_or_send_error(ctx, draft_id)
-        if draft is not None:
+        prefix = ''
+        drafts = await self.find_drafts_by_player(ctx)
+        for draft in drafts:
+            if len(drafts) > 1:
+                prefix = f"{draft.guild.name}: **{draft.id()}**: "
             players = draft.get_pending_players()
             if players:
                 list = ", ".join([player.display_name for player in players])
-                await ctx.send(f"Pending players: {list}")
+                await ctx.send(prefix + f"Pending players: {list}")
             else:
-                await ctx.send("No pending players")
+                await ctx.send(prefix + "No pending players")
 
     @commands.dm_only()
     @commands.command(name='deck', help="Show your current deck as images")
@@ -185,7 +188,7 @@ class CubeDrafter(commands.Cog):
     @commands.dm_only()
     @commands.command(name='drafts', help="Show your in progress drafts")
     async def my_drafts(self, ctx):
-        drafts = self.find_drafts_by_player(ctx.author)
+        drafts = await self.find_drafts_by_player(ctx)
         if len(drafts) == 0:
             await ctx.send("You are not playing any draft")
         else:
@@ -212,7 +215,7 @@ class CubeDrafter(commands.Cog):
     async def find_draft_or_send_error(self, ctx, draft_id=None) -> GuildDraft:
         drafts = None
         if draft_id is None:
-            drafts = self.find_drafts_by_player(ctx.author)
+            drafts = await self.find_drafts_by_player(ctx)
             if len(drafts) > 1:
                 ids = "\n".join([f"{x.guild.name}: **{x.id()}**" for x in drafts])
                 raise CheckFailure("You are playing in several drafts. Please specify the draft id:\n" + ids)
@@ -226,9 +229,13 @@ class CubeDrafter(commands.Cog):
                 raise CheckFailure("You are not playing any draft")
             return draft
 
-    def find_drafts_by_player(self, player):
+    async def find_drafts_by_player(self, ctx: commands.Context):
+        player = ctx.author
+        if ctx.guild: # Don't leak other guilds if invoked in a guild context.
+            return (await self.get_guild(ctx)).get_drafts_for_player(player)
         drafts = []
-        [drafts.extend(guild.get_drafts_for_player(player)) for guild in self.guilds_by_id.values()]
+        for guild in self.guilds_by_id.values():
+            drafts.extend(guild.get_drafts_for_player(player))
         return drafts
 
     def find_draft_by_id(self, draft_id):
