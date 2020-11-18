@@ -24,6 +24,7 @@ class CubeDrafter(commands.Cog):
         self.bot = bot
         self.guilds_by_id: Dict[int, Guild] = {}
         self.redis = None
+        self.readied = False
 
     async def get_guild(self, ctx: commands.Context) -> Guild:
         if not ctx.guild:
@@ -52,6 +53,8 @@ class CubeDrafter(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
+        if self.readied:
+            return
         try:
             self.redis = await aioredis.create_redis_pool(os.getenv('REDIS_URL', default='redis://localhost'), password=os.getenv('REDIS_PASSWORD'))
         except ConnectionRefusedError:
@@ -63,6 +66,7 @@ class CubeDrafter(commands.Cog):
             print("Ready on guild: {n}".format(n=guild.name))
             await self.setup_guild(guild)
         self.status.start()
+        self.readied = True
 
     async def setup_guild(self, guild: discord.Guild) -> Guild:
         if not guild.id in self.guilds_by_id:
