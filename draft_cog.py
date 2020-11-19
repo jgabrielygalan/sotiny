@@ -1,6 +1,6 @@
 import os
 import traceback
-from typing import Dict, Optional
+from typing import Dict, Optional, List
 
 import aioredis
 import discord
@@ -175,7 +175,7 @@ class CubeDrafter(commands.Cog):
     @commands.dm_only()
     @commands.command(name='pack', help="Resend your current pack")
     async def my_pack(self, ctx: Context, draft_id = None):
-        draft = await self.find_draft_or_send_error(ctx, draft_id)
+        draft = await self.find_draft_or_send_error(ctx, draft_id, True)
         if draft is None:
             return
         player = draft.draft.player_by_id(ctx.author.id)
@@ -212,15 +212,19 @@ class CubeDrafter(commands.Cog):
         await guild.save_state()
 
 
-    async def find_draft_or_send_error(self, ctx, draft_id=None) -> GuildDraft:
+    async def find_draft_or_send_error(self, ctx, draft_id=None, only_active=False) -> GuildDraft:
         drafts = None
         if draft_id is None:
             drafts = await self.find_drafts_by_player(ctx)
+            if not drafts:
+                raise CheckFailure("You are not currently in a draft")
+            if only_active:
+                drafts = [d for d in drafts if d.draft.player_by_id(ctx.author.id).current_pack]
+            if not drafts:
+                raise CheckFailure("You have no packs in front of you")
             if len(drafts) > 1:
                 ids = "\n".join([f"{x.guild.name}: **{x.id()}**" for x in drafts])
                 raise CheckFailure("You are playing in several drafts. Please specify the draft id:\n" + ids)
-            elif len(drafts) == 0:
-                raise CheckFailure("You are not playing any draft")
             else:
                 return drafts[0]
         else:
@@ -229,7 +233,7 @@ class CubeDrafter(commands.Cog):
                 raise CheckFailure("You are not playing any draft")
             return draft
 
-    async def find_drafts_by_player(self, ctx: commands.Context):
+    async def find_drafts_by_player(self, ctx: commands.Context) -> List[GuildDraft]:
         player = ctx.author
         if ctx.guild: # Don't leak other guilds if invoked in a guild context.
             return (await self.get_guild(ctx)).get_drafts_for_player(player)
