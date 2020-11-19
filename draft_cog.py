@@ -12,7 +12,7 @@ from discord.ext.commands.errors import CheckFailure
 
 import utils
 from cog_exceptions import UserFeedbackException
-from draft_guild import GuildDraft
+from discord_draft import GuildDraft
 from guild import Guild
 
 DEFAULT_PACK_NUMBER = 3

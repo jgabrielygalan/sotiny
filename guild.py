@@ -5,7 +5,7 @@ import aioredis
 import attr
 import discord
 
-from draft_guild import DEFAULT_CUBE_CUBECOBRA_ID, GuildDraft
+from discord_draft import DEFAULT_CUBE_CUBECOBRA_ID, GuildDraft
 
 
 @attr.s(auto_attribs=True)
