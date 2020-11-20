@@ -6,7 +6,7 @@ from draft_player import DraftPlayer
 
 class TestDraft(unittest.TestCase):
     def setUp(self):
-        self.player = DraftPlayer(1, 2, 3)
+        self.player = DraftPlayer(1, 1)
 
     def add_a_pack(self, cards = None, number = 1):
         if cards is None:
@@ -15,14 +15,8 @@ class TestDraft(unittest.TestCase):
         self.player.push_pack(booster)
         return booster
 
-    def test_id(self):        
+    def test_id(self):
         self.assertEqual(1, self.player.id)
-
-    def test_next(self):        
-        self.assertEqual(2, self.player.next)
-
-    def test_previous(self):        
-        self.assertEqual(3, self.player.previous)
 
     def test_no_current_pack_at_start(self):
         self.assertFalse(self.player.has_current_pack())
@@ -87,7 +81,7 @@ class TestDraft(unittest.TestCase):
         self.assertEqual(2, booster1.number_of_cards())
 
     def test_lastpick(self):
-        self.player = DraftPlayer(1, 2, 3)
+        self.player = DraftPlayer(1, 1)
         self.add_a_pack()
         self.player.pick(1)
         self.assertEqual('a', self.player.last_pick())
@@ -101,5 +95,5 @@ class TestDraft(unittest.TestCase):
 
     def test_queued_pack(self):
         self.add_a_pack()
-        self.add_a_pack(['d', 'e', 'f'], 2)    
+        self.add_a_pack(['d', 'e', 'f'], 2)
         self.assertTrue(self.player.has_queued_packs())
