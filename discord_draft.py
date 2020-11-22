@@ -229,6 +229,8 @@ class GuildDraft:
         for player in self.draft.players:
             self.players[player] = self.guild.guild.get_member(player)
             self.messages_by_player[player] = dict()
+            if self.draft.player_by_id(player).current_pack is not None:
+                await self.send_current_pack_to_player("Bump: ", player)
 
 async def send_image_with_retry(user, image_file: str, text: str = '') -> discord.Message:
     message = await send(user, file=File(image_file), content=text)

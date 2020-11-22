@@ -219,7 +219,7 @@ class CubeDrafter(commands.Cog):
             if not drafts:
                 raise CheckFailure("You are not currently in a draft")
             if only_active:
-                drafts = [d for d in drafts if d.draft.player_by_id(ctx.author.id).current_pack]
+                drafts = [d for d in drafts if d.draft and d.draft.player_by_id(ctx.author.id).current_pack]
             if not drafts:
                 raise CheckFailure("You have no packs in front of you")
             if len(drafts) > 1:
