@@ -130,7 +130,7 @@ class Guild:
         self.players.clear()
         for uid in await self.redis.smembers(f'sotiny:{self.guild.id}:players'):
             snowflake = int(uid)
-            member = self.guild.get_member(snowflake)
+            member = self.guild.get_member(snowflake) or await self.guild.fetch_member(snowflake)
             if member is not None:
                 self.players[snowflake] = member
         self.setup(
