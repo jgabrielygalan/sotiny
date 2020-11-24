@@ -27,20 +27,20 @@ class Draft:
     """
     players: List[int]
     cards: List[str]
-    state: List[DraftPlayer] = attr.ib(factory=list)
-    opened_packs = 0
+    _state: List[DraftPlayer] = attr.ib(factory=list)
+    _opened_packs = 0
 
     def player_by_id(self, player_id: int) -> DraftPlayer:
-        return self.state[self.players.index(player_id)]
+        return self._state[self.players.index(player_id)]
 
     def pack_of(self, player_id: int) -> Optional[Booster]:
         try:
-            return self.state[self.players.index(player_id)].current_pack
+            return self._state[self.players.index(player_id)].current_pack
         except IndexError as e:
             return None
 
     def deck_of(self, player_id: int) -> List[str]:
-        return self.state[self.players.index(player_id)].deck
+        return self._state[self.players.index(player_id)].deck
 
     def start(self, number_of_packs: int, cards_per_booster: int) -> List[DraftPlayer]:
         if number_of_packs * cards_per_booster * len(self.players) > len(self.cards):
@@ -50,9 +50,9 @@ class Draft:
         random.shuffle(self.players)
         random.shuffle(self.cards)
         for i, player in enumerate(self.players):
-            self.state.append(DraftPlayer(player, i))
+            self._state.append(DraftPlayer(player, i))
         self.open_boosters_for_all_players()
-        return self.state # return all players to update
+        return self._state # return all players to update
 
     def open_booster(self, player: DraftPlayer, number: int) -> Booster:
         card_list = [self.cards.pop() for _ in range(0,self.cards_per_booster)]
@@ -61,16 +61,16 @@ class Draft:
         return booster
 
     def open_boosters_for_all_players(self) -> None:
-        self.opened_packs += 1
-        for player in self.state:
-            self.open_booster(player, self.opened_packs)
+        self._opened_packs += 1
+        for player in self._state:
+            self.open_booster(player, self._opened_packs)
         print("Opening pack for all players")
 
     def get_pending_players(self):
-        return [x for x in self.state if x.has_current_pack()]
+        return [x for x in self._state if x.has_current_pack()]
 
     def is_draft_finished(self):
-        return (self.is_pack_finished() and (self.opened_packs >= self.number_of_packs))
+        return (self.is_pack_finished() and (self._opened_packs >= self.number_of_packs))
 
     def is_pack_finished(self):
         return len(self.get_pending_players()) == 0
@@ -116,7 +116,7 @@ class Draft:
 
 
         if new_booster:
-            for player in self.state:
+            for player in self._state:
                 if player not in users_to_update:
                     result[player] = []
 

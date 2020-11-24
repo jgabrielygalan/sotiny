@@ -29,7 +29,7 @@ class Updater(commands.Cog):
             print('Update found, shutting down')
             subprocess.check_output(['git', 'pull']).decode()
             try:
-                subprocess.check_output([sys.executable, '-m', 'pipenv', 'sync']).decode()
+                subprocess.check_output(['pipenv', 'sync']).decode()
             except Exception as c:
                 print(c)
             await self.bot.close()

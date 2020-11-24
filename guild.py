@@ -143,7 +143,7 @@ class Guild:
         for bdraft_id in await self.redis.smembers(f'sotiny:{self.guild.id}:active_drafts'):
             draft_id = bdraft_id.decode()
             print(f'Loading {draft_id}')
-            draft = GuildDraft(self, dict())
+            draft = GuildDraft(self)
             draft.uuid = draft_id
             await draft.load_state(self.redis)
             if draft.draft is None or draft.draft.is_draft_finished():
