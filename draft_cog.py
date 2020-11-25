@@ -90,7 +90,7 @@ class CubeDrafter(commands.Cog):
         if guild.id in self.guilds_by_id:
             del self.guilds_by_id[guild.id]
 
-    @commands.command(name='play', help='Register to play a draft')
+    @commands.command(name='play', help='Register to play a draft', aliases=['join'])
     async def play(self, ctx: Context):
         player = ctx.author
         guild = await self.get_guild(ctx)
