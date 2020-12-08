@@ -28,9 +28,9 @@ class Draft:
     players: List[int]
     cards: List[str]
     _state: List[DraftPlayer] = attr.ib(factory=list)
-    _opened_packs = 0
-    number_of_packs = 3
-    cards_per_booster = 15
+    _opened_packs: int = 0
+    number_of_packs: int = 3
+    cards_per_booster: int = 15
 
     def player_by_id(self, player_id: int) -> DraftPlayer:
         return self._state[self.players.index(player_id)]
