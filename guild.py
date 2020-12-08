@@ -142,14 +142,18 @@ class Guild:
 
         for bdraft_id in await self.redis.smembers(f'sotiny:{self.guild.id}:active_drafts'):
             draft_id = bdraft_id.decode()
+            self.load_draft(draft_id)
+
+    async def load_draft(self, draft_id: str) -> Optional[GuildDraft]:
             print(f'Loading {draft_id}')
             draft = GuildDraft(self)
             draft.uuid = draft_id
             await draft.load_state(self.redis)
             if draft.draft is None or draft.draft.is_draft_finished():
                 # await self.redis.srem(f'sotiny:{self.guild.id}:active_drafts', bdraft_id)
-                continue
+                return
             self.drafts_in_progress.append(draft)
+            return draft
 
 
 def get_cubedrafter_role(guild: discord.Guild) -> discord.Role:
