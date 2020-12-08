@@ -208,16 +208,23 @@ class GuildDraft:
         state = json.dumps(cattr.unstructure(self.draft))
         with open(os.path.join('drafts', f'{self.uuid}.json'), 'w') as f:
             f.write(state)
-        await redis.set(f'draft:{self.uuid}', state, expire=604800)
+        await redis.set(f'draft:{self.uuid}', state, expire=2419200)
 
     async def load_state(self, redis: Redis) -> None:
         state = await redis.get(f'draft:{self.uuid}')
         if state is None:
             print(f'{self.uuid} could not be found')
-            return
+            path = os.path.join('drafts', f'{self.uuid}.json')
+            if os.path.exists(path):
+                with open(path) as f:
+                    state = f.read()
+            else:
+                return
         try:
-            self.draft = cattr.structure(json.loads(state.decode()), Draft)
-        except TypeError as e:
+            if isinstance(state, bytes):
+                state = state.decode()
+            self.draft = cattr.structure(json.loads(state), Draft)
+        except (TypeError, IndexError) as e:
             print(f'{self.uuid} failed to reload\n{e}')
             traceback.print_exc()
             return
