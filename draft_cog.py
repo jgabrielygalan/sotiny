@@ -193,7 +193,7 @@ class CubeDrafter(commands.Cog):
             await ctx.send("You are not playing any draft")
         else:
             divider = "\n"
-            list = divider.join([f"[{x.guild.name}:{x.id()}] {x.draft.number_of_packs} packs ({x.draft.cards} cards). {', '.join([p.display_name for p in x.get_players()])}" for x in drafts])
+            list = divider.join([f"[{x.guild.name}:{x.id()}] {x.draft.number_of_packs} packs ({x.draft.cards_per_booster} cards). {', '.join([p.display_name for p in x.get_players()])}" for x in drafts])
             await ctx.send(f"{list}")
 
     @flags.add_flag('--packs', type=int, default=3)
