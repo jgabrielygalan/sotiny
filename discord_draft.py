@@ -224,7 +224,7 @@ class GuildDraft:
             if isinstance(state, bytes):
                 state = state.decode()
             self.draft = cattr.structure(json.loads(state), Draft)
-        except (TypeError, IndexError) as e:
+        except Exception as e:
             print(f'{self.uuid} failed to reload\n{e}')
             traceback.print_exc()
             return
