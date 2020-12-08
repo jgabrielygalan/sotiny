@@ -108,8 +108,9 @@ class CubeDrafter(commands.Cog):
             await guild.start(ctx)
         await guild.save_state()
 
-    @commands.command(name='cancel', help='Cancel your registration for the draft. Only allowed before it starts')
+    @commands.command(name='cancel', aliases=['leave'])
     async def cancel(self, ctx):
+        """Cancel your registration for an upcoming draft."""
         player = ctx.author
         guild = await self.get_guild(ctx)
         if guild.is_player_registered(player):
@@ -185,7 +186,6 @@ class CubeDrafter(commands.Cog):
 
         await draft.send_current_pack_to_player("Your pack:", ctx.author.id)
 
-    @commands.dm_only()
     @commands.command(name='drafts', help="Show your in progress drafts")
     async def my_drafts(self, ctx):
         drafts = await self.find_drafts_by_player(ctx)
@@ -193,7 +193,7 @@ class CubeDrafter(commands.Cog):
             await ctx.send("You are not playing any draft")
         else:
             divider = "\n"
-            list = divider.join([f"[{x.guild.name}:{x.id()}] {x.packs} packs ({x.cards} cards). {', '.join([p.display_name for p in x.get_players()])}" for x in drafts])
+            list = divider.join([f"[{x.guild.name}:{x.id()}] {x.draft.number_of_packs} packs ({x.draft.cards} cards). {', '.join([p.display_name for p in x.get_players()])}" for x in drafts])
             await ctx.send(f"{list}")
 
     @flags.add_flag('--packs', type=int, default=3)
