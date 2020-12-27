@@ -90,6 +90,7 @@ class CubeDrafter(commands.Cog):
         if guild.id in self.guilds_by_id:
             del self.guilds_by_id[guild.id]
 
+    @commands.guild_only()
     @commands.command(name='play', help='Register to play a draft', aliases=['join'])
     async def play(self, ctx: Context):
         player = ctx.author
@@ -108,6 +109,7 @@ class CubeDrafter(commands.Cog):
             await guild.start(ctx)
         await guild.save_state()
 
+    @commands.guild_only()
     @commands.command(name='cancel', aliases=['leave'])
     async def cancel(self, ctx):
         """Cancel your registration for an upcoming draft."""
@@ -121,6 +123,7 @@ class CubeDrafter(commands.Cog):
             print(f"{player.display_name} is not registered, can't cancel")
             await ctx.send("{mention}, you are not registered for the draft, I can't cancel".format(mention=ctx.author.mention))
 
+    @commands.guild_only()
     @commands.command(name='players', help='List registered players for the next draft')
     async def players(self, ctx):
         guild = await self.get_guild(ctx)
@@ -130,6 +133,7 @@ class CubeDrafter(commands.Cog):
         else:
             await ctx.send("The following players are registered for the next draft: {p}".format(p=", ".join([p.display_name for p in guild.get_registered_players()])))
 
+    @commands.guild_only()
     @commands.command(name='start', help="Start the draft with the registered players. Packs is the number of packs to open per player (default 3). cards is the number of cards per booster (default 15). cube is the CubeCobra id of a Cube (default Penny Dreadful Eternal Cube).")
     async def start(self, ctx):
         guild = await self.get_guild(ctx)
@@ -173,7 +177,6 @@ class CubeDrafter(commands.Cog):
         if draft is not None:
             await draft.picks(ctx, ctx.author.id)
 
-    @commands.dm_only()
     @commands.command(name='pack', help="Resend your current pack")
     async def my_pack(self, ctx: Context, draft_id = None):
         draft = await self.find_draft_or_send_error(ctx, draft_id, True)
@@ -196,6 +199,7 @@ class CubeDrafter(commands.Cog):
             list = divider.join([f"[{x.guild.name}:{x.id()}] {x.draft.number_of_packs} packs ({x.draft.cards_per_booster} cards). {', '.join([p.display_name for p in x.get_players()])}" for x in drafts])
             await ctx.send(f"{list}")
 
+    @commands.guild_only()
     @flags.add_flag('--packs', type=int, default=3)
     @flags.add_flag('--cards-per-pack', type=int, default=15)
     @flags.add_flag('--players', type=int, default=8)
