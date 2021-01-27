@@ -1,0 +1,704 @@
+interactions:
+- request:
+    body: null
+    headers: {}
+    method: GET
+    uri: https://cubecobra.com/cube/api/cubejson/5d7488c28d85b07c66d22162
+  response:
+    body:
+      string: "{\"_id\":\"5d7488c28d85b07c66d22162\",\"isListed\":true,\"decks\":[\"5e3b73c478c1257d2a50ce28\",\"5e3b73c478c1257d2a50ce28\",\"5e4f7842f77e53095238d706\",\"5e4f7842f77e53095238d706\",\"5e5c1f1d93b22e284c4947a1\",\"5e5c1f1d93b22e284c4947a1\"],\"default_sorts\":[],\"cards\":[{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d2233a\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"cfcea783-e9f0-4d44-ac74-5aee9a07aa69\",\"type_line\":\"Creature
+        \u2014 Human Cleric\",\"addedTmsp\":\"2019-09-08T04:51:44.773Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d2233b\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"cfcea783-e9f0-4d44-ac74-5aee9a07aa69\",\"type_line\":\"Creature
+        \u2014 Human Cleric\",\"addedTmsp\":\"2019-09-08T04:51:44.774Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d2233c\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"cfcea783-e9f0-4d44-ac74-5aee9a07aa69\",\"type_line\":\"Creature
+        \u2014 Human Cleric\",\"addedTmsp\":\"2019-09-08T04:51:44.775Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d2233d\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"cfcea783-e9f0-4d44-ac74-5aee9a07aa69\",\"type_line\":\"Creature
+        \u2014 Human Cleric\",\"addedTmsp\":\"2019-09-08T04:51:44.775Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d2233e\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"cfcea783-e9f0-4d44-ac74-5aee9a07aa69\",\"type_line\":\"Creature
+        \u2014 Human Cleric\",\"addedTmsp\":\"2019-09-08T04:51:44.775Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d2233f\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"cfcea783-e9f0-4d44-ac74-5aee9a07aa69\",\"type_line\":\"Creature
+        \u2014 Human Cleric\",\"addedTmsp\":\"2019-09-08T04:51:44.776Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d22340\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"cfcea783-e9f0-4d44-ac74-5aee9a07aa69\",\"type_line\":\"Creature
+        \u2014 Human Cleric\",\"addedTmsp\":\"2019-09-08T04:51:44.776Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d22341\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"cfcea783-e9f0-4d44-ac74-5aee9a07aa69\",\"type_line\":\"Creature
+        \u2014 Human Cleric\",\"addedTmsp\":\"2019-09-08T04:51:44.776Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d22342\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"9e81806d-5d87-4032-ad94-c2cdeabecdbf\",\"type_line\":\"Creature
+        \u2014 Bird\",\"addedTmsp\":\"2019-09-08T04:51:44.776Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d22343\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"9e81806d-5d87-4032-ad94-c2cdeabecdbf\",\"type_line\":\"Creature
+        \u2014 Bird\",\"addedTmsp\":\"2019-09-08T04:51:44.777Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d22344\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"9e81806d-5d87-4032-ad94-c2cdeabecdbf\",\"type_line\":\"Creature
+        \u2014 Bird\",\"addedTmsp\":\"2019-09-08T04:51:44.777Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d22345\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"9e81806d-5d87-4032-ad94-c2cdeabecdbf\",\"type_line\":\"Creature
+        \u2014 Bird\",\"addedTmsp\":\"2019-09-08T04:51:44.778Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d22346\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"9e81806d-5d87-4032-ad94-c2cdeabecdbf\",\"type_line\":\"Creature
+        \u2014 Bird\",\"addedTmsp\":\"2019-09-08T04:51:44.778Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d22347\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"9e81806d-5d87-4032-ad94-c2cdeabecdbf\",\"type_line\":\"Creature
+        \u2014 Bird\",\"addedTmsp\":\"2019-09-08T04:51:44.778Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d22348\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"9e81806d-5d87-4032-ad94-c2cdeabecdbf\",\"type_line\":\"Creature
+        \u2014 Bird\",\"addedTmsp\":\"2019-09-08T04:51:44.778Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d22349\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"9e81806d-5d87-4032-ad94-c2cdeabecdbf\",\"type_line\":\"Creature
+        \u2014 Bird\",\"addedTmsp\":\"2019-09-08T04:51:44.779Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d2234a\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"e93f0c57-eb80-4dde-bdb0-326970491621\",\"type_line\":\"Creature
+        \u2014 Human Advisor\",\"addedTmsp\":\"2019-09-08T04:51:44.779Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d2234b\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"e93f0c57-eb80-4dde-bdb0-326970491621\",\"type_line\":\"Creature
+        \u2014 Human Advisor\",\"addedTmsp\":\"2019-09-08T04:51:44.780Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d2234c\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"e93f0c57-eb80-4dde-bdb0-326970491621\",\"type_line\":\"Creature
+        \u2014 Human Advisor\",\"addedTmsp\":\"2019-09-08T04:51:44.780Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d2234d\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"e93f0c57-eb80-4dde-bdb0-326970491621\",\"type_line\":\"Creature
+        \u2014 Human Advisor\",\"addedTmsp\":\"2019-09-08T04:51:44.780Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d2234e\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"e93f0c57-eb80-4dde-bdb0-326970491621\",\"type_line\":\"Creature
+        \u2014 Human Advisor\",\"addedTmsp\":\"2019-09-08T04:51:44.781Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d2234f\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"e93f0c57-eb80-4dde-bdb0-326970491621\",\"type_line\":\"Creature
+        \u2014 Human Advisor\",\"addedTmsp\":\"2019-09-08T04:51:44.782Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d22350\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"e93f0c57-eb80-4dde-bdb0-326970491621\",\"type_line\":\"Creature
+        \u2014 Human Advisor\",\"addedTmsp\":\"2019-09-08T04:51:44.782Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d22351\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"e93f0c57-eb80-4dde-bdb0-326970491621\",\"type_line\":\"Creature
+        \u2014 Human Advisor\",\"addedTmsp\":\"2019-09-08T04:51:44.782Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d22352\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"264d120a-d7e2-4b9e-ac85-c66e976c577b\",\"type_line\":\"Creature
+        \u2014 Human Soldier\",\"addedTmsp\":\"2019-09-08T04:51:44.782Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d22353\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"264d120a-d7e2-4b9e-ac85-c66e976c577b\",\"type_line\":\"Creature
+        \u2014 Human Soldier\",\"addedTmsp\":\"2019-09-08T04:51:44.783Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d22354\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"264d120a-d7e2-4b9e-ac85-c66e976c577b\",\"type_line\":\"Creature
+        \u2014 Human Soldier\",\"addedTmsp\":\"2019-09-08T04:51:44.783Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d22355\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"264d120a-d7e2-4b9e-ac85-c66e976c577b\",\"type_line\":\"Creature
+        \u2014 Human Soldier\",\"addedTmsp\":\"2019-09-08T04:51:44.783Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d22356\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"264d120a-d7e2-4b9e-ac85-c66e976c577b\",\"type_line\":\"Creature
+        \u2014 Human Soldier\",\"addedTmsp\":\"2019-09-08T04:51:44.784Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d22357\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"264d120a-d7e2-4b9e-ac85-c66e976c577b\",\"type_line\":\"Creature
+        \u2014 Human Soldier\",\"addedTmsp\":\"2019-09-08T04:51:44.784Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d22358\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"264d120a-d7e2-4b9e-ac85-c66e976c577b\",\"type_line\":\"Creature
+        \u2014 Human Soldier\",\"addedTmsp\":\"2019-09-08T04:51:44.784Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d22359\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"264d120a-d7e2-4b9e-ac85-c66e976c577b\",\"type_line\":\"Creature
+        \u2014 Human Soldier\",\"addedTmsp\":\"2019-09-08T04:51:44.784Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d2235a\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"264d120a-d7e2-4b9e-ac85-c66e976c577b\",\"type_line\":\"Creature
+        \u2014 Human Soldier\",\"addedTmsp\":\"2019-09-08T04:51:44.785Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d2235b\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"264d120a-d7e2-4b9e-ac85-c66e976c577b\",\"type_line\":\"Creature
+        \u2014 Human Soldier\",\"addedTmsp\":\"2019-09-08T04:51:44.785Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d2235c\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"264d120a-d7e2-4b9e-ac85-c66e976c577b\",\"type_line\":\"Creature
+        \u2014 Human Soldier\",\"addedTmsp\":\"2019-09-08T04:51:44.785Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d2235d\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"264d120a-d7e2-4b9e-ac85-c66e976c577b\",\"type_line\":\"Creature
+        \u2014 Human Soldier\",\"addedTmsp\":\"2019-09-08T04:51:44.785Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d2235e\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"eb2e9b7e-434e-477f-b3e8-e85ceb913650\",\"type_line\":\"Creature
+        \u2014 Human Soldier\",\"addedTmsp\":\"2019-09-08T04:51:44.786Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d2235f\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"eb2e9b7e-434e-477f-b3e8-e85ceb913650\",\"type_line\":\"Creature
+        \u2014 Human Soldier\",\"addedTmsp\":\"2019-09-08T04:51:44.786Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d22360\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"eb2e9b7e-434e-477f-b3e8-e85ceb913650\",\"type_line\":\"Creature
+        \u2014 Human Soldier\",\"addedTmsp\":\"2019-09-08T04:51:44.786Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d22361\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"eb2e9b7e-434e-477f-b3e8-e85ceb913650\",\"type_line\":\"Creature
+        \u2014 Human Soldier\",\"addedTmsp\":\"2019-09-08T04:51:44.786Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d22362\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"eb2e9b7e-434e-477f-b3e8-e85ceb913650\",\"type_line\":\"Creature
+        \u2014 Human Soldier\",\"addedTmsp\":\"2019-09-08T04:51:44.787Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d22363\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"eb2e9b7e-434e-477f-b3e8-e85ceb913650\",\"type_line\":\"Creature
+        \u2014 Human Soldier\",\"addedTmsp\":\"2019-09-08T04:51:44.787Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d22364\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"eb2e9b7e-434e-477f-b3e8-e85ceb913650\",\"type_line\":\"Creature
+        \u2014 Human Soldier\",\"addedTmsp\":\"2019-09-08T04:51:44.787Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d22365\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"eb2e9b7e-434e-477f-b3e8-e85ceb913650\",\"type_line\":\"Creature
+        \u2014 Human Soldier\",\"addedTmsp\":\"2019-09-08T04:51:44.788Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d22366\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"0dedef8a-5527-40dc-9ad9-bcee4cf30a76\",\"type_line\":\"Creature
+        \u2014 Cleric Avatar\",\"addedTmsp\":\"2019-09-08T04:51:44.788Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d22367\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"0dedef8a-5527-40dc-9ad9-bcee4cf30a76\",\"type_line\":\"Creature
+        \u2014 Cleric Avatar\",\"addedTmsp\":\"2019-09-08T04:51:44.788Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d22368\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"060e278c-dc34-4a94-9b15-6e9ffb2a1aee\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.789Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d22369\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"060e278c-dc34-4a94-9b15-6e9ffb2a1aee\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.789Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d2236a\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"320b2b02-a3ff-4f68-93e6-8539d7caa005\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.789Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d2236b\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"320b2b02-a3ff-4f68-93e6-8539d7caa005\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.789Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d2236c\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"320b2b02-a3ff-4f68-93e6-8539d7caa005\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.790Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d2236d\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"320b2b02-a3ff-4f68-93e6-8539d7caa005\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.790Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d2236e\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"320b2b02-a3ff-4f68-93e6-8539d7caa005\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.790Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d2236f\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"320b2b02-a3ff-4f68-93e6-8539d7caa005\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.790Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d22370\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"d61748dd-4010-47da-8717-ca0147877057\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.791Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d22371\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"d61748dd-4010-47da-8717-ca0147877057\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.791Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d22372\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"a9cac762-7482-471f-b4de-e0cb6da5451c\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.791Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d22373\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"f685445d-e2af-455f-b3b2-97cf15362f3c\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.791Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d22374\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"f685445d-e2af-455f-b3b2-97cf15362f3c\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.792Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d22375\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"c401fabd-52fb-4c59-9c72-10ff97dda45f\",\"type_line\":\"Enchantment\",\"addedTmsp\":\"2019-09-08T04:51:44.792Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d22376\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"c401fabd-52fb-4c59-9c72-10ff97dda45f\",\"type_line\":\"Enchantment\",\"addedTmsp\":\"2019-09-08T04:51:44.792Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d22377\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"9890be7f-35af-43b7-b255-25be4ff20dc0\",\"type_line\":\"Enchantment\",\"addedTmsp\":\"2019-09-08T04:51:44.792Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d22378\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"67b610fe-36ee-4d58-8ed4-04e7a12587b2\",\"type_line\":\"Enchantment\",\"addedTmsp\":\"2019-09-08T04:51:44.793Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d22379\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"67b610fe-36ee-4d58-8ed4-04e7a12587b2\",\"type_line\":\"Enchantment\",\"addedTmsp\":\"2019-09-08T04:51:44.793Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d2237a\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"556d334e-3ac9-45b0-98d2-aff49ada0f75\",\"type_line\":\"Enchantment\",\"addedTmsp\":\"2019-09-08T04:51:44.793Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d2237b\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"556d334e-3ac9-45b0-98d2-aff49ada0f75\",\"type_line\":\"Enchantment\",\"addedTmsp\":\"2019-09-08T04:51:44.794Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d2237c\",\"status\":\"Not
+        Owned\",\"cmc\":6,\"cardID\":\"9e3b826a-7349-45ae-89bf-675fea7ce8e3\",\"type_line\":\"Enchantment\",\"addedTmsp\":\"2019-09-08T04:51:44.794Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d2237d\",\"status\":\"Not
+        Owned\",\"cmc\":6,\"cardID\":\"9e3b826a-7349-45ae-89bf-675fea7ce8e3\",\"type_line\":\"Enchantment\",\"addedTmsp\":\"2019-09-08T04:51:44.795Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d2237e\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"28aa0337-94bd-4274-b2ee-6f43747c77b3\",\"type_line\":\"Creature
+        \u2014 Faerie Rogue\",\"addedTmsp\":\"2019-09-08T04:51:44.795Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d2237f\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"28aa0337-94bd-4274-b2ee-6f43747c77b3\",\"type_line\":\"Creature
+        \u2014 Faerie Rogue\",\"addedTmsp\":\"2019-09-08T04:51:44.796Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d22380\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"28aa0337-94bd-4274-b2ee-6f43747c77b3\",\"type_line\":\"Creature
+        \u2014 Faerie Rogue\",\"addedTmsp\":\"2019-09-08T04:51:44.796Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d22381\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"28aa0337-94bd-4274-b2ee-6f43747c77b3\",\"type_line\":\"Creature
+        \u2014 Faerie Rogue\",\"addedTmsp\":\"2019-09-08T04:51:44.797Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d22382\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"28aa0337-94bd-4274-b2ee-6f43747c77b3\",\"type_line\":\"Creature
+        \u2014 Faerie Rogue\",\"addedTmsp\":\"2019-09-08T04:51:44.797Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d22383\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"28aa0337-94bd-4274-b2ee-6f43747c77b3\",\"type_line\":\"Creature
+        \u2014 Faerie Rogue\",\"addedTmsp\":\"2019-09-08T04:51:44.798Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d22384\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"28aa0337-94bd-4274-b2ee-6f43747c77b3\",\"type_line\":\"Creature
+        \u2014 Faerie Rogue\",\"addedTmsp\":\"2019-09-08T04:51:44.798Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d22385\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"28aa0337-94bd-4274-b2ee-6f43747c77b3\",\"type_line\":\"Creature
+        \u2014 Faerie Rogue\",\"addedTmsp\":\"2019-09-08T04:51:44.799Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d22386\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"5e648262-3b9b-4c58-8e29-48356e3cb064\",\"type_line\":\"Creature
+        \u2014 Shapeshifter\",\"addedTmsp\":\"2019-09-08T04:51:44.799Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d22387\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"5e648262-3b9b-4c58-8e29-48356e3cb064\",\"type_line\":\"Creature
+        \u2014 Shapeshifter\",\"addedTmsp\":\"2019-09-08T04:51:44.800Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d22388\",\"status\":\"Not
+        Owned\",\"cmc\":6,\"cardID\":\"31a0cae5-925f-4d00-a4da-1db8bae5511b\",\"type_line\":\"Creature
+        \u2014 Sphinx\",\"addedTmsp\":\"2019-09-08T04:51:44.800Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d22389\",\"status\":\"Not
+        Owned\",\"cmc\":6,\"cardID\":\"31a0cae5-925f-4d00-a4da-1db8bae5511b\",\"type_line\":\"Creature
+        \u2014 Sphinx\",\"addedTmsp\":\"2019-09-08T04:51:44.801Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d2238a\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"ad88e5ee-0eee-47af-a7b4-9bac044e1c8c\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.801Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d2238b\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"ad88e5ee-0eee-47af-a7b4-9bac044e1c8c\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.802Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d2238c\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"ad88e5ee-0eee-47af-a7b4-9bac044e1c8c\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.802Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d2238d\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"ad88e5ee-0eee-47af-a7b4-9bac044e1c8c\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.803Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d2238e\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"ad88e5ee-0eee-47af-a7b4-9bac044e1c8c\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.803Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d2238f\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"ad88e5ee-0eee-47af-a7b4-9bac044e1c8c\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.804Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d22390\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"ad88e5ee-0eee-47af-a7b4-9bac044e1c8c\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.804Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d22391\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"ad88e5ee-0eee-47af-a7b4-9bac044e1c8c\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.805Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d22392\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"ad88e5ee-0eee-47af-a7b4-9bac044e1c8c\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.805Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d22393\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"3d09ea4a-0d3a-40b8-be0f-a31693099c4f\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.806Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d22394\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"3d09ea4a-0d3a-40b8-be0f-a31693099c4f\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.806Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d22395\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"3d09ea4a-0d3a-40b8-be0f-a31693099c4f\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.807Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d22396\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"3d09ea4a-0d3a-40b8-be0f-a31693099c4f\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.808Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d22397\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"3d09ea4a-0d3a-40b8-be0f-a31693099c4f\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.808Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d22398\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"3d09ea4a-0d3a-40b8-be0f-a31693099c4f\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.809Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d22399\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"55cd75bc-5ec7-45b2-9231-85a321ecd786\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.809Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d2239a\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"55cd75bc-5ec7-45b2-9231-85a321ecd786\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.810Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d2239b\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"40d72a34-0f31-4fec-b5a5-4574199bc312\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.810Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d2239c\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"40d72a34-0f31-4fec-b5a5-4574199bc312\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.810Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d2239d\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"40d72a34-0f31-4fec-b5a5-4574199bc312\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.811Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d2239e\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"40d72a34-0f31-4fec-b5a5-4574199bc312\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.811Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d2239f\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"40d72a34-0f31-4fec-b5a5-4574199bc312\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.811Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d223a0\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"40d72a34-0f31-4fec-b5a5-4574199bc312\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.811Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d223a1\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"02ad8a5a-9814-4fb5-90b1-95c0769be456\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.812Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d223a2\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"02ad8a5a-9814-4fb5-90b1-95c0769be456\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.812Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d223a3\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"9e5ba99d-d95d-4a3b-b6b6-a5e2589d538e\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.812Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d223a4\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"9e5ba99d-d95d-4a3b-b6b6-a5e2589d538e\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.812Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d223a5\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"c99f6785-e5a1-4fdc-9fb5-e1a372e7e848\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.812Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d223a6\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"c99f6785-e5a1-4fdc-9fb5-e1a372e7e848\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.813Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d223a7\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"48ca8c31-a9ea-4388-b257-951c1c68b86d\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.813Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d223a8\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"bfba9fc2-8746-4693-bb75-01b5d78f7fee\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.813Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d223a9\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"bfba9fc2-8746-4693-bb75-01b5d78f7fee\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.813Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d223aa\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"bfba9fc2-8746-4693-bb75-01b5d78f7fee\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.814Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d223ab\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"bfba9fc2-8746-4693-bb75-01b5d78f7fee\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.814Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d223ac\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"bfba9fc2-8746-4693-bb75-01b5d78f7fee\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.814Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d223ad\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"bfba9fc2-8746-4693-bb75-01b5d78f7fee\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.814Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d223ae\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"c62fa778-ce44-4a3e-958a-91dfe5398944\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.815Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d223af\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"c62fa778-ce44-4a3e-958a-91dfe5398944\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.815Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d223b0\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"a3584150-4f09-4c15-b13e-707bd91b3004\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.815Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d223b1\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"a3584150-4f09-4c15-b13e-707bd91b3004\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.815Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d223b2\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"a3584150-4f09-4c15-b13e-707bd91b3004\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.816Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d223b3\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"a3584150-4f09-4c15-b13e-707bd91b3004\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.816Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d223b4\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"a3584150-4f09-4c15-b13e-707bd91b3004\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.816Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d223b5\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"a3584150-4f09-4c15-b13e-707bd91b3004\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.816Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d223b6\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"a3584150-4f09-4c15-b13e-707bd91b3004\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.817Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d223b7\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"a3584150-4f09-4c15-b13e-707bd91b3004\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.817Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d223b8\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"a3584150-4f09-4c15-b13e-707bd91b3004\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.817Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d223b9\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"2abd4521-62c8-4b2f-a406-a8ddfa8f475a\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.817Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d223ba\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"2abd4521-62c8-4b2f-a406-a8ddfa8f475a\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.817Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d223bb\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"f4ada33a-5b7c-426a-8416-4ce01bccaa5c\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.818Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d223bc\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"f4ada33a-5b7c-426a-8416-4ce01bccaa5c\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.818Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d223bd\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"2e67d62f-9629-463b-a445-4181f6fafd0f\",\"type_line\":\"Enchantment\",\"addedTmsp\":\"2019-09-08T04:51:44.818Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d223be\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"137e0ac1-3bf2-4583-b44f-c9fe8d7e8882\",\"type_line\":\"Enchantment\",\"addedTmsp\":\"2019-09-08T04:51:44.819Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\"],\"_id\":\"5d7488e08d85b07c66d223bf\",\"status\":\"Not
+        Owned\",\"cmc\":5,\"cardID\":\"9cd77575-fedc-45b1-a53b-dfed0f34c875\",\"type_line\":\"Enchantment\",\"addedTmsp\":\"2019-09-08T04:51:44.819Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223c0\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"202c2323-6589-457a-af51-5528a98e7b30\",\"type_line\":\"Creature
+        \u2014 Human Cleric\",\"addedTmsp\":\"2019-09-08T04:51:44.819Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223c1\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"202c2323-6589-457a-af51-5528a98e7b30\",\"type_line\":\"Creature
+        \u2014 Human Cleric\",\"addedTmsp\":\"2019-09-08T04:51:44.819Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223c2\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"202c2323-6589-457a-af51-5528a98e7b30\",\"type_line\":\"Creature
+        \u2014 Human Cleric\",\"addedTmsp\":\"2019-09-08T04:51:44.820Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223c3\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"202c2323-6589-457a-af51-5528a98e7b30\",\"type_line\":\"Creature
+        \u2014 Human Cleric\",\"addedTmsp\":\"2019-09-08T04:51:44.820Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223c4\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"202c2323-6589-457a-af51-5528a98e7b30\",\"type_line\":\"Creature
+        \u2014 Human Cleric\",\"addedTmsp\":\"2019-09-08T04:51:44.820Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223c5\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"202c2323-6589-457a-af51-5528a98e7b30\",\"type_line\":\"Creature
+        \u2014 Human Cleric\",\"addedTmsp\":\"2019-09-08T04:51:44.820Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223c6\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"202c2323-6589-457a-af51-5528a98e7b30\",\"type_line\":\"Creature
+        \u2014 Human Cleric\",\"addedTmsp\":\"2019-09-08T04:51:44.820Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223c7\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"202c2323-6589-457a-af51-5528a98e7b30\",\"type_line\":\"Creature
+        \u2014 Human Cleric\",\"addedTmsp\":\"2019-09-08T04:51:44.821Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223c8\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"202c2323-6589-457a-af51-5528a98e7b30\",\"type_line\":\"Creature
+        \u2014 Human Cleric\",\"addedTmsp\":\"2019-09-08T04:51:44.821Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223c9\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"202c2323-6589-457a-af51-5528a98e7b30\",\"type_line\":\"Creature
+        \u2014 Human Cleric\",\"addedTmsp\":\"2019-09-08T04:51:44.821Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223ca\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"170693f5-13db-4191-99b1-e527ffb5b88e\",\"type_line\":\"Creature
+        \u2014 Rat\",\"addedTmsp\":\"2019-09-08T04:51:44.822Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223cb\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"170693f5-13db-4191-99b1-e527ffb5b88e\",\"type_line\":\"Creature
+        \u2014 Rat\",\"addedTmsp\":\"2019-09-08T04:51:44.822Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223cc\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"75f47b6e-9557-4853-b8d6-7602a91c59a7\",\"type_line\":\"Creature
+        \u2014 Rat\",\"addedTmsp\":\"2019-09-08T04:51:44.822Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223cd\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"75f47b6e-9557-4853-b8d6-7602a91c59a7\",\"type_line\":\"Creature
+        \u2014 Rat\",\"addedTmsp\":\"2019-09-08T04:51:44.822Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223ce\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"75f47b6e-9557-4853-b8d6-7602a91c59a7\",\"type_line\":\"Creature
+        \u2014 Rat\",\"addedTmsp\":\"2019-09-08T04:51:44.823Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223cf\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"75f47b6e-9557-4853-b8d6-7602a91c59a7\",\"type_line\":\"Creature
+        \u2014 Rat\",\"addedTmsp\":\"2019-09-08T04:51:44.823Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223d0\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"75f47b6e-9557-4853-b8d6-7602a91c59a7\",\"type_line\":\"Creature
+        \u2014 Rat\",\"addedTmsp\":\"2019-09-08T04:51:44.823Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223d1\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"75f47b6e-9557-4853-b8d6-7602a91c59a7\",\"type_line\":\"Creature
+        \u2014 Rat\",\"addedTmsp\":\"2019-09-08T04:51:44.824Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223d2\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"75f47b6e-9557-4853-b8d6-7602a91c59a7\",\"type_line\":\"Creature
+        \u2014 Rat\",\"addedTmsp\":\"2019-09-08T04:51:44.824Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223d3\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"75f47b6e-9557-4853-b8d6-7602a91c59a7\",\"type_line\":\"Creature
+        \u2014 Rat\",\"addedTmsp\":\"2019-09-08T04:51:44.824Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223d4\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"75f47b6e-9557-4853-b8d6-7602a91c59a7\",\"type_line\":\"Creature
+        \u2014 Rat\",\"addedTmsp\":\"2019-09-08T04:51:44.824Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223d5\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"75f47b6e-9557-4853-b8d6-7602a91c59a7\",\"type_line\":\"Creature
+        \u2014 Rat\",\"addedTmsp\":\"2019-09-08T04:51:44.825Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223d6\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"75f47b6e-9557-4853-b8d6-7602a91c59a7\",\"type_line\":\"Creature
+        \u2014 Rat\",\"addedTmsp\":\"2019-09-08T04:51:44.825Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223d7\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"75f47b6e-9557-4853-b8d6-7602a91c59a7\",\"type_line\":\"Creature
+        \u2014 Rat\",\"addedTmsp\":\"2019-09-08T04:51:44.825Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223d8\",\"status\":\"Not
+        Owned\",\"cmc\":5,\"cardID\":\"6a2e1d4a-8df4-472f-a98f-d6b71c1dd1c4\",\"type_line\":\"Creature
+        \u2014 Demon\",\"addedTmsp\":\"2019-09-08T04:51:44.825Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223d9\",\"status\":\"Not
+        Owned\",\"cmc\":8,\"cardID\":\"cf2a5c2e-7fe1-45eb-b01c-891ab961186f\",\"type_line\":\"Legendary
+        Creature \u2014 Demon\",\"addedTmsp\":\"2019-09-08T04:51:44.825Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223da\",\"status\":\"Not
+        Owned\",\"cmc\":8,\"cardID\":\"058eb32f-2ae2-4276-ae1a-242bbb150418\",\"type_line\":\"Creature
+        \u2014 Demon\",\"addedTmsp\":\"2019-09-08T04:51:44.826Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223db\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"6e438caf-9373-4de8-b4ac-212f5036e677\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.826Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223dc\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"6e438caf-9373-4de8-b4ac-212f5036e677\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.826Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223dd\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"6e438caf-9373-4de8-b4ac-212f5036e677\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.826Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223de\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"6e438caf-9373-4de8-b4ac-212f5036e677\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.827Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223df\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"3ca11057-e50a-4817-924a-5bb504d0780f\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.827Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223e0\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"3ca11057-e50a-4817-924a-5bb504d0780f\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.827Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223e1\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"f8e688e7-8350-4b78-bd49-a6ffdedad556\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.827Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223e2\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"f8e688e7-8350-4b78-bd49-a6ffdedad556\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.828Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223e3\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"2d344791-5d5c-40c5-99c7-931954ea39d1\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.828Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223e4\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"2d344791-5d5c-40c5-99c7-931954ea39d1\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.828Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223e5\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"2d344791-5d5c-40c5-99c7-931954ea39d1\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.828Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223e6\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"2d344791-5d5c-40c5-99c7-931954ea39d1\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.828Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223e7\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"2d344791-5d5c-40c5-99c7-931954ea39d1\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.829Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223e8\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"2d344791-5d5c-40c5-99c7-931954ea39d1\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.829Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223e9\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"6a4e4be5-e057-4b50-9f86-76bc0b9987de\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.829Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223ea\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"6a4e4be5-e057-4b50-9f86-76bc0b9987de\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.829Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223eb\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"6a4e4be5-e057-4b50-9f86-76bc0b9987de\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.830Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223ec\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"6a4e4be5-e057-4b50-9f86-76bc0b9987de\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.830Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223ed\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"6a4e4be5-e057-4b50-9f86-76bc0b9987de\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.831Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223ee\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"6a4e4be5-e057-4b50-9f86-76bc0b9987de\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.831Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223ef\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"c07889a1-1582-4f14-8925-fa21a1a5fd65\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.831Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223f0\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"c07889a1-1582-4f14-8925-fa21a1a5fd65\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.832Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223f1\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"c07889a1-1582-4f14-8925-fa21a1a5fd65\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.832Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223f2\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"c07889a1-1582-4f14-8925-fa21a1a5fd65\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.832Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223f3\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"c07889a1-1582-4f14-8925-fa21a1a5fd65\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.832Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223f4\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"c07889a1-1582-4f14-8925-fa21a1a5fd65\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.832Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223f5\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"1eb7cb72-24f7-433b-9858-26009189daaa\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.833Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223f6\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"1eb7cb72-24f7-433b-9858-26009189daaa\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.833Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223f7\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"1eb7cb72-24f7-433b-9858-26009189daaa\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.833Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223f8\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"1eb7cb72-24f7-433b-9858-26009189daaa\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.835Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223f9\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"1eb7cb72-24f7-433b-9858-26009189daaa\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.836Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223fa\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"1eb7cb72-24f7-433b-9858-26009189daaa\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.836Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223fb\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"a8cad7a3-777e-4c84-b404-5f504844ab3b\",\"type_line\":\"Sorcery
+        \u2014 Arcane\",\"addedTmsp\":\"2019-09-08T04:51:44.836Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223fc\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"a8cad7a3-777e-4c84-b404-5f504844ab3b\",\"type_line\":\"Sorcery
+        \u2014 Arcane\",\"addedTmsp\":\"2019-09-08T04:51:44.837Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223fd\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"02d6e0e5-798c-4791-85fe-24d0838df8f4\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.837Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223fe\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"acc5b944-a9fe-4a64-bf11-51817a26f22b\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.837Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d223ff\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"acc5b944-a9fe-4a64-bf11-51817a26f22b\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.837Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d22400\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"fa151bd1-770b-49fe-9db5-aae373fab934\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.838Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d22401\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"fa151bd1-770b-49fe-9db5-aae373fab934\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.838Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\"],\"_id\":\"5d7488e08d85b07c66d22402\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"dd376a52-5dfd-49f3-a520-537cd4527439\",\"type_line\":\"Enchantment\",\"addedTmsp\":\"2019-09-08T04:51:44.838Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d22403\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"f50f60a8-e99a-4891-b474-a21abee38970\",\"type_line\":\"Creature
+        \u2014 Goblin Wizard\",\"addedTmsp\":\"2019-09-08T04:51:44.838Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d22404\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"f50f60a8-e99a-4891-b474-a21abee38970\",\"type_line\":\"Creature
+        \u2014 Goblin Wizard\",\"addedTmsp\":\"2019-09-08T04:51:44.838Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d22405\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"f50f60a8-e99a-4891-b474-a21abee38970\",\"type_line\":\"Creature
+        \u2014 Goblin Wizard\",\"addedTmsp\":\"2019-09-08T04:51:44.839Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d22406\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"f50f60a8-e99a-4891-b474-a21abee38970\",\"type_line\":\"Creature
+        \u2014 Goblin Wizard\",\"addedTmsp\":\"2019-09-08T04:51:44.839Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d22407\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"f50f60a8-e99a-4891-b474-a21abee38970\",\"type_line\":\"Creature
+        \u2014 Goblin Wizard\",\"addedTmsp\":\"2019-09-08T04:51:44.839Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d22408\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"f50f60a8-e99a-4891-b474-a21abee38970\",\"type_line\":\"Creature
+        \u2014 Goblin Wizard\",\"addedTmsp\":\"2019-09-08T04:51:44.840Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d22409\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"16858395-c742-4657-88c2-5af20c92718d\",\"type_line\":\"Creature
+        \u2014 Elemental Cat\",\"addedTmsp\":\"2019-09-08T04:51:44.840Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d2240a\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"16858395-c742-4657-88c2-5af20c92718d\",\"type_line\":\"Creature
+        \u2014 Elemental Cat\",\"addedTmsp\":\"2019-09-08T04:51:44.840Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d2240b\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"16858395-c742-4657-88c2-5af20c92718d\",\"type_line\":\"Creature
+        \u2014 Elemental Cat\",\"addedTmsp\":\"2019-09-08T04:51:44.840Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d2240c\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"16858395-c742-4657-88c2-5af20c92718d\",\"type_line\":\"Creature
+        \u2014 Elemental Cat\",\"addedTmsp\":\"2019-09-08T04:51:44.843Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d2240d\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"16858395-c742-4657-88c2-5af20c92718d\",\"type_line\":\"Creature
+        \u2014 Elemental Cat\",\"addedTmsp\":\"2019-09-08T04:51:44.844Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d2240e\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"16858395-c742-4657-88c2-5af20c92718d\",\"type_line\":\"Creature
+        \u2014 Elemental Cat\",\"addedTmsp\":\"2019-09-08T04:51:44.844Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d2240f\",\"status\":\"Not
+        Owned\",\"cmc\":5,\"cardID\":\"421ee1c4-a105-41bf-83e9-edf3c49d057c\",\"type_line\":\"Creature
+        \u2014 Beast\",\"addedTmsp\":\"2019-09-08T04:51:44.844Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d22410\",\"status\":\"Not
+        Owned\",\"cmc\":5,\"cardID\":\"421ee1c4-a105-41bf-83e9-edf3c49d057c\",\"type_line\":\"Creature
+        \u2014 Beast\",\"addedTmsp\":\"2019-09-08T04:51:44.844Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d22411\",\"status\":\"Not
+        Owned\",\"cmc\":5,\"cardID\":\"421ee1c4-a105-41bf-83e9-edf3c49d057c\",\"type_line\":\"Creature
+        \u2014 Beast\",\"addedTmsp\":\"2019-09-08T04:51:44.845Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d22412\",\"status\":\"Not
+        Owned\",\"cmc\":5,\"cardID\":\"421ee1c4-a105-41bf-83e9-edf3c49d057c\",\"type_line\":\"Creature
+        \u2014 Beast\",\"addedTmsp\":\"2019-09-08T04:51:44.845Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d22413\",\"status\":\"Not
+        Owned\",\"cmc\":5,\"cardID\":\"421ee1c4-a105-41bf-83e9-edf3c49d057c\",\"type_line\":\"Creature
+        \u2014 Beast\",\"addedTmsp\":\"2019-09-08T04:51:44.845Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d22414\",\"status\":\"Not
+        Owned\",\"cmc\":5,\"cardID\":\"421ee1c4-a105-41bf-83e9-edf3c49d057c\",\"type_line\":\"Creature
+        \u2014 Beast\",\"addedTmsp\":\"2019-09-08T04:51:44.845Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d22415\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"dc6a4367-bbee-43b8-b5dd-28498f8e2ede\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.846Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d22416\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"dc6a4367-bbee-43b8-b5dd-28498f8e2ede\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.846Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d22417\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"dc6a4367-bbee-43b8-b5dd-28498f8e2ede\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.846Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d22418\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"dc6a4367-bbee-43b8-b5dd-28498f8e2ede\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.847Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d22419\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"dc6a4367-bbee-43b8-b5dd-28498f8e2ede\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.847Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d2241a\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"dc6a4367-bbee-43b8-b5dd-28498f8e2ede\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.847Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d2241b\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"64bbd438-7df2-4d7b-88ad-4531ebaf3931\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.847Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d2241c\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"64bbd438-7df2-4d7b-88ad-4531ebaf3931\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.848Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d2241d\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"64bbd438-7df2-4d7b-88ad-4531ebaf3931\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.848Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d2241e\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"64bbd438-7df2-4d7b-88ad-4531ebaf3931\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.848Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d2241f\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"64bbd438-7df2-4d7b-88ad-4531ebaf3931\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.848Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d22420\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"64bbd438-7df2-4d7b-88ad-4531ebaf3931\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.849Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d22421\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"f687518f-73ff-4813-a56f-5b5cc4f36e7a\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.849Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d22422\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"f687518f-73ff-4813-a56f-5b5cc4f36e7a\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.849Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d22423\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"f687518f-73ff-4813-a56f-5b5cc4f36e7a\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.849Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d22424\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"f687518f-73ff-4813-a56f-5b5cc4f36e7a\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.850Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d22425\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"f687518f-73ff-4813-a56f-5b5cc4f36e7a\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.850Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d22426\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"f687518f-73ff-4813-a56f-5b5cc4f36e7a\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.850Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d22427\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"9974a543-7429-458b-a24f-c84cbffbb54d\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.850Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d22428\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"9974a543-7429-458b-a24f-c84cbffbb54d\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.851Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d22429\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"9974a543-7429-458b-a24f-c84cbffbb54d\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.851Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d2242a\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"9974a543-7429-458b-a24f-c84cbffbb54d\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.852Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d2242b\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"9974a543-7429-458b-a24f-c84cbffbb54d\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.852Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d2242c\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"9974a543-7429-458b-a24f-c84cbffbb54d\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.852Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d2242d\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"9974a543-7429-458b-a24f-c84cbffbb54d\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.852Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d2242e\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"9974a543-7429-458b-a24f-c84cbffbb54d\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.853Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d2242f\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"c062caf7-f0eb-44db-9f74-e6711a13fada\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.853Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d22430\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"c062caf7-f0eb-44db-9f74-e6711a13fada\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.853Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d22431\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"c062caf7-f0eb-44db-9f74-e6711a13fada\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.853Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d22432\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"c062caf7-f0eb-44db-9f74-e6711a13fada\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.853Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d22433\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"c062caf7-f0eb-44db-9f74-e6711a13fada\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.854Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d22434\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"c062caf7-f0eb-44db-9f74-e6711a13fada\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.854Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d22435\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"01f842c8-cd6c-4f4d-9aa8-417a92b37867\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.854Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d22436\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"01f842c8-cd6c-4f4d-9aa8-417a92b37867\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.854Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d22437\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"8dfe022f-cbdf-4710-af7b-9f0e213fc89c\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.855Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d22438\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"8dfe022f-cbdf-4710-af7b-9f0e213fc89c\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.855Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d22439\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"bd243ce5-152b-4d9c-991e-be56b6731d99\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.855Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d2243a\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"0f9cea68-4390-4d73-a374-d6299cbc9271\",\"type_line\":\"Enchantment\",\"addedTmsp\":\"2019-09-08T04:51:44.855Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d2243b\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"0f9cea68-4390-4d73-a374-d6299cbc9271\",\"type_line\":\"Enchantment\",\"addedTmsp\":\"2019-09-08T04:51:44.855Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d2243c\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"85197997-5e1a-46ce-8f0d-6da5ce297baf\",\"type_line\":\"Enchantment\",\"addedTmsp\":\"2019-09-08T04:51:44.856Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d2243d\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"7bb40e09-6855-46d5-9bc9-bc6b2b0d7653\",\"type_line\":\"Creature
+        \u2014 Human Druid\",\"addedTmsp\":\"2019-09-08T04:51:44.856Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d2243e\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"7bb40e09-6855-46d5-9bc9-bc6b2b0d7653\",\"type_line\":\"Creature
+        \u2014 Human Druid\",\"addedTmsp\":\"2019-09-08T04:51:44.856Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d2243f\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"7bb40e09-6855-46d5-9bc9-bc6b2b0d7653\",\"type_line\":\"Creature
+        \u2014 Human Druid\",\"addedTmsp\":\"2019-09-08T04:51:44.857Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d22440\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"7bb40e09-6855-46d5-9bc9-bc6b2b0d7653\",\"type_line\":\"Creature
+        \u2014 Human Druid\",\"addedTmsp\":\"2019-09-08T04:51:44.857Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d22441\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"7bb40e09-6855-46d5-9bc9-bc6b2b0d7653\",\"type_line\":\"Creature
+        \u2014 Human Druid\",\"addedTmsp\":\"2019-09-08T04:51:44.857Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d22442\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"7bb40e09-6855-46d5-9bc9-bc6b2b0d7653\",\"type_line\":\"Creature
+        \u2014 Human Druid\",\"addedTmsp\":\"2019-09-08T04:51:44.858Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d22443\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"b71290eb-b529-4fc3-ab94-fee0ab9e2169\",\"type_line\":\"Creature
+        \u2014 Spirit\",\"addedTmsp\":\"2019-09-08T04:51:44.858Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d22444\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"b71290eb-b529-4fc3-ab94-fee0ab9e2169\",\"type_line\":\"Creature
+        \u2014 Spirit\",\"addedTmsp\":\"2019-09-08T04:51:44.858Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d22445\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"8f370eff-3980-4c19-808b-c1099279ef20\",\"type_line\":\"Creature
+        \u2014 Elf Warrior\",\"addedTmsp\":\"2019-09-08T04:51:44.858Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d22446\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"8f370eff-3980-4c19-808b-c1099279ef20\",\"type_line\":\"Creature
+        \u2014 Elf Warrior\",\"addedTmsp\":\"2019-09-08T04:51:44.859Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d22447\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"8f370eff-3980-4c19-808b-c1099279ef20\",\"type_line\":\"Creature
+        \u2014 Elf Warrior\",\"addedTmsp\":\"2019-09-08T04:51:44.859Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d22448\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"8f370eff-3980-4c19-808b-c1099279ef20\",\"type_line\":\"Creature
+        \u2014 Elf Warrior\",\"addedTmsp\":\"2019-09-08T04:51:44.859Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d22449\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"8f370eff-3980-4c19-808b-c1099279ef20\",\"type_line\":\"Creature
+        \u2014 Elf Warrior\",\"addedTmsp\":\"2019-09-08T04:51:44.859Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d2244a\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"8f370eff-3980-4c19-808b-c1099279ef20\",\"type_line\":\"Creature
+        \u2014 Elf Warrior\",\"addedTmsp\":\"2019-09-08T04:51:44.860Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d2244b\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"8f370eff-3980-4c19-808b-c1099279ef20\",\"type_line\":\"Creature
+        \u2014 Elf Warrior\",\"addedTmsp\":\"2019-09-08T04:51:44.860Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d2244c\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"8f370eff-3980-4c19-808b-c1099279ef20\",\"type_line\":\"Creature
+        \u2014 Elf Warrior\",\"addedTmsp\":\"2019-09-08T04:51:44.860Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d2244d\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"bda18561-4767-4f8e-bc6d-9117d1a480b1\",\"type_line\":\"Creature
+        \u2014 Elf\",\"addedTmsp\":\"2019-09-08T04:51:44.860Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d2244e\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"bda18561-4767-4f8e-bc6d-9117d1a480b1\",\"type_line\":\"Creature
+        \u2014 Elf\",\"addedTmsp\":\"2019-09-08T04:51:44.861Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d2244f\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"bda18561-4767-4f8e-bc6d-9117d1a480b1\",\"type_line\":\"Creature
+        \u2014 Elf\",\"addedTmsp\":\"2019-09-08T04:51:44.861Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d22450\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"bda18561-4767-4f8e-bc6d-9117d1a480b1\",\"type_line\":\"Creature
+        \u2014 Elf\",\"addedTmsp\":\"2019-09-08T04:51:44.861Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d22451\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"bda18561-4767-4f8e-bc6d-9117d1a480b1\",\"type_line\":\"Creature
+        \u2014 Elf\",\"addedTmsp\":\"2019-09-08T04:51:44.861Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d22452\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"bda18561-4767-4f8e-bc6d-9117d1a480b1\",\"type_line\":\"Creature
+        \u2014 Elf\",\"addedTmsp\":\"2019-09-08T04:51:44.862Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d22453\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"bda18561-4767-4f8e-bc6d-9117d1a480b1\",\"type_line\":\"Creature
+        \u2014 Elf\",\"addedTmsp\":\"2019-09-08T04:51:44.862Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d22454\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"bda18561-4767-4f8e-bc6d-9117d1a480b1\",\"type_line\":\"Creature
+        \u2014 Elf\",\"addedTmsp\":\"2019-09-08T04:51:44.862Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d22455\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"bda18561-4767-4f8e-bc6d-9117d1a480b1\",\"type_line\":\"Creature
+        \u2014 Elf\",\"addedTmsp\":\"2019-09-08T04:51:44.862Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d22456\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"bda18561-4767-4f8e-bc6d-9117d1a480b1\",\"type_line\":\"Creature
+        \u2014 Elf\",\"addedTmsp\":\"2019-09-08T04:51:44.862Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d22457\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"e19879a4-7c77-4bfd-a7fa-5fe5cc82a193\",\"type_line\":\"Creature
+        \u2014 Elf Avatar\",\"addedTmsp\":\"2019-09-08T04:51:44.863Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d22458\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"e19879a4-7c77-4bfd-a7fa-5fe5cc82a193\",\"type_line\":\"Creature
+        \u2014 Elf Avatar\",\"addedTmsp\":\"2019-09-08T04:51:44.863Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d22459\",\"status\":\"Not
+        Owned\",\"cmc\":6,\"cardID\":\"d757b3ad-b808-4506-934e-727e065f66c1\",\"type_line\":\"Creature
+        \u2014 Aurochs\",\"addedTmsp\":\"2019-09-08T04:51:44.863Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d2245a\",\"status\":\"Not
+        Owned\",\"cmc\":6,\"cardID\":\"d757b3ad-b808-4506-934e-727e065f66c1\",\"type_line\":\"Creature
+        \u2014 Aurochs\",\"addedTmsp\":\"2019-09-08T04:51:44.863Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d2245b\",\"status\":\"Not
+        Owned\",\"cmc\":6,\"cardID\":\"d757b3ad-b808-4506-934e-727e065f66c1\",\"type_line\":\"Creature
+        \u2014 Aurochs\",\"addedTmsp\":\"2019-09-08T04:51:44.864Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d2245c\",\"status\":\"Not
+        Owned\",\"cmc\":6,\"cardID\":\"d757b3ad-b808-4506-934e-727e065f66c1\",\"type_line\":\"Creature
+        \u2014 Aurochs\",\"addedTmsp\":\"2019-09-08T04:51:44.864Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d2245d\",\"status\":\"Not
+        Owned\",\"cmc\":6,\"cardID\":\"d757b3ad-b808-4506-934e-727e065f66c1\",\"type_line\":\"Creature
+        \u2014 Aurochs\",\"addedTmsp\":\"2019-09-08T04:51:44.865Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d2245e\",\"status\":\"Not
+        Owned\",\"cmc\":6,\"cardID\":\"d757b3ad-b808-4506-934e-727e065f66c1\",\"type_line\":\"Creature
+        \u2014 Aurochs\",\"addedTmsp\":\"2019-09-08T04:51:44.866Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d2245f\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"1b4c26ab-0f7b-4163-b9e4-a415b91352a6\",\"type_line\":\"Legendary
+        Planeswalker \u2014 Nissa\",\"addedTmsp\":\"2019-09-08T04:51:44.866Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d22460\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"1b4c26ab-0f7b-4163-b9e4-a415b91352a6\",\"type_line\":\"Legendary
+        Planeswalker \u2014 Nissa\",\"addedTmsp\":\"2019-09-08T04:51:44.866Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d22461\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"04367e72-3f8c-4cba-8bdf-5a1ba9c9f01f\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.866Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d22462\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"04367e72-3f8c-4cba-8bdf-5a1ba9c9f01f\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.867Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d22463\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"217dada5-7ffc-488b-8062-34c034906ea9\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.867Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d22464\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"217dada5-7ffc-488b-8062-34c034906ea9\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.867Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d22465\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"217dada5-7ffc-488b-8062-34c034906ea9\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.867Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d22466\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"217dada5-7ffc-488b-8062-34c034906ea9\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.868Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d22467\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"217dada5-7ffc-488b-8062-34c034906ea9\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.868Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d22468\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"217dada5-7ffc-488b-8062-34c034906ea9\",\"type_line\":\"Instant\",\"addedTmsp\":\"2019-09-08T04:51:44.868Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d22469\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"dedb483e-b2c6-46c6-b02b-a49599d33521\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.868Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d2246a\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"dedb483e-b2c6-46c6-b02b-a49599d33521\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.868Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d2246b\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"1c46caa8-efc0-4b72-b122-61e5d86a5b86\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.869Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d2246c\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"1c46caa8-efc0-4b72-b122-61e5d86a5b86\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.869Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d2246d\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"5bcc210b-e37e-463c-8fd4-83e5113429a9\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.869Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d2246e\",\"status\":\"Not
+        Owned\",\"cmc\":6,\"cardID\":\"f71dc232-9b7e-4c0e-ac05-8e48b4936aa9\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.869Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d2246f\",\"status\":\"Not
+        Owned\",\"cmc\":6,\"cardID\":\"f71dc232-9b7e-4c0e-ac05-8e48b4936aa9\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.869Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d22470\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"4b66bab3-ee6f-4f74-bbc1-8099c9c4904b\",\"type_line\":\"Enchantment\",\"addedTmsp\":\"2019-09-08T04:51:44.870Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d22471\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"aa51adee-b343-4a03-8fa0-0d86244db5b7\",\"type_line\":\"Enchantment
+        \u2014 Aura\",\"addedTmsp\":\"2019-09-08T04:51:44.870Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d22472\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"aa51adee-b343-4a03-8fa0-0d86244db5b7\",\"type_line\":\"Enchantment
+        \u2014 Aura\",\"addedTmsp\":\"2019-09-08T04:51:44.870Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d22473\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"aa51adee-b343-4a03-8fa0-0d86244db5b7\",\"type_line\":\"Enchantment
+        \u2014 Aura\",\"addedTmsp\":\"2019-09-08T04:51:44.870Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d22474\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"aa51adee-b343-4a03-8fa0-0d86244db5b7\",\"type_line\":\"Enchantment
+        \u2014 Aura\",\"addedTmsp\":\"2019-09-08T04:51:44.871Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d22475\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"aa51adee-b343-4a03-8fa0-0d86244db5b7\",\"type_line\":\"Enchantment
+        \u2014 Aura\",\"addedTmsp\":\"2019-09-08T04:51:44.871Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d22476\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"aa51adee-b343-4a03-8fa0-0d86244db5b7\",\"type_line\":\"Enchantment
+        \u2014 Aura\",\"addedTmsp\":\"2019-09-08T04:51:44.871Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d22477\",\"status\":\"Not
+        Owned\",\"cmc\":5,\"cardID\":\"aa476306-9d6b-45ed-9e6c-fd4aee6592e7\",\"type_line\":\"Enchantment
+        \u2014 Aura\",\"addedTmsp\":\"2019-09-08T04:51:44.871Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d22478\",\"status\":\"Not
+        Owned\",\"cmc\":5,\"cardID\":\"aa476306-9d6b-45ed-9e6c-fd4aee6592e7\",\"type_line\":\"Enchantment
+        \u2014 Aura\",\"addedTmsp\":\"2019-09-08T04:51:44.872Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d22479\",\"status\":\"Not
+        Owned\",\"cmc\":5,\"cardID\":\"aa476306-9d6b-45ed-9e6c-fd4aee6592e7\",\"type_line\":\"Enchantment
+        \u2014 Aura\",\"addedTmsp\":\"2019-09-08T04:51:44.872Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d2247a\",\"status\":\"Not
+        Owned\",\"cmc\":5,\"cardID\":\"aa476306-9d6b-45ed-9e6c-fd4aee6592e7\",\"type_line\":\"Enchantment
+        \u2014 Aura\",\"addedTmsp\":\"2019-09-08T04:51:44.872Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d2247b\",\"status\":\"Not
+        Owned\",\"cmc\":5,\"cardID\":\"aa476306-9d6b-45ed-9e6c-fd4aee6592e7\",\"type_line\":\"Enchantment
+        \u2014 Aura\",\"addedTmsp\":\"2019-09-08T04:51:44.872Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\"],\"_id\":\"5d7488e08d85b07c66d2247c\",\"status\":\"Not
+        Owned\",\"cmc\":5,\"cardID\":\"aa476306-9d6b-45ed-9e6c-fd4aee6592e7\",\"type_line\":\"Enchantment
+        \u2014 Aura\",\"addedTmsp\":\"2019-09-08T04:51:44.873Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\",\"W\"],\"_id\":\"5d7488e08d85b07c66d2247d\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"1a55308b-5772-430a-93e4-b65c416b86cf\",\"type_line\":\"Creature
+        \u2014 Human Wizard\",\"addedTmsp\":\"2019-09-08T04:51:44.873Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\",\"W\"],\"_id\":\"5d7488e08d85b07c66d2247e\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"1a55308b-5772-430a-93e4-b65c416b86cf\",\"type_line\":\"Creature
+        \u2014 Human Wizard\",\"addedTmsp\":\"2019-09-08T04:51:44.873Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\",\"W\"],\"_id\":\"5d7488e08d85b07c66d2247f\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"74de5ed5-eab0-44ff-aa9a-077d487f1b5e\",\"type_line\":\"Enchantment\",\"addedTmsp\":\"2019-09-08T04:51:44.873Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\",\"W\"],\"_id\":\"5d7488e08d85b07c66d22480\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"74de5ed5-eab0-44ff-aa9a-077d487f1b5e\",\"type_line\":\"Enchantment\",\"addedTmsp\":\"2019-09-08T04:51:44.873Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\",\"U\"],\"_id\":\"5d7488e08d85b07c66d22481\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"80d88d83-d614-4995-ad3e-7ac062f4a93c\",\"type_line\":\"Legendary
+        Creature \u2014 Human Wizard\",\"addedTmsp\":\"2019-09-08T04:51:44.874Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\",\"U\"],\"_id\":\"5d7488e08d85b07c66d22482\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"7b1969ce-3bf1-4beb-bbf8-22edfda8e3f8\",\"type_line\":\"Creature
+        \u2014 Shapeshifter\",\"addedTmsp\":\"2019-09-08T04:51:44.874Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\",\"U\"],\"_id\":\"5d7488e08d85b07c66d22483\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"7b1969ce-3bf1-4beb-bbf8-22edfda8e3f8\",\"type_line\":\"Creature
+        \u2014 Shapeshifter\",\"addedTmsp\":\"2019-09-08T04:51:44.874Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\",\"U\"],\"_id\":\"5d7488e08d85b07c66d22484\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"7b1969ce-3bf1-4beb-bbf8-22edfda8e3f8\",\"type_line\":\"Creature
+        \u2014 Shapeshifter\",\"addedTmsp\":\"2019-09-08T04:51:44.874Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\",\"R\"],\"_id\":\"5d7488e08d85b07c66d22485\",\"status\":\"Not
+        Owned\",\"cmc\":5,\"cardID\":\"7a62b9ea-18ea-4fbc-8e4d-0bacb4e4c47e\",\"type_line\":\"Creature
+        \u2014 Spirit Avatar\",\"addedTmsp\":\"2019-09-08T04:51:44.875Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\",\"R\"],\"_id\":\"5d7488e08d85b07c66d22486\",\"status\":\"Not
+        Owned\",\"cmc\":5,\"cardID\":\"7a62b9ea-18ea-4fbc-8e4d-0bacb4e4c47e\",\"type_line\":\"Creature
+        \u2014 Spirit Avatar\",\"addedTmsp\":\"2019-09-08T04:51:44.875Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\",\"R\"],\"_id\":\"5d7488e08d85b07c66d22487\",\"status\":\"Not
+        Owned\",\"cmc\":5,\"cardID\":\"7a62b9ea-18ea-4fbc-8e4d-0bacb4e4c47e\",\"type_line\":\"Creature
+        \u2014 Spirit Avatar\",\"addedTmsp\":\"2019-09-08T04:51:44.875Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\",\"R\"],\"_id\":\"5d7488e08d85b07c66d22488\",\"status\":\"Not
+        Owned\",\"cmc\":5,\"cardID\":\"7a62b9ea-18ea-4fbc-8e4d-0bacb4e4c47e\",\"type_line\":\"Creature
+        \u2014 Spirit Avatar\",\"addedTmsp\":\"2019-09-08T04:51:44.875Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\",\"G\"],\"_id\":\"5d7488e08d85b07c66d22489\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"57418b2d-238c-4637-9830-9e672e3bc6da\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.876Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\",\"G\"],\"_id\":\"5d7488e08d85b07c66d2248a\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"57418b2d-238c-4637-9830-9e672e3bc6da\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.876Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\",\"G\"],\"_id\":\"5d7488e08d85b07c66d2248b\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"fb977f5b-2202-43c1-a8c0-7fba8c093fa2\",\"type_line\":\"Enchantment\",\"addedTmsp\":\"2019-09-08T04:51:44.876Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\",\"G\"],\"_id\":\"5d7488e08d85b07c66d2248c\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"fb977f5b-2202-43c1-a8c0-7fba8c093fa2\",\"type_line\":\"Enchantment\",\"addedTmsp\":\"2019-09-08T04:51:44.876Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\",\"U\"],\"_id\":\"5d7488e08d85b07c66d2248d\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"2000b4e8-7887-454e-9d52-211516613dd0\",\"type_line\":\"Creature
+        \u2014 Human Wizard\",\"addedTmsp\":\"2019-09-08T04:51:44.877Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\",\"U\"],\"_id\":\"5d7488e08d85b07c66d2248e\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"2000b4e8-7887-454e-9d52-211516613dd0\",\"type_line\":\"Creature
+        \u2014 Human Wizard\",\"addedTmsp\":\"2019-09-08T04:51:44.877Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\",\"U\"],\"_id\":\"5d7488e08d85b07c66d2248f\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"2000b4e8-7887-454e-9d52-211516613dd0\",\"type_line\":\"Creature
+        \u2014 Human Wizard\",\"addedTmsp\":\"2019-09-08T04:51:44.877Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\",\"U\"],\"_id\":\"5d7488e08d85b07c66d22490\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"2000b4e8-7887-454e-9d52-211516613dd0\",\"type_line\":\"Creature
+        \u2014 Human Wizard\",\"addedTmsp\":\"2019-09-08T04:51:44.877Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\",\"U\"],\"_id\":\"5d7488e08d85b07c66d22491\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"190ac2fe-532d-4d7e-9d74-07ae6850aac8\",\"type_line\":\"Creature
+        \u2014 Human Wizard\",\"addedTmsp\":\"2019-09-08T04:51:44.877Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\",\"U\"],\"_id\":\"5d7488e08d85b07c66d22492\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"190ac2fe-532d-4d7e-9d74-07ae6850aac8\",\"type_line\":\"Creature
+        \u2014 Human Wizard\",\"addedTmsp\":\"2019-09-08T04:51:44.878Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\",\"U\"],\"_id\":\"5d7488e08d85b07c66d22493\",\"status\":\"Not
+        Owned\",\"cmc\":7,\"cardID\":\"c2974372-5490-4fee-9d7c-37177ee85b58\",\"type_line\":\"Creature
+        \u2014 Djinn\",\"addedTmsp\":\"2019-09-08T04:51:44.878Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\",\"U\"],\"_id\":\"5d7488e08d85b07c66d22494\",\"status\":\"Not
+        Owned\",\"cmc\":7,\"cardID\":\"c2974372-5490-4fee-9d7c-37177ee85b58\",\"type_line\":\"Creature
+        \u2014 Djinn\",\"addedTmsp\":\"2019-09-08T04:51:44.878Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\",\"U\",\"W\"],\"_id\":\"5d7488e08d85b07c66d22495\",\"status\":\"Not
+        Owned\",\"cmc\":7,\"cardID\":\"39e8bf21-0baf-4ee9-b224-b9eee50df280\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.878Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\",\"R\",\"U\"],\"_id\":\"5d7488e08d85b07c66d22496\",\"status\":\"Not
+        Owned\",\"cmc\":4,\"cardID\":\"d5deaec5-499d-4e19-b879-8bcd1dc35f3e\",\"type_line\":\"Legendary
+        Creature \u2014 Human Artificer\",\"addedTmsp\":\"2019-09-08T04:51:44.878Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d22497\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"147bef05-4497-44d5-9dd6-fb5dc08e78f7\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.879Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d22498\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"147bef05-4497-44d5-9dd6-fb5dc08e78f7\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.879Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d22499\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"d53712a0-e11d-4b83-aebc-8e97244f085b\",\"type_line\":\"Artifact
+        Creature \u2014 Myr\",\"addedTmsp\":\"2019-09-08T04:51:44.879Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d2249a\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"d53712a0-e11d-4b83-aebc-8e97244f085b\",\"type_line\":\"Artifact
+        Creature \u2014 Myr\",\"addedTmsp\":\"2019-09-08T04:51:44.879Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d2249b\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"d53712a0-e11d-4b83-aebc-8e97244f085b\",\"type_line\":\"Artifact
+        Creature \u2014 Myr\",\"addedTmsp\":\"2019-09-08T04:51:44.880Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d2249c\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"d53712a0-e11d-4b83-aebc-8e97244f085b\",\"type_line\":\"Artifact
+        Creature \u2014 Myr\",\"addedTmsp\":\"2019-09-08T04:51:44.880Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d2249d\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"d53712a0-e11d-4b83-aebc-8e97244f085b\",\"type_line\":\"Artifact
+        Creature \u2014 Myr\",\"addedTmsp\":\"2019-09-08T04:51:44.880Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d2249e\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"d53712a0-e11d-4b83-aebc-8e97244f085b\",\"type_line\":\"Artifact
+        Creature \u2014 Myr\",\"addedTmsp\":\"2019-09-08T04:51:44.880Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d2249f\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"d53712a0-e11d-4b83-aebc-8e97244f085b\",\"type_line\":\"Artifact
+        Creature \u2014 Myr\",\"addedTmsp\":\"2019-09-08T04:51:44.880Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d224a0\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"d53712a0-e11d-4b83-aebc-8e97244f085b\",\"type_line\":\"Artifact
+        Creature \u2014 Myr\",\"addedTmsp\":\"2019-09-08T04:51:44.881Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d224a1\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"d53712a0-e11d-4b83-aebc-8e97244f085b\",\"type_line\":\"Artifact
+        Creature \u2014 Myr\",\"addedTmsp\":\"2019-09-08T04:51:44.881Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d224a2\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"d53712a0-e11d-4b83-aebc-8e97244f085b\",\"type_line\":\"Artifact
+        Creature \u2014 Myr\",\"addedTmsp\":\"2019-09-08T04:51:44.881Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d224a3\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"92ede7b6-ee03-4b4f-bc59-1759b02bd5d5\",\"type_line\":\"Artifact
+        Creature \u2014 Horror\",\"addedTmsp\":\"2019-09-08T04:51:44.881Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d224a4\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"92ede7b6-ee03-4b4f-bc59-1759b02bd5d5\",\"type_line\":\"Artifact
+        Creature \u2014 Horror\",\"addedTmsp\":\"2019-09-08T04:51:44.881Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d224a5\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"b316f198-4465-4fb5-a7a6-a92bf8eae8c1\",\"type_line\":\"Artifact\",\"addedTmsp\":\"2019-09-08T04:51:44.882Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d224a6\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"b316f198-4465-4fb5-a7a6-a92bf8eae8c1\",\"type_line\":\"Artifact\",\"addedTmsp\":\"2019-09-08T04:51:44.882Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d224a7\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"b316f198-4465-4fb5-a7a6-a92bf8eae8c1\",\"type_line\":\"Artifact\",\"addedTmsp\":\"2019-09-08T04:51:44.882Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d224a8\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"b316f198-4465-4fb5-a7a6-a92bf8eae8c1\",\"type_line\":\"Artifact\",\"addedTmsp\":\"2019-09-08T04:51:44.882Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d224a9\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"b316f198-4465-4fb5-a7a6-a92bf8eae8c1\",\"type_line\":\"Artifact\",\"addedTmsp\":\"2019-09-08T04:51:44.882Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d224aa\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"b316f198-4465-4fb5-a7a6-a92bf8eae8c1\",\"type_line\":\"Artifact\",\"addedTmsp\":\"2019-09-08T04:51:44.883Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d224ab\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"9cc7bed9-863a-46a4-85db-4c5608542363\",\"type_line\":\"Artifact\",\"addedTmsp\":\"2019-09-08T04:51:44.883Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d224ac\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"9cc7bed9-863a-46a4-85db-4c5608542363\",\"type_line\":\"Artifact\",\"addedTmsp\":\"2019-09-08T04:51:44.883Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d224ad\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"ab56119b-1e13-44d4-b73b-991488c039f1\",\"type_line\":\"Artifact
+        \u2014 Equipment\",\"addedTmsp\":\"2019-09-08T04:51:44.883Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d224ae\",\"status\":\"Not
+        Owned\",\"cmc\":1,\"cardID\":\"ab56119b-1e13-44d4-b73b-991488c039f1\",\"type_line\":\"Artifact
+        \u2014 Equipment\",\"addedTmsp\":\"2019-09-08T04:51:44.883Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d224af\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"ee874779-e654-48f0-8f2d-cc98ef150d75\",\"type_line\":\"Artifact\",\"addedTmsp\":\"2019-09-08T04:51:44.884Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d224b0\",\"status\":\"Not
+        Owned\",\"cmc\":2,\"cardID\":\"ee874779-e654-48f0-8f2d-cc98ef150d75\",\"type_line\":\"Artifact\",\"addedTmsp\":\"2019-09-08T04:51:44.884Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d224b1\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"9050cd01-44c9-4e87-a165-a8b88c8e5d45\",\"type_line\":\"Artifact\",\"addedTmsp\":\"2019-09-08T04:51:44.884Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d224b2\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"9050cd01-44c9-4e87-a165-a8b88c8e5d45\",\"type_line\":\"Artifact\",\"addedTmsp\":\"2019-09-08T04:51:44.885Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d224b3\",\"status\":\"Not
+        Owned\",\"cmc\":5,\"cardID\":\"1676ccbb-91d2-4f26-b3a5-ccb1a21bdebf\",\"type_line\":\"Artifact\",\"addedTmsp\":\"2019-09-08T04:51:44.885Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d224b4\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"147bef05-4497-44d5-9dd6-fb5dc08e78f7\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.885Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d224b5\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"147bef05-4497-44d5-9dd6-fb5dc08e78f7\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.885Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d224b6\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"147bef05-4497-44d5-9dd6-fb5dc08e78f7\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.886Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\"],\"_id\":\"5d7488e08d85b07c66d224b7\",\"status\":\"Not
+        Owned\",\"cmc\":3,\"cardID\":\"147bef05-4497-44d5-9dd6-fb5dc08e78f7\",\"type_line\":\"Sorcery\",\"addedTmsp\":\"2019-09-08T04:51:44.886Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d224b8\",\"status\":\"Not
+        Owned\",\"cmc\":5,\"cardID\":\"31412335-110c-449a-9c2f-bff8763a6504\",\"type_line\":\"Legendary
+        Artifact\",\"addedTmsp\":\"2019-09-08T04:51:44.886Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d224b9\",\"status\":\"Not
+        Owned\",\"cmc\":5,\"cardID\":\"31412335-110c-449a-9c2f-bff8763a6504\",\"type_line\":\"Legendary
+        Artifact\",\"addedTmsp\":\"2019-09-08T04:51:44.886Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\",\"W\"],\"_id\":\"5d7488e08d85b07c66d224ba\",\"status\":\"Not
+        Owned\",\"cmc\":0,\"cardID\":\"e52013ba-9b17-497b-a844-1e7eb5607019\",\"type_line\":\"Land
+        \u2014 Gate\",\"addedTmsp\":\"2019-09-08T04:51:44.887Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"U\",\"W\"],\"_id\":\"5d7488e08d85b07c66d224bb\",\"status\":\"Not
+        Owned\",\"cmc\":0,\"cardID\":\"e52013ba-9b17-497b-a844-1e7eb5607019\",\"type_line\":\"Land
+        \u2014 Gate\",\"addedTmsp\":\"2019-09-08T04:51:44.887Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\",\"W\"],\"_id\":\"5d7488e08d85b07c66d224bc\",\"status\":\"Not
+        Owned\",\"cmc\":0,\"cardID\":\"28d6c68f-5e41-4b10-b4fa-8f7aee6b587b\",\"type_line\":\"Land
+        \u2014 Gate\",\"addedTmsp\":\"2019-09-08T04:51:44.887Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\",\"W\"],\"_id\":\"5d7488e08d85b07c66d224bd\",\"status\":\"Not
+        Owned\",\"cmc\":0,\"cardID\":\"28d6c68f-5e41-4b10-b4fa-8f7aee6b587b\",\"type_line\":\"Land
+        \u2014 Gate\",\"addedTmsp\":\"2019-09-08T04:51:44.887Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d224be\",\"status\":\"Not
+        Owned\",\"cmc\":0,\"cardID\":\"2f28ecdc-a4f0-4327-a78c-340be41555ee\",\"type_line\":\"Land
+        \u2014 Locus\",\"addedTmsp\":\"2019-09-08T04:51:44.888Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d224bf\",\"status\":\"Not
+        Owned\",\"cmc\":0,\"cardID\":\"2f28ecdc-a4f0-4327-a78c-340be41555ee\",\"type_line\":\"Land
+        \u2014 Locus\",\"addedTmsp\":\"2019-09-08T04:51:44.888Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d224c0\",\"status\":\"Not
+        Owned\",\"cmc\":0,\"cardID\":\"2f28ecdc-a4f0-4327-a78c-340be41555ee\",\"type_line\":\"Land
+        \u2014 Locus\",\"addedTmsp\":\"2019-09-08T04:51:44.888Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d224c1\",\"status\":\"Not
+        Owned\",\"cmc\":0,\"cardID\":\"2f28ecdc-a4f0-4327-a78c-340be41555ee\",\"type_line\":\"Land
+        \u2014 Locus\",\"addedTmsp\":\"2019-09-08T04:51:44.888Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d224c2\",\"status\":\"Not
+        Owned\",\"cmc\":0,\"cardID\":\"2f28ecdc-a4f0-4327-a78c-340be41555ee\",\"type_line\":\"Land
+        \u2014 Locus\",\"addedTmsp\":\"2019-09-08T04:51:44.888Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d224c3\",\"status\":\"Not
+        Owned\",\"cmc\":0,\"cardID\":\"2f28ecdc-a4f0-4327-a78c-340be41555ee\",\"type_line\":\"Land
+        \u2014 Locus\",\"addedTmsp\":\"2019-09-08T04:51:44.889Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d224c4\",\"status\":\"Not
+        Owned\",\"cmc\":0,\"cardID\":\"2f28ecdc-a4f0-4327-a78c-340be41555ee\",\"type_line\":\"Land
+        \u2014 Locus\",\"addedTmsp\":\"2019-09-08T04:51:44.889Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d224c5\",\"status\":\"Not
+        Owned\",\"cmc\":0,\"cardID\":\"2f28ecdc-a4f0-4327-a78c-340be41555ee\",\"type_line\":\"Land
+        \u2014 Locus\",\"addedTmsp\":\"2019-09-08T04:51:44.889Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\",\"U\"],\"_id\":\"5d7488e08d85b07c66d224c6\",\"status\":\"Not
+        Owned\",\"cmc\":0,\"cardID\":\"3694ac90-e71e-4736-8945-7dbf5b5fd6a9\",\"type_line\":\"Land
+        \u2014 Gate\",\"addedTmsp\":\"2019-09-08T04:51:44.889Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\",\"U\"],\"_id\":\"5d7488e08d85b07c66d224c7\",\"status\":\"Not
+        Owned\",\"cmc\":0,\"cardID\":\"3694ac90-e71e-4736-8945-7dbf5b5fd6a9\",\"type_line\":\"Land
+        \u2014 Gate\",\"addedTmsp\":\"2019-09-08T04:51:44.889Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d224c8\",\"status\":\"Not
+        Owned\",\"cmc\":0,\"cardID\":\"8b63efb6-249c-4f57-9af1-baffe938520c\",\"type_line\":\"Land
+        \u2014 Locus\",\"addedTmsp\":\"2019-09-08T04:51:44.890Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d224c9\",\"status\":\"Not
+        Owned\",\"cmc\":0,\"cardID\":\"8b63efb6-249c-4f57-9af1-baffe938520c\",\"type_line\":\"Land
+        \u2014 Locus\",\"addedTmsp\":\"2019-09-08T04:51:44.890Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d224ca\",\"status\":\"Not
+        Owned\",\"cmc\":0,\"cardID\":\"8b63efb6-249c-4f57-9af1-baffe938520c\",\"type_line\":\"Land
+        \u2014 Locus\",\"addedTmsp\":\"2019-09-08T04:51:44.890Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d224cb\",\"status\":\"Not
+        Owned\",\"cmc\":0,\"cardID\":\"8b63efb6-249c-4f57-9af1-baffe938520c\",\"type_line\":\"Land
+        \u2014 Locus\",\"addedTmsp\":\"2019-09-08T04:51:44.892Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d224cc\",\"status\":\"Not
+        Owned\",\"cmc\":0,\"cardID\":\"8b63efb6-249c-4f57-9af1-baffe938520c\",\"type_line\":\"Land
+        \u2014 Locus\",\"addedTmsp\":\"2019-09-08T04:51:44.893Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d224cd\",\"status\":\"Not
+        Owned\",\"cmc\":0,\"cardID\":\"8b63efb6-249c-4f57-9af1-baffe938520c\",\"type_line\":\"Land
+        \u2014 Locus\",\"addedTmsp\":\"2019-09-08T04:51:44.893Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d224ce\",\"status\":\"Not
+        Owned\",\"cmc\":0,\"cardID\":\"8b63efb6-249c-4f57-9af1-baffe938520c\",\"type_line\":\"Land
+        \u2014 Locus\",\"addedTmsp\":\"2019-09-08T04:51:44.893Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d224cf\",\"status\":\"Not
+        Owned\",\"cmc\":0,\"cardID\":\"8b63efb6-249c-4f57-9af1-baffe938520c\",\"type_line\":\"Land
+        \u2014 Locus\",\"addedTmsp\":\"2019-09-08T04:51:44.893Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\",\"G\"],\"_id\":\"5d7488e08d85b07c66d224d0\",\"status\":\"Not
+        Owned\",\"cmc\":0,\"cardID\":\"9baed2e6-687f-4ab4-b378-4282f3a43c9c\",\"type_line\":\"Land
+        \u2014 Gate\",\"addedTmsp\":\"2019-09-08T04:51:44.894Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\",\"G\"],\"_id\":\"5d7488e08d85b07c66d224d1\",\"status\":\"Not
+        Owned\",\"cmc\":0,\"cardID\":\"9baed2e6-687f-4ab4-b378-4282f3a43c9c\",\"type_line\":\"Land
+        \u2014 Gate\",\"addedTmsp\":\"2019-09-08T04:51:44.894Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\",\"R\"],\"_id\":\"5d7488e08d85b07c66d224d2\",\"status\":\"Not
+        Owned\",\"cmc\":0,\"cardID\":\"8fffd445-de4f-45de-95b9-6e0855926a6a\",\"type_line\":\"Land
+        \u2014 Gate\",\"addedTmsp\":\"2019-09-08T04:51:44.894Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\",\"R\"],\"_id\":\"5d7488e08d85b07c66d224d3\",\"status\":\"Not
+        Owned\",\"cmc\":0,\"cardID\":\"8fffd445-de4f-45de-95b9-6e0855926a6a\",\"type_line\":\"Land
+        \u2014 Gate\",\"addedTmsp\":\"2019-09-08T04:51:44.894Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\",\"U\"],\"_id\":\"5d7488e08d85b07c66d224d4\",\"status\":\"Not
+        Owned\",\"cmc\":0,\"cardID\":\"c60c576b-a1ea-41d2-a1d8-4417c11ed48e\",\"type_line\":\"Land
+        \u2014 Gate\",\"addedTmsp\":\"2019-09-08T04:51:44.895Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"R\",\"U\"],\"_id\":\"5d7488e08d85b07c66d224d5\",\"status\":\"Not
+        Owned\",\"cmc\":0,\"cardID\":\"c60c576b-a1ea-41d2-a1d8-4417c11ed48e\",\"type_line\":\"Land
+        \u2014 Gate\",\"addedTmsp\":\"2019-09-08T04:51:44.895Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d224d6\",\"status\":\"Not
+        Owned\",\"cmc\":0,\"cardID\":\"401f7042-24fd-42a0-ae7c-e6b7de1aa446\",\"type_line\":\"Land\",\"addedTmsp\":\"2019-09-08T04:51:44.895Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d224d7\",\"status\":\"Not
+        Owned\",\"cmc\":0,\"cardID\":\"401f7042-24fd-42a0-ae7c-e6b7de1aa446\",\"type_line\":\"Land\",\"addedTmsp\":\"2019-09-08T04:51:44.895Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"W\"],\"_id\":\"5d7488e08d85b07c66d224d8\",\"status\":\"Not
+        Owned\",\"cmc\":0,\"cardID\":\"724acbe2-4c82-4360-a738-38cc6aa0c4a4\",\"type_line\":\"Land
+        \u2014 Plains\",\"addedTmsp\":\"2019-09-08T04:51:44.896Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\",\"W\"],\"_id\":\"5d7488e08d85b07c66d224d9\",\"status\":\"Not
+        Owned\",\"cmc\":0,\"cardID\":\"cbadf8cf-02bf-45f6-b3c1-a684d9bc5228\",\"type_line\":\"Land
+        \u2014 Gate\",\"addedTmsp\":\"2019-09-08T04:51:44.896Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\",\"W\"],\"_id\":\"5d7488e08d85b07c66d224da\",\"status\":\"Not
+        Owned\",\"cmc\":0,\"cardID\":\"cbadf8cf-02bf-45f6-b3c1-a684d9bc5228\",\"type_line\":\"Land
+        \u2014 Gate\",\"addedTmsp\":\"2019-09-08T04:51:44.896Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d224db\",\"status\":\"Not
+        Owned\",\"cmc\":0,\"cardID\":\"eac8649b-b892-4854-8422-fd117ccac39a\",\"type_line\":\"Legendary
+        Land\",\"addedTmsp\":\"2019-09-08T04:51:44.896Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[],\"_id\":\"5d7488e08d85b07c66d224dc\",\"status\":\"Not
+        Owned\",\"cmc\":0,\"cardID\":\"eac8649b-b892-4854-8422-fd117ccac39a\",\"type_line\":\"Legendary
+        Land\",\"addedTmsp\":\"2019-09-08T04:51:44.896Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\",\"R\"],\"_id\":\"5d7488e08d85b07c66d224dd\",\"status\":\"Not
+        Owned\",\"cmc\":0,\"cardID\":\"5e378faf-b1f2-46df-945a-37681d392104\",\"type_line\":\"Land
+        \u2014 Gate\",\"addedTmsp\":\"2019-09-08T04:51:44.897Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"B\",\"R\"],\"_id\":\"5d7488e08d85b07c66d224de\",\"status\":\"Not
+        Owned\",\"cmc\":0,\"cardID\":\"5e378faf-b1f2-46df-945a-37681d392104\",\"type_line\":\"Land
+        \u2014 Gate\",\"addedTmsp\":\"2019-09-08T04:51:44.897Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\",\"W\"],\"_id\":\"5d7488e08d85b07c66d224df\",\"status\":\"Not
+        Owned\",\"cmc\":0,\"cardID\":\"ee1db693-5dd9-48de-8520-014d9ad5b596\",\"type_line\":\"Land
+        \u2014 Gate\",\"addedTmsp\":\"2019-09-08T04:51:44.897Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\",\"W\"],\"_id\":\"5d7488e08d85b07c66d224e0\",\"status\":\"Not
+        Owned\",\"cmc\":0,\"cardID\":\"ee1db693-5dd9-48de-8520-014d9ad5b596\",\"type_line\":\"Land
+        \u2014 Gate\",\"addedTmsp\":\"2019-09-08T04:51:44.897Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\",\"U\"],\"_id\":\"5d7488e08d85b07c66d224e1\",\"status\":\"Not
+        Owned\",\"cmc\":0,\"cardID\":\"d4e7b715-38c5-406f-883c-9c174f87944e\",\"type_line\":\"Land
+        \u2014 Gate\",\"addedTmsp\":\"2019-09-08T04:51:44.898Z\"},{\"tags\":[\"New\"],\"finish\":\"Non-foil\",\"colors\":[\"G\",\"U\"],\"_id\":\"5d7488e08d85b07c66d224e2\",\"status\":\"Not
+        Owned\",\"cmc\":0,\"cardID\":\"d4e7b715-38c5-406f-883c-9c174f87944e\",\"type_line\":\"Land
+        \u2014 Gate\",\"addedTmsp\":\"2019-09-08T04:51:44.898Z\"}],\"shortID\":\"19w\",\"name\":\"Fun
+        with Multiples\",\"owner\":\"5d7488788d85b07c66d21ff6\",\"image_uri\":\"https://img.scryfall.com/cards/art_crop/front/3/a/3a53487a-c00b-42da-904c-f022a0c5b1ed.jpg?1562828783\",\"image_name\":\"Evil
+        Twin [isd-212]\",\"image_artist\":\"Greg Staples\",\"description\":\"This
+        is a brand new cube!\",\"owner_name\":\"silasary\",\"date_updated\":\"2020-02-16T03:44:20.775Z\",\"updated_string\":\"2/16/2020,
+        3:44:20 AM\",\"type\":\"Vintage\",\"card_count\":425,\"__v\":4,\"descriptionhtml\":\"undefined\",\"urlAlias\":\"fun\",\"categoryOverride\":\"Vintage\",\"categoryPrefixes\":[],\"draft_formats\":[],\"isFeatured\":false,\"maybe\":[],\"numDecks\":3,\"overrideCategory\":false,\"privatePrices\":false,\"tag_colors\":[],\"tags\":[],\"users_following\":[\"5d8a2d89d6d574217d2b98da\"],\"defaultPrinting\":\"recent\",\"defaultStatus\":\"Owned\",\"defaultDraftFormat\":-1}"
+    headers:
+      Access-Control-Allow-Origin:
+      - '*'
+      Cache-Control:
+      - no-cache="set-cookie"
+      Connection:
+      - keep-alive
+      Content-Encoding:
+      - gzip
+      Content-Type:
+      - application/json; charset=utf-8
+      Date:
+      - Wed, 27 Jan 2021 05:40:33 GMT
+      Etag:
+      - W/"1836e-x1n5FbPf2/Eh0ROOxKJs30bRkGY"
+      Server:
+      - nginx/1.16.1
+      Set-Cookie:
+      - connect.sid=s%3ApcjB_uG3BJrw6JOqQe4X4LGb1ZSRGHNH.61lsGpl1%2BQj06bkZP%2BbEHPdu1pFwqrt41TeOfJ%2BGVhU;
+        Path=/; Expires=Wed, 26 Jan 2022 05:40:33 GMT; HttpOnly
+      - AWSELB=435D637F1AF5270988F02B281AFDD4B156DE3AD4A4A8B6298D52BE8AEF93071560F18DE9F0296A4AC7458F213ACD7C9B964A51C0E6BE484E5AAA1F7DF8C7C21F0448F4505E;PATH=/;MAX-AGE=36000
+      - AWSELBCORS=435D637F1AF5270988F02B281AFDD4B156DE3AD4A4A8B6298D52BE8AEF93071560F18DE9F0296A4AC7458F213ACD7C9B964A51C0E6BE484E5AAA1F7DF8C7C21F0448F4505E;PATH=/;MAX-AGE=36000;SECURE;SAMESITE=None
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding
+      X-Powered-By:
+      - Express
+      X-RateLimit-Limit:
+      - '1'
+      X-RateLimit-Remaining:
+      - '0'
+      X-RateLimit-Reset:
+      - '1611726077'
+    status:
+      code: 200
+      message: OK
+    url: https://cubecobra.com/cube/api/cubejson/5d7488c28d85b07c66d22162
+version: 1

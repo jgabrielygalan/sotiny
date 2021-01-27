@@ -6,7 +6,7 @@ import attr
 import discord
 
 from discord_draft import DEFAULT_CUBE_CUBECOBRA_ID, GuildDraft
-
+import cube
 
 @attr.s(auto_attribs=True)
 class DraftSettings:
@@ -14,6 +14,14 @@ class DraftSettings:
     cards_per_booster: int
     max_players: int
     cube_id: str
+
+    _cubedata: Optional[cube.Cube] = None
+    async def cubedata(self) -> cube.Cube:
+        if self._cubedata:
+            return self._cubedata
+        self._cubedata = await cube.load_cubecobra_cube(self.cube_id)
+        return self._cubedata
+
 
 
 class Guild:
@@ -151,7 +159,7 @@ class Guild:
             await draft.load_state(self.redis)
             if draft.draft is None or draft.draft.is_draft_finished():
                 # await self.redis.srem(f'sotiny:{self.guild.id}:active_drafts', bdraft_id)
-                return
+                return None
             self.drafts_in_progress.append(draft)
             return draft
 

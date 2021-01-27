@@ -98,10 +98,11 @@ class CubeDrafter(commands.Cog):
         print(f"Registering {player.display_name} for the next draft")
         await guild.add_player(player)
         num_players = len(guild.players)
+        cubeinfo = await guild.pending_conf.cubedata()
         if num_players == 1:
             msg = f"{ctx.author.mention}, I have registered you for a draft of https://cubecobra.com/cube/overview/{guild.pending_conf.cube_id}"
         else:
-            msg = f"{ctx.author.mention}, I have registered you for the next draft"
+            msg = f"{ctx.author.mention}, I have registered you for the next draft of {cubeinfo.name}"
         if guild.pending_conf.max_players:
             msg = msg + f'\nYou are player {num_players} of {guild.pending_conf.max_players}'
         await ctx.send(msg)
@@ -180,7 +181,7 @@ class CubeDrafter(commands.Cog):
     @commands.command(name='pack', help="Resend your current pack")
     async def my_pack(self, ctx: Context, draft_id = None):
         draft = await self.find_draft_or_send_error(ctx, draft_id, True)
-        if draft is None:
+        if draft is None or draft.draft is None:
             return
         player = draft.draft.player_by_id(ctx.author.id)
         if player.current_pack is None:

@@ -17,6 +17,7 @@ python-dotenv = "*"
 [dev-packages]
 mypy = "*"
 pytest = "*"
+pytest-vcr = "*"
 
 [requires]
 python_version = "3.8"
