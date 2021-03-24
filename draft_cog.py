@@ -178,6 +178,21 @@ class CubeDrafter(commands.Cog):
         if draft is not None:
             await draft.picks(ctx, ctx.author.id)
 
+    @commands.command()
+    async def abandon(self, ctx, draft_id = None):
+        """Vote to cancel an in-progress draft"""
+        draft = await self.find_draft_or_send_error(ctx, draft_id)
+        if draft is not None:
+            draft.abandon_votes.add(ctx.author.id)
+            if len(draft.abandon_votes) > 2:
+                draft.guild.drafts_in_progress.remove(draft)
+                chan = self.bot.get_channel(draft.start_channel_id)
+                await chan.send(f'{draft.id()} abandoned')
+            else:
+                await ctx.send(f'{draft.id()} needs {3 - len(draft.abandon_votes)} more votes to abandon.')
+
+
+
     @commands.command(name='pack', help="Resend your current pack")
     async def my_pack(self, ctx: Context, draft_id = None):
         draft = await self.find_draft_or_send_error(ctx, draft_id, True)

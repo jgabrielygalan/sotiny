@@ -6,7 +6,7 @@ import traceback
 import urllib.request
 import uuid
 from io import BytesIO
-from typing import Dict, List, Optional, TYPE_CHECKING
+from typing import Dict, List, Optional, Set, TYPE_CHECKING
 
 import aiohttp
 import attr
@@ -43,6 +43,7 @@ class GuildDraft:
     messages_by_player: Dict[int, dict] = attr.ib(factory=dict)
     draft: Optional[Draft] = None
     start_channel_id: Optional[int] = None
+    abandon_votes: Set[int] = attr.ib(factory=set)
 
     def id(self):
         return self.uuid
@@ -206,11 +207,6 @@ class GuildDraft:
         content = generate_file_content(self.draft.deck_of(player_id))
         file=BytesIO(bytes(content, 'utf-8'))
         await messagable.send(content=f"[{self.id_with_guild()}] Your deck", file=File(fp=file, filename=f"{self.guild.name}_{time.strftime('%Y%m%d')}.txt"))
-
-    # async def unsend_packs(self) -> None:
-    #     for d in self.messages_by_player.values():
-    #         for mid in d.keys():
-
 
     async def save_state(self, redis: Redis) -> None:
         state = json.dumps(cattr.unstructure(self.draft))
