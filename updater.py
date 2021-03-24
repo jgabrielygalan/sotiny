@@ -22,7 +22,10 @@ class Updater(commands.Cog):
 
     @tasks.loop(minutes=5.0)
     async def update(self) -> None:
-        subprocess.check_output(['git', 'fetch']).decode()
+        try:
+            subprocess.check_output(['git', 'fetch']).decode()
+        except subprocess.CalledProcessError:
+            return
         commit_id = subprocess.check_output(['git', 'rev-parse', f'origin/{self.branch}']).decode().strip()
         if commit_id != self.commit_id:
             print(f'origin/{self.branch} at {commit_id}')

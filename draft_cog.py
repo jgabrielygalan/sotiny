@@ -91,8 +91,8 @@ class CubeDrafter(commands.Cog):
             del self.guilds_by_id[guild.id]
 
     @commands.guild_only()
-    @commands.command(name='play', help='Register to play a draft', aliases=['join'])
-    async def play(self, ctx: Context):
+    @commands.command(help='Register to play a draft', aliases=['play'])
+    async def join(self, ctx: Context):
         player = ctx.author
         guild = await self.get_guild(ctx)
         print(f"Registering {player.display_name} for the next draft")

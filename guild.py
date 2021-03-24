@@ -1,3 +1,4 @@
+from cog_exceptions import DMsClosedException
 from copy import copy
 from typing import Dict, List, Optional
 
@@ -96,7 +97,15 @@ class Guild:
     async def start(self, ctx):
         players = copy(self.players)
         draft = GuildDraft(self, players)
-        await draft.start(ctx.channel, self.pending_conf.number_of_packs, self.pending_conf.cards_per_booster, self.pending_conf.cube_id)
+        try:
+            await draft.start(ctx.channel, self.pending_conf.number_of_packs, self.pending_conf.cards_per_booster, self.pending_conf.cube_id)
+        except DMsClosedException as e:
+            await self.remove_player(e.user)
+            error = f'Could not start draft because {e.user.mention} has disabled DMs from this server. {len(self.players)} of {self.pending_conf.max_players} are now registered.'
+            await ctx.channel.send(error)
+            for p in self.players.values():
+                await p.send(error)
+            return
         self.players = {}
         self.drafts_in_progress.append(draft)
 

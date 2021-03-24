@@ -17,7 +17,7 @@ from aioredis.commands import Redis
 from discord import File
 
 import image_fetcher
-from cog_exceptions import UserFeedbackException
+from cog_exceptions import DMsClosedException, UserFeedbackException
 from draft import (CARDS_WITH_FUNCTION, Draft, DraftEffect,
                    player_card_drafteffect)
 from draft_player import DraftPlayer
@@ -121,7 +121,10 @@ class GuildDraft:
         messageable = self.players[player_id]
         self.messages_by_player[player_id].clear()
         async with messageable.typing():
-            await messageable.send(f"[{self.id_with_guild()}] {intro}")
+            try:
+                await messageable.send(f"[{self.id_with_guild()}] {intro}")
+            except discord.Forbidden as e:
+                raise DMsClosedException(messageable, e.response, e.text) from e
             pack = self.draft.pack_of(player_id)
             if pack is None:
                 return
@@ -203,6 +206,11 @@ class GuildDraft:
         content = generate_file_content(self.draft.deck_of(player_id))
         file=BytesIO(bytes(content, 'utf-8'))
         await messagable.send(content=f"[{self.id_with_guild()}] Your deck", file=File(fp=file, filename=f"{self.guild.name}_{time.strftime('%Y%m%d')}.txt"))
+
+    # async def unsend_packs(self) -> None:
+    #     for d in self.messages_by_player.values():
+    #         for mid in d.keys():
+
 
     async def save_state(self, redis: Redis) -> None:
         state = json.dumps(cattr.unstructure(self.draft))
