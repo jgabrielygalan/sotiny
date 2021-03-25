@@ -184,12 +184,13 @@ class CubeDrafter(commands.Cog):
         draft = await self.find_draft_or_send_error(ctx, draft_id)
         if draft is not None:
             draft.abandon_votes.add(ctx.author.id)
-            if len(draft.abandon_votes) > 2:
+            needed = min(3, len(draft.players))
+            if len(draft.abandon_votes) >= needed:
                 draft.guild.drafts_in_progress.remove(draft)
                 chan = self.bot.get_channel(draft.start_channel_id)
                 await chan.send(f'{draft.id()} abandoned')
             else:
-                await ctx.send(f'{draft.id()} needs {3 - len(draft.abandon_votes)} more votes to abandon.')
+                await ctx.send(f'{draft.id()} needs {needed - len(draft.abandon_votes)} more votes to abandon.')
 
 
 
