@@ -98,10 +98,10 @@ class CubeDrafter(commands.Cog):
         print(f"Registering {player.display_name} for the next draft")
         await guild.add_player(player)
         num_players = len(guild.players)
-        cubeinfo = await guild.pending_conf.cubedata()
         if num_players == 1:
             msg = f"{ctx.author.mention}, I have registered you for a draft of https://cubecobra.com/cube/overview/{guild.pending_conf.cube_id}"
         else:
+            cubeinfo = await guild.pending_conf.cubedata()
             msg = f"{ctx.author.mention}, I have registered you for the next draft of {cubeinfo.name}"
         if guild.pending_conf.max_players:
             msg = msg + f'\nYou are player {num_players} of {guild.pending_conf.max_players}'
@@ -227,7 +227,12 @@ class CubeDrafter(commands.Cog):
         packs, cards = validate_and_cast_start_input(flags['packs'], flags['cards_per_pack'])
         guild.setup(packs, cards, cube, flags['players'])
         if cube:
-            await ctx.send(f"Okay. I'll start a draft of {cube} when we have {flags['players']} players")
+            try:
+                data = await guild.pending_conf.cubedata()
+                await ctx.send(f"Okay. I'll start a draft of {data.name} by {data.owner_name} (`{data.shortID}`) when we have {flags['players']} players")
+            except Exception:
+                await ctx.send(f"Unable to load data for https://cubecobra.com/cube/overview/{cube}, please double-check the ID and try again.")
+                raise
         else:
             await ctx.send(f"Okay. I'll start a draft when we have {flags['players']} players")
         await guild.save_state()

@@ -51,7 +51,7 @@ async def load_cubecobra_cube(cubecobra_id: str) -> Cube:
             response = await fetch(aios, url)
             cube: Cube = cattr.structure(json.loads(response), Cube)
             return cube
-    except aiohttp.ClientError:
+    except (aiohttp.ClientError, json.JSONDecodeError):
         raise UserFeedbackException(f"Unable to load cube list from {url}")
 
 async def fetch_name(id: str) -> str:
