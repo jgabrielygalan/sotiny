@@ -1,6 +1,6 @@
 import subprocess
 import sys
-from dis_snek import Snake
+from dis_snek import Snake, listen
 from dis_snek.models.scale import Scale
 
 from dis_snek.tasks import Task, triggers
@@ -14,9 +14,17 @@ class Updater(Scale):
             upstream = subprocess.check_output(['git', 'rev-parse', f'origin/{self.branch}']).decode().strip()
             if upstream == self.commit_id:
                 print(f'Currently running {self.commit_id} on {self.branch}')
+
         except subprocess.CalledProcessError as e:
             print(e)
             pass
+
+    @listen()
+    async def on_ready(self):
+        try:
+            self.update.start()
+        except Exception as e:
+            print(e)
 
     @Task.create(triggers.IntervalTrigger(minutes=5))
     async def update(self) -> None:

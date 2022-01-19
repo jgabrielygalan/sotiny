@@ -55,11 +55,16 @@ class GuildDraft:
 
     @property
     def start_channel_id(self) -> Optional[int]:
-        return self.draft.metadata.get('start_channel_id', None)
+        if self.draft:
+            return self.draft.metadata.get('start_channel_id', None)
+        return None
 
     @start_channel_id.setter
     def start_channel_id(self, value: int) -> None:
-        self.draft.metadata['start_channel_id'] = value
+        if self.draft:
+            self.draft.metadata['start_channel_id'] = value
+        else:
+            raise RuntimeError("Can't set start_channel_id before draft is initialized")
 
     def id(self) -> str:
         return self.uuid
