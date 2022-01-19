@@ -15,6 +15,9 @@ COMPOSITE="composite"
 class FetchException(Exception):
     pass
 
+def pdm_composite_url(cards: List[str]) -> str:
+    return 'https://pennydreadfulmagic.com/image/{0}/'.format('|'.join(cards))
+
 async def download_image_async(cards: List[str]):
     filepath = determine_filepath(cards, COMPOSITE)
     if acceptable_file(filepath):
@@ -103,9 +106,9 @@ def save_composite_image(in_filepaths, out_filepath: str) -> None:
         aspect_ratio = image.width / image.height       # (0.7059 for 480x680)
         image.thumbnail((aspect_ratio * 445, 445))      # (314.1255x445)
     widths, heights = zip(*(i.size for i in images))
-    #total_width = sum(widths)
+    # total_width = sum(widths)
     max_height = max(heights)
-    #new_image = Image.new('RGB', (total_width, max_height))
+    # new_image = Image.new('RGB', (total_width, max_height))
     new_image = Image.new('RGB', (1571, max_height)) # 5 cards wide: 314.1255*5
     x_offset = 0
     for image in images:

@@ -1,6 +1,6 @@
 import random
 from enum import Enum
-from typing import Any, Dict, Iterable, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 import attr
 
@@ -31,6 +31,7 @@ class Draft:
     _opened_packs: int = 0
     number_of_packs: int = 3
     cards_per_booster: int = 15
+    metadata: dict[str, Any] = attr.ib(factory=dict)
 
     def player_by_id(self, player_id: int) -> DraftPlayer:
         return self._state[self.players.index(player_id)]
@@ -38,7 +39,7 @@ class Draft:
     def pack_of(self, player_id: int) -> Optional[Booster]:
         try:
             return self._state[self.players.index(player_id)].current_pack
-        except IndexError as e:
+        except IndexError:
             return None
 
     def deck_of(self, player_id: int) -> List[str]:
@@ -54,10 +55,10 @@ class Draft:
         for i, player in enumerate(self.players):
             self._state.append(DraftPlayer(player, i))
         self.open_boosters_for_all_players()
-        return self._state # return all players to update
+        return self._state  # return all players to update
 
     def open_booster(self, player: DraftPlayer, number: int) -> Booster:
-        card_list = [self.cards.pop() for _ in range(0,self.cards_per_booster)]
+        card_list = [self.cards.pop() for _ in range(0, self.cards_per_booster)]
         booster = Booster(card_list, number)
         player.push_pack(booster, True)
         return booster
@@ -68,13 +69,13 @@ class Draft:
             self.open_booster(player, self._opened_packs)
         print("Opening pack for all players")
 
-    def get_pending_players(self):
+    def get_pending_players(self) -> List[DraftPlayer]:
         return [x for x in self._state if x.has_current_pack()]
 
-    def is_draft_finished(self):
+    def is_draft_finished(self) -> bool:
         return (self.is_pack_finished() and (self._opened_packs >= self.number_of_packs))
 
-    def is_pack_finished(self):
+    def is_pack_finished(self) -> bool:
         return len(self.get_pending_players()) == 0
 
     def pick(self, player_id: int, position: int) -> PickReturn:
@@ -116,7 +117,6 @@ class Draft:
                     pick_effects.append(effect)
                 result[player].append(player.last_pick())
 
-
         if new_booster:
             for player in self._state:
                 if player not in users_to_update:
@@ -129,10 +129,10 @@ class Draft:
 
     def check_if_draft_matters(self, player: DraftPlayer, pack: Booster) -> Optional[player_card_drafteffect]:
         pick = player.last_pick()
-        if pick == 'Lore Seeker': # Reveal Lore Seeker as you draft it. After you draft Lore Seeker, you may add a booster pack to the draft
+        if pick == 'Lore Seeker':  # Reveal Lore Seeker as you draft it. After you draft Lore Seeker, you may add a booster pack to the draft
             self.open_booster(player, pack.number)
             return (player, pick, DraftEffect.add_booster_to_draft)
-        if pick in ['Cogwork Librarian', "Leovold's Operative"]: # Swap me into a later booster!
+        if pick in ['Cogwork Librarian', "Leovold's Operative"]:  # Swap me into a later booster!
             return (player, pick, DraftEffect.no_immediate_effect)
 
         return None
@@ -148,12 +148,11 @@ class Draft:
             return nextbooster, pick_effect
         return False, None
 
-
     def get_next_player(self, player: DraftPlayer, pack: Booster) -> int:
         i = player.seat
         if pack.number % 2 == 1:
-            return self.players[(i+1)%len(self.players)]
+            return self.players[(i + 1) % len(self.players)]
         return self.players[i-1]
 
-def was_last_pick_of_pack(pack: Booster):
+def was_last_pick_of_pack(pack: Booster) -> bool:
     return pack.is_empty()

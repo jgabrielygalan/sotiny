@@ -4,7 +4,7 @@ from typing import Dict, List, Optional
 
 import aioredis
 import attr
-import discord
+import dis_snek
 
 from discord_draft import DEFAULT_CUBE_CUBECOBRA_ID, GuildDraft
 import cube
@@ -17,50 +17,49 @@ class DraftSettings:
     cube_id: str
 
     _cubedata: Optional[cube.Cube] = None
+
     async def cubedata(self) -> cube.Cube:
         if self._cubedata:
             return self._cubedata
         self._cubedata = await cube.load_cubecobra_cube(self.cube_id)
         return self._cubedata
 
-
-
-class Guild:
+class GuildData:
     """
     Maintains state about a Guild, and handles draft registration
     """
-    def __init__(self, guild: discord.Guild, redis_client: aioredis.Redis) -> None:
+    def __init__(self, guild: dis_snek.Guild, redis_client: aioredis.Redis) -> None:
         self.redis = redis_client
         self.guild = guild
         self.id = guild.id
         self.name = guild.name
         self.role = get_cubedrafter_role(guild)
         self.drafts_in_progress: List[GuildDraft] = []
-        self.players: Dict[int, discord.Member] = {} # players registered for the next draft
+        self.players: Dict[int, dis_snek.Member] = {}  # players registered for the next draft
         self.pending_conf: DraftSettings = DraftSettings(3, 15, 8, DEFAULT_CUBE_CUBECOBRA_ID)
 
-    async def add_player(self, player: discord.Member) -> None:
+    async def add_player(self, player: dis_snek.Member) -> None:
         self.players[player.id] = player
         if self.role is not None:
-            await player.add_roles(self.role)
+            await player.add_role(self.role)
 
-    async def remove_player(self, player: discord.Member) -> None:
+    async def remove_player(self, player: dis_snek.Member) -> None:
         if self.role is not None:
-            await player.remove_roles(self.role)
+            await player.remove_role(self.role)
         if player.id in self.players:
             del self.players[player.id]
 
-    def is_player_registered(self, player: discord.Member) -> bool:
+    def is_player_registered(self, player: dis_snek.Member) -> bool:
         return player.id in self.players
 
-    def is_player_playing(self, player: discord.Member) -> bool:
+    def is_player_playing(self, player: dis_snek.Member) -> bool:
         draft = next((x for x in self.drafts_in_progress if x.has_player(player.id)), None)
-        return draft != None
+        return draft is not None
 
     def no_registered_players(self) -> bool:
         return len(self.players) == 0
 
-    def get_registered_players(self) -> List[discord.Member]:
+    def get_registered_players(self) -> List[dis_snek.Member]:
         return list(self.players.values())
 
     def player_exists(self, player) -> bool:
@@ -109,7 +108,7 @@ class Guild:
         self.players = {}
         self.drafts_in_progress.append(draft)
 
-    async def try_pick_with_reaction(self, message_id: int, emoji, player: int) -> bool:
+    async def try_pick(self, message_id: int, player: int, emoji: str | int = None) -> bool:
         draft: Optional[GuildDraft] = next((x for x in self.drafts_in_progress if x.has_message(message_id)), None)
         if draft is None:
             return False
@@ -122,7 +121,7 @@ class Guild:
             return
         for player in draft.get_players():
             if not self.player_exists(player):
-                if discord.utils.find(lambda m: m.name == 'CubeDrafter', player.roles):
+                if dis_snek.utils.find(lambda m: m.name == 'CubeDrafter', player.roles):
                     await player.remove_roles(self.role)
 
     async def save_state(self) -> None:
@@ -142,47 +141,54 @@ class Guild:
             await draft.save_state(self.redis)
 
     async def load_state(self) -> None:
+        """
+        Loads the state of the guild from redis.
+        """
         if self.redis is None:
             return
         self.players.clear()
         for uid in await self.redis.smembers(f'sotiny:{self.guild.id}:players'):
             snowflake = int(uid)
-            member = self.guild.get_member(snowflake) or await self.guild.fetch_member(snowflake)
+            member = await self.guild.get_member(snowflake)
             if member is not None:
                 self.players[snowflake] = member
         self.setup(
             await self.redis.get(f'sotiny:{self.guild.id}:number_of_packs'),
             await self.redis.get(f'sotiny:{self.guild.id}:cards_per_booster'),
             await self.redis.get(f'sotiny:{self.guild.id}:cube_id'),
-            await self.redis.get(f'sotiny:{self.guild.id}:max_players')
-            )
+            await self.redis.get(f'sotiny:{self.guild.id}:max_players'),
+        )
 
         for bdraft_id in await self.redis.smembers(f'sotiny:{self.guild.id}:active_drafts'):
             draft_id = bdraft_id.decode()
             await self.load_draft(draft_id)
 
     async def load_draft(self, draft_id: str) -> Optional[GuildDraft]:
-            print(f'Loading {draft_id}')
-            draft = GuildDraft(self)
-            draft.uuid = draft_id
-            await draft.load_state(self.redis)
-            if draft.draft is None or draft.draft.is_draft_finished():
-                # await self.redis.srem(f'sotiny:{self.guild.id}:active_drafts', bdraft_id)
-                return None
-            self.drafts_in_progress.append(draft)
-            return draft
+        """
+        Loads a draft from redis.
+        """
+        print(f'Loading {draft_id}')
+        draft = GuildDraft(self)
+        draft.uuid = draft_id
+        await draft.load_state(self.redis)
+        if draft.draft is None or draft.draft.is_draft_finished():
+            # await self.redis.srem(f'sotiny:{self.guild.id}:active_drafts', bdraft_id)
+            return None
+        self.drafts_in_progress.append(draft)
+        return draft
 
 
-def get_cubedrafter_role(guild: discord.Guild) -> discord.Role:
-    role = discord.utils.find(lambda m: m.name == 'CubeDrafter', guild.roles)
+def get_cubedrafter_role(guild: dis_snek.Guild) -> dis_snek.Role:
+    return None
+    role = dis_snek.utils.find(lambda m: m.name == 'CubeDrafter', guild.roles)
     if role is None:
         print("Guild {n} doesn't have the CubeDrafter role".format(n=guild.name))
         return None
     top_role = guild.me.top_role
     print(f"{role.name} at {role.position}. {top_role.name} at {top_role.position}")
     if role.position < top_role.position:
-        print("Guild {n} has the CubeDrafter role with id: {i}".format(n=guild.name,i=role.id))
+        print("Guild {n} has the CubeDrafter role with id: {i}".format(n=guild.name, i=role.id))
         return role
     else:
-        print("Guild {n} has the CubeDrafter role with id: {i}, but with higher position than the bot, can't manage it".format(n=guild.name,i=role.id))
+        print("Guild {n} has the CubeDrafter role with id: {i}, but with higher position than the bot, can't manage it".format(n=guild.name, i=role.id))
         return None

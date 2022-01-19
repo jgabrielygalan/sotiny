@@ -32,11 +32,11 @@ class Cube(object):
     async def ensure_data(self) -> None:
         for ids in chunks(list({c.cardID for c in self.cards}), 75):
             await fetch_names(ids)
-        for c in cube.cards:
+        for c in self.cards:
             await c.ensure_data()
 
 
-async def fetch(session, url):
+async def fetch(session, url) -> str:
     async with session.get(url) as response:
         if response.status >= 400:
             raise UserFeedbackException(f"Unable to load {url}")

@@ -3,32 +3,41 @@ import traceback
 from typing import Dict, Optional, List
 
 import aioredis
-import discord
-import discord.utils
-from discord.ext import commands, flags, tasks
-from discord.ext.commands import Bot, Context
-from discord.ext.commands.context import Context
-from discord.ext.commands.errors import CheckFailure
+from dis_snek import Context, Scale, Snake
+import dis_snek
+from dis_snek.errors import CommandCheckFailure, CommandException
+from dis_snek.models import checks
+from dis_snek.models.checks import guild_only
+from dis_snek.models.command import check
+from dis_snek.models.context import MessageContext
+from dis_snek.models.listener import listen
+from dis_snek.tasks import triggers
+from dis_snek.tasks.task import Task
+import molter
 
 import utils
-from cog_exceptions import UserFeedbackException
+from cog_exceptions import NoPrivateMessage, PrivateMessageOnly, UserFeedbackException
 from discord_draft import GuildDraft
-from guild import Guild
+from guild import GuildData
 
 DEFAULT_PACK_NUMBER = 3
 DEFAULT_CARD_NUMBER = 15
 
 
-class CubeDrafter(commands.Cog):
-    def __init__(self, bot: Bot) -> None:
+class CubeDrafter(Scale):
+    def __init__(self, bot: Snake) -> None:
         self.bot = bot
-        self.guilds_by_id: Dict[int, Guild] = {}
-        self.redis = None
+        self.guilds_by_id: Dict[int, GuildData] = {}
         self.readied = False
+        try:
+            self.redis = aioredis.from_url(os.getenv('REDIS_URL', default='redis://localhost'), password=os.getenv('REDIS_PASSWORD'))
+        except ConnectionRefusedError:
+            self.redis = None
+            print('Could not connect to redis')
 
-    async def get_guild(self, ctx: commands.Context) -> Guild:
+    async def get_guild(self, ctx: Context) -> GuildData:
         if not ctx.guild:
-            raise commands.NoPrivateMessage()
+            raise NoPrivateMessage
         guild = self.guilds_by_id.get(ctx.guild.id)
         if guild is None:
 
@@ -40,27 +49,19 @@ class CubeDrafter(commands.Cog):
         traceback.print_exception(type(error), error, error.__traceback__)
         if isinstance(error, UserFeedbackException):
             await ctx.send(f"{ctx.author.mention}: {error}")
-        elif isinstance(error, commands.PrivateMessageOnly):
+        elif isinstance(error, PrivateMessageOnly):
             await ctx.send("That command can only be used in Private Message with the bot")
-        elif isinstance(error, commands.NoPrivateMessage):
+        elif isinstance(error, NoPrivateMessage):
             await ctx.send("You can't use this command in a private message")
-        elif isinstance(error, commands.CheckFailure):
+        elif isinstance(error, CommandCheckFailure):
             await ctx.send(error)
-        elif isinstance(error, commands.CommandError):
+        elif isinstance(error, CommandException):
             await ctx.send(f"Error executing command `{ctx.command.name}`: {str(error)}")
         else:
             await ctx.send("There was an error processing your command")
 
-    @commands.Cog.listener()
+    @listen()
     async def on_ready(self):
-        if self.readied:
-            return
-        try:
-            self.redis = await aioredis.create_redis_pool(os.getenv('REDIS_URL', default='redis://localhost'), password=os.getenv('REDIS_PASSWORD'))
-        except ConnectionRefusedError:
-            self.redis = None
-            print('Could not connect to redis')
-
         print("Bot is ready (from the Cog)")
         for guild in self.bot.guilds:
             print("Ready on guild: {n}".format(n=guild.name))
@@ -68,31 +69,35 @@ class CubeDrafter(commands.Cog):
         self.status.start()
         self.readied = True
 
-    async def setup_guild(self, guild: discord.Guild) -> Guild:
+    async def setup_guild(self, guild: dis_snek.Guild) -> GuildData:
         if not guild.id in self.guilds_by_id:
-            self.guilds_by_id[guild.id] = Guild(guild, self.redis)
-            if self.guilds_by_id[guild.id].role is None and guild.me.guild_permissions.manage_roles:
-                print(f'Creating CubeDrafter Role for {guild.name}')
-                role = await guild.create_role(name='CubeDrafter', reason='A role assigned to anyone currently drafting a cube')
-                self.guilds_by_id[guild.id].role = role
+            self.guilds_by_id[guild.id] = GuildData(guild, self.redis)
+            # if self.guilds_by_id[guild.id].role is None and guild.me.guild_permissions.manage_roles:
+            #     print(f'Creating CubeDrafter Role for {guild.name}')
+            #     role = await guild.create_role(name='CubeDrafter', reason='A role assigned to anyone currently drafting a cube')
+            #     self.guilds_by_id[guild.id].role = role
             await self.guilds_by_id[guild.id].load_state()
         return self.guilds_by_id[guild.id]
 
-    @commands.Cog.listener()
-    async def on_guild_join(self, guild):
+    @listen()
+    async def on_guild_join(self, event: dis_snek.events.GuildJoin):
+        guild = event.guild
         print("Joined {n}: {r}".format(n=guild.name, r=guild.roles))
         if not guild.id in self.guilds_by_id:
             await self.setup_guild(guild)
 
-    @commands.Cog.listener()
+    @listen()
     async def on_guild_remove(self, guild):
         print("Removed from {n}".format(n=guild.name))
         if guild.id in self.guilds_by_id:
             del self.guilds_by_id[guild.id]
 
-    @commands.guild_only()
-    @commands.command(help='Register to play a draft', aliases=['play'])
-    async def join(self, ctx: Context):
+    @molter.message_command()
+    @check(guild_only())
+    async def play(self, ctx: Context):
+        """
+        Register to play a draft
+        """
         player = ctx.author
         guild = await self.get_guild(ctx)
         print(f"Registering {player.display_name} for the next draft")
@@ -110,8 +115,10 @@ class CubeDrafter(commands.Cog):
             await guild.start(ctx)
         await guild.save_state()
 
-    @commands.guild_only()
-    @commands.command(name='cancel', aliases=['leave'])
+    join = molter.message_command(name='join')(play.callback)
+
+    @molter.message_command(name='leave')
+    @check(checks.guild_only())
     async def cancel(self, ctx):
         """Cancel your registration for an upcoming draft."""
         player = ctx.author
@@ -124,37 +131,46 @@ class CubeDrafter(commands.Cog):
             print(f"{player.display_name} is not registered, can't cancel")
             await ctx.send("{mention}, you are not registered for the draft, I can't cancel".format(mention=ctx.author.mention))
 
-    @commands.guild_only()
-    @commands.command(name='players', help='List registered players for the next draft')
+    @molter.message_command(name='players', help='List registered players for the next draft')
+    @check(checks.guild_only())
     async def players(self, ctx):
         guild = await self.get_guild(ctx)
 
         if guild.no_registered_players():
             await ctx.send("No players registered for the next draft")
         else:
-            await ctx.send("The following players are registered for the next draft: {p}".format(p=", ".join([p.display_name for p in guild.get_registered_players()])))
+            await ctx.send("The following players are registered for the next draft: {p}".format(p=", ".join([p.nick or p.user.username for p in guild.get_registered_players()])))
 
-    @commands.guild_only()
-    @commands.command(name='start', help="Start the draft with the registered players. Packs is the number of packs to open per player (default 3). cards is the number of cards per booster (default 15). cube is the CubeCobra id of a Cube (default Penny Dreadful Eternal Cube).")
-    async def start(self, ctx):
+    @molter.message_command(name='start', help="Start the draft with the registered players. Packs is the number of packs to open per player (default 3). cards is the number of cards per booster (default 15). cube is the CubeCobra id of a Cube (default Penny Dreadful Eternal Cube).")
+    @check(checks.guild_only())
+    async def start(self, ctx: MessageContext) -> None:
         guild = await self.get_guild(ctx)
         if guild.no_registered_players():
             await ctx.send("Can't start the draft, there are no registered players")
             return
-        async with ctx.typing():
-            await guild.start(ctx)
+        await ctx.channel.trigger_typing()
+        await guild.start(ctx)
         await guild.save_state()
 
-    @commands.Cog.listener()
-    async def on_raw_reaction_add(self, payload: discord.RawReactionActionEvent) -> None:
+    @listen()
+    async def on_raw_reaction_add(self, payload: dis_snek.events.MessageReactionAdd) -> None:
         if payload.user_id == self.bot.user.id:
             return
         for guild in self.guilds_by_id.values():
-            handled = await guild.try_pick_with_reaction(payload.message_id, payload.emoji.name, payload.user_id)
+            handled = await guild.try_pick(payload.message_id, payload.user_id, payload.emoji.name)
             if handled:
                 await guild.save_state()
 
-    @commands.command(name='pending')
+    @dis_snek.listen()
+    async def on_component(self, event: dis_snek.events.Component):
+        ctx: dis_snek.ComponentContext = event.context
+        for guild in self.guilds_by_id.values():
+            handled = await guild.try_pick(ctx.message.id, ctx.author.id, ctx.custom_id)
+            if handled:
+                await guild.save_state()
+
+
+    @molter.message_command(name='pending')
     async def pending(self, ctx):
         """
         Show players who still haven't picked
@@ -171,14 +187,14 @@ class CubeDrafter(commands.Cog):
             else:
                 await ctx.send(prefix + "No pending players")
 
-    @commands.dm_only()
-    @commands.command(name='deck', help="Show your current deck as images")
+    @molter.message_command(name='deck', help="Show your current deck as images")
+    @check(checks.dm_only())
     async def my_deck(self, ctx, draft_id = None):
         draft = await self.find_draft_or_send_error(ctx, draft_id)
         if draft is not None:
             await draft.picks(ctx, ctx.author.id)
 
-    @commands.command()
+    @molter.message_command()
     async def abandon(self, ctx, draft_id = None):
         """Vote to cancel an in-progress draft"""
         draft = await self.find_draft_or_send_error(ctx, draft_id)
@@ -192,9 +208,7 @@ class CubeDrafter(commands.Cog):
             else:
                 await ctx.send(f'{draft.id()} needs {needed - len(draft.abandon_votes)} more votes to abandon.')
 
-
-
-    @commands.command(name='pack', help="Resend your current pack")
+    @molter.message_command(name='pack', help="Resend your current pack")
     async def my_pack(self, ctx: Context, draft_id = None):
         draft = await self.find_draft_or_send_error(ctx, draft_id, True)
         if draft is None or draft.draft is None:
@@ -206,7 +220,7 @@ class CubeDrafter(commands.Cog):
 
         await draft.send_current_pack_to_player("Your pack:", ctx.author.id)
 
-    @commands.command(name='drafts', help="Show your in progress drafts")
+    @molter.message_command(name='drafts', help="Show your in progress drafts")
     async def my_drafts(self, ctx):
         drafts = await self.find_drafts_by_player(ctx)
         if len(drafts) == 0:
@@ -216,11 +230,11 @@ class CubeDrafter(commands.Cog):
             list = divider.join([f"[{x.guild.name}:{x.id()}] {x.draft.number_of_packs} packs ({x.draft.cards_per_booster} cards). {', '.join([p.display_name for p in x.get_players()])}" for x in drafts])
             await ctx.send(f"{list}")
 
-    @commands.guild_only()
-    @flags.add_flag('--packs', type=int, default=3)
-    @flags.add_flag('--cards-per-pack', type=int, default=15)
-    @flags.add_flag('--players', type=int, default=8)
-    @flags.command(name='setup')
+    # @commands.guild_only()
+    # @flags.add_flag('--packs', type=int, default=3)
+    # @flags.add_flag('--cards-per-pack', type=int, default=15)
+    # @flags.add_flag('--players', type=int, default=8)
+    # @flags.command(name='setup')
     async def setup(self, ctx, cube: Optional[str], **flags) -> None:
         """Set up an upcoming draft"""
         guild = await self.get_guild(ctx)
@@ -237,31 +251,30 @@ class CubeDrafter(commands.Cog):
             await ctx.send(f"Okay. I'll start a draft when we have {flags['players']} players")
         await guild.save_state()
 
-
     async def find_draft_or_send_error(self, ctx, draft_id=None, only_active=False) -> GuildDraft:
         drafts = None
         if draft_id is None:
             drafts = await self.find_drafts_by_player(ctx)
             if not drafts:
-                raise CheckFailure("You are not currently in a draft")
+                raise CommandCheckFailure("You are not currently in a draft")
             if only_active:
                 drafts = [d for d in drafts if d.draft and d.draft.player_by_id(ctx.author.id).current_pack]
             if not drafts:
-                raise CheckFailure("You have no packs in front of you")
+                raise CommandCheckFailure("You have no packs in front of you")
             if len(drafts) > 1:
                 ids = "\n".join([f"{x.guild.name}: **{x.id()}**" for x in drafts])
-                raise CheckFailure("You are playing in several drafts. Please specify the draft id:\n" + ids)
+                raise CommandCheckFailure("You are playing in several drafts. Please specify the draft id:\n" + ids)
             else:
                 return drafts[0]
         else:
             draft = self.find_draft_by_id(draft_id)
             if draft is None:
-                raise CheckFailure("You are not playing any draft")
+                raise CommandCheckFailure("You are not playing any draft")
             return draft
 
-    async def find_drafts_by_player(self, ctx: commands.Context) -> List[GuildDraft]:
+    async def find_drafts_by_player(self, ctx: Context) -> List[GuildDraft]:
         player = ctx.author
-        if ctx.guild: # Don't leak other guilds if invoked in a guild context.
+        if ctx.guild:  # Don't leak other guilds if invoked in a guild context.
             return (await self.get_guild(ctx)).get_drafts_for_player(player)
         drafts = []
         for guild in self.guilds_by_id.values():
@@ -275,7 +288,7 @@ class CubeDrafter(commands.Cog):
                 return draft
         return None
 
-    @tasks.loop(seconds=60.0)
+    @Task.create(triggers.IntervalTrigger(minutes=1))
     async def status(self) -> None:
         drafts = []
         count = 0
@@ -284,9 +297,9 @@ class CubeDrafter(commands.Cog):
                 drafts.extend(guild.drafts_in_progress)
                 count = count + 1
         if count == 0:
-            game = discord.Game('>play to start drafting')
+            game = '>play to start drafting'
         else:
-            game = discord.Game(f'{len(drafts)} drafts across {len(self.guilds_by_id)} guilds.')
+            game = f'{len(drafts)} drafts across {len(self.guilds_by_id)} guilds.'
         await self.bot.change_presence(activity=game)
 
 
@@ -304,5 +317,5 @@ def validate_and_cast_start_input(packs: int, cards: int):
         raise UserFeedbackException("cards should be a number greater than 1")
     return (packs_valid, cards_valid)
 
-def setup(bot: commands.Bot):
-    bot.add_cog(CubeDrafter(bot))
+def setup(bot: Snake):
+    CubeDrafter(bot)
