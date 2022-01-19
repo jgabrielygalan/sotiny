@@ -14,7 +14,6 @@ class Updater(Scale):
             upstream = subprocess.check_output(['git', 'rev-parse', f'origin/{self.branch}']).decode().strip()
             if upstream == self.commit_id:
                 print(f'Currently running {self.commit_id} on {self.branch}')
-                self.update.start()  # pylint: disable=no-member
         except subprocess.CalledProcessError as e:
             print(e)
             pass
