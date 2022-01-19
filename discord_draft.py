@@ -34,7 +34,7 @@ if TYPE_CHECKING:
 EMOJIS_BY_NUMBER = {1: '1⃣', 2: '2⃣', 3: '3⃣', 4: '4⃣', 5: '5⃣'}
 NUMBERS_BY_EMOJI = {
     '1⃣': 1, '2⃣': 2, '3⃣': 3, '4⃣': 4, '5⃣': 5,
-    '1': 1, '2': 2, '3': 3, '4': 4, '5': 5
+    '1': 1, '2': 2, '3': 3, '4': 4, '5': 5,
 }
 DEFAULT_CUBE_CUBECOBRA_ID = "penny_dreadful"
 
@@ -74,8 +74,7 @@ class GuildDraft:
 
     def get_pending_players(self):
         pending = self.draft.get_pending_players()
-        players = [self.players[x.id] for x in pending]
-        return players
+        return [self.players[x.id] for x in pending]
 
     async def start(self, channel: dis_snek.GuildText, packs: int, cards: int, cube: str):
         if not self.uuid:
@@ -100,7 +99,7 @@ class GuildDraft:
             print(f"Missing message_id({message_id} + emoji({emoji})")
             return
 
-        return await self.handle_pick_response(info.updates, player_id, info.draft_effect)
+        await self.handle_pick_response(info.updates, player_id, info.draft_effect)
 
     async def picks(self, messageable, player_id):
         cards = self.draft.deck_of(player_id)
@@ -110,9 +109,10 @@ class GuildDraft:
         else:
             await messageable.send(f"[{self.id_with_guild()}] Deck: ")
         for page in range(0, int(len(cards) / 5) + 1):
-            l = cards[5 * page: 5 * page + 5]
-            if l is not None and len(l) > 0:
-                image_file = await image_fetcher.download_image_async(l)
+            row = cards[5 * page: 5 * page + 5]
+            if row is not None and len(row) > 0:
+                cards = list(row)
+                image_file = await image_fetcher.download_image_async(cards)
                 await send_image_with_retry(messageable, image_file)
         await self.send_deckfile_to_player(messageable, player_id)
 
@@ -142,7 +142,8 @@ class GuildDraft:
         for row in rows:
             if row is not None and len(row) > 0:
                 image_file = await image_fetcher.download_image_async(row)
-                components: list[ActionRow] = self.buttons(row)
+                cardrow: list[str] = list(row)
+                components: list[ActionRow] = self.buttons(cardrow)
                 message = await send_image_with_retry(messageable, image_file, components=components)
                 self.messages_by_player[player_id][message.id] = {"row": i, "message": message, "len": len(row)}
                 i += 1
@@ -159,7 +160,7 @@ class GuildDraft:
             for a in actions:
                 await message.add_reaction(emoji_cog.get_emoji(a))
 
-    def buttons(self, cards: List[str]) -> List[ActionRow]:
+    def buttons(self, cards: Iterable[str]) -> List[ActionRow]:
         return [ActionRow(
             *[
                 Button(style=ButtonStyles.BLUE,
@@ -167,7 +168,7 @@ class GuildDraft:
                        custom_id=f'{i + 1}',
                        )
                 for i, c in enumerate(cards)
-            ]
+            ],
         )]
 
     async def handle_pick_response(self, updates: Dict[DraftPlayer, List[str]], player_id: int, effects: List[player_card_drafteffect]) -> None:
@@ -266,7 +267,7 @@ async def send_image_with_retry(user: SendMixin, image_file: str, text: str = ''
     if message and message.attachments and message.attachments[0].size == 0:
         print('Message size is zero so resending')
         await message.delete()
-        message = await user.send(file=image_file, content=text, **kwargs)
+        return await user.send(file=image_file, content=text, **kwargs)
     return message
 
 
@@ -321,12 +322,10 @@ async def load_cubecobra_cube(cubecobra_id: str) -> List[str]:
             print(response)
             print(f"{type(response)}")
             return response
-    except (urllib.error.HTTPError, aiohttp.ClientError):
-        raise UserFeedbackException(f"Unable to load cube list from {url}")
+    except (urllib.error.HTTPError, aiohttp.ClientError) as e:
+        raise UserFeedbackException(f"Unable to load cube list from {url}") from e
 
 
 def get_cards(file_name: str = 'EternalPennyDreadfulCube.txt') -> List[str]:
     with open(file_name) as f:
-        read_cards = f.read().splitlines()
-
-    return read_cards
+        return f.read().splitlines()

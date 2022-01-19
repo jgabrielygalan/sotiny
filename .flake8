@@ -2,7 +2,8 @@
 ignore = 
     E501,E302,E402,E713,W504,W503,E251,Q000,
     E226
-    D, ANN
+    D, ANN,
+    S,
 
 per-file-ignores =
     updater.py:S607

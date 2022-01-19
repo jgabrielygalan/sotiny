@@ -43,7 +43,7 @@ class DraftPlayer:
         self.current_pack = None
         if len(self.queue) > 0:
             self.current_pack = self.queue.pop(0)
-        return current_pack
+        return current_pack  # noqa: R504
 
     def autopick(self) -> Optional[Booster]:
         return self.pick(1)

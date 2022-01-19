@@ -12,3 +12,4 @@ async def test_long_id():
 @pytest.mark.asyncio
 async def test_a93():
     a93 = await cube.load_cubecobra_cube("a93")
+    assert a93.cards

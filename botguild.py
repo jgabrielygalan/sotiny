@@ -24,8 +24,7 @@ class SelfGuild(Scale):
         guild = await self.get_server()
         print(f'Uploading {name} to {guild.name}')
         with open(path, 'rb') as f:
-            emoji = await guild.create_custom_emoji(name=name, image=f.read())
-        return emoji
+            return await guild.create_custom_emoji(name=name, image=f.read())
 
 def setup(bot: Snake) -> None:
     if not os.path.exists('emoji_images'):

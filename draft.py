@@ -140,6 +140,8 @@ class Draft:
     def autopick(self, player: DraftPlayer) -> Tuple[bool, Optional[player_card_drafteffect]]:
         if player.has_one_card_in_current_pack():
             pack = player.autopick()
+            if not pack:
+                return False, None
             pick_effect = self.check_if_draft_matters(player, pack)
             nextbooster = False
             if self.is_pack_finished() and not self.is_draft_finished():

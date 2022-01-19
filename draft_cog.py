@@ -40,8 +40,7 @@ class CubeDrafter(Scale):
             raise NoPrivateMessage
         guild = self.guilds_by_id.get(ctx.guild.id)
         if guild is None:
-
-            guild = await self.setup_guild(ctx.guild)
+            return await self.setup_guild(ctx.guild)
         return guild
 
     async def cog_command_error(self, ctx: Context, error) -> None:
@@ -168,7 +167,6 @@ class CubeDrafter(Scale):
             handled = await guild.try_pick(ctx.message.id, ctx.author.id, ctx.custom_id)
             if handled:
                 await guild.save_state()
-
 
     @molter.message_command(name='pending')
     async def pending(self, ctx):

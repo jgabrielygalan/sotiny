@@ -51,4 +51,3 @@ class TestBooster(unittest.TestCase):
         booster = Booster([], 1)
         result = booster.pick_by_position(1)
         self.assertIsNone(result)
-
