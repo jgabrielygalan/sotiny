@@ -1,14 +1,21 @@
 from typing import Union
-import discord
-from discord.errors import Forbidden
-from discord.ext import commands
+
+from dis_snek.errors import CommandException, Forbidden
+from dis_snek.models.discord_objects.user import Member, User
 
 
-class UserFeedbackException(commands.CommandError):
+class UserFeedbackException(CommandException):
     pass
 
 class DMsClosedException(Forbidden):
-    user: Union[discord.Member, discord.User]
-    def __init__(self, user: Union[discord.Member, discord.User], response, message):
+    user: Union[Member, User]
+
+    def __init__(self, user: Union[Member, User], response, message):
         self.user = user
         super().__init__(response, message)
+
+class NoPrivateMessage(CommandException):
+    pass
+
+class PrivateMessageOnly(CommandException):
+    pass

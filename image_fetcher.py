@@ -3,19 +3,22 @@ import os
 import re
 import unicodedata
 import urllib.request
-from typing import List
+from typing import Iterable
 
 import aiohttp
 from PIL import Image
 
-CARD_BACK=Image.open("./card_back.jpg")
-STANDALONE="standalone"
-COMPOSITE="composite"
+CARD_BACK = Image.open("./card_back.jpg")
+STANDALONE = "standalone"
+COMPOSITE = "composite"
 
 class FetchException(Exception):
     pass
 
-async def download_image_async(cards: List[str]):
+def pdm_composite_url(cards: Iterable[str]) -> str:
+    return 'https://pennydreadfulmagic.com/image/{0}/'.format('|'.join(cards))
+
+async def download_image_async(cards: Iterable[str]):
     filepath = determine_filepath(cards, COMPOSITE)
     if acceptable_file(filepath):
         return filepath
@@ -65,7 +68,7 @@ async def store_async(url: str, path: str) -> aiohttp.ClientResponse:
                     fout.write(chunk)
             return response
     except aiohttp.ClientError as e:
-        raise FetchException(e)
+        raise FetchException(e) from e
 
 
 def determine_filepath(cards, type, prefix: str = '') -> str:
@@ -103,10 +106,10 @@ def save_composite_image(in_filepaths, out_filepath: str) -> None:
         aspect_ratio = image.width / image.height       # (0.7059 for 480x680)
         image.thumbnail((aspect_ratio * 445, 445))      # (314.1255x445)
     widths, heights = zip(*(i.size for i in images))
-    #total_width = sum(widths)
+    # total_width = sum(widths)
     max_height = max(heights)
-    #new_image = Image.new('RGB', (total_width, max_height))
-    new_image = Image.new('RGB', (1571, max_height)) # 5 cards wide: 314.1255*5
+    # new_image = Image.new('RGB', (total_width, max_height))
+    new_image = Image.new('RGB', (1571, max_height))  # 5 cards wide: 314.1255*5
     x_offset = 0
     for image in images:
         new_image.paste(image, (x_offset, 0))
@@ -124,10 +127,11 @@ def escape(str_input: str, skip_double_slash: bool = False) -> str:
     s = str_input
     if skip_double_slash:
         s = s.replace('//', '-split-')
-    s = urllib.parse.quote_plus(s.replace(u'Æ', 'AE')).lower() # type: ignore # urllib isn't fully stubbed
+    s = urllib.parse.quote_plus(s.replace(u'Æ', 'AE')).lower()
     if skip_double_slash:
         s = s.replace('-split-', '//')
-    return s
+    return s  # noqa: R504
+
 
 if not os.path.exists('./images'):
     os.mkdir('./images')

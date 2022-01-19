@@ -9,10 +9,10 @@ class Booster(object):
     number: int
     pick_number = 1
 
-    def is_empty(self):
+    def is_empty(self) -> bool:
         return self.number_of_cards() == 0
 
-    def number_of_cards(self):
+    def number_of_cards(self) -> int:
         return len(self.cards)
 
     def pick_by_position(self, position: int) -> Optional[str]:

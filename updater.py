@@ -1,12 +1,12 @@
-import os
 import subprocess
 import sys
+from dis_snek import Snake
+from dis_snek.models.scale import Scale
 
-from discord.ext import commands, tasks
+from dis_snek.tasks import Task, triggers
 
-
-class Updater(commands.Cog):
-    def __init__(self, bot: commands.Bot) -> None:
+class Updater(Scale):
+    def __init__(self, bot: Snake) -> None:
         self.bot = bot
         self.commit_id = subprocess.check_output(['git', 'rev-parse', 'HEAD']).decode().strip()
         self.branch = subprocess.check_output(['git', 'rev-parse', '--abbrev-ref', 'HEAD']).strip().decode()
@@ -19,8 +19,7 @@ class Updater(commands.Cog):
             print(e)
             pass
 
-
-    @tasks.loop(minutes=5.0)
+    @Task.create(triggers.IntervalTrigger(minutes=5))
     async def update(self) -> None:
         try:
             subprocess.check_output(['git', 'fetch']).decode()
@@ -35,7 +34,7 @@ class Updater(commands.Cog):
                 subprocess.check_output(['pipenv', 'sync']).decode()
             except Exception as c:
                 print(c)
-            await self.bot.close()
+            sys.exit(0)
 
-def setup(bot: commands.Bot) -> None:
-    bot.add_cog(Updater(bot))
+def setup(bot: Snake) -> None:
+    Updater(bot)

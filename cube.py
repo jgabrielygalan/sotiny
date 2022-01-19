@@ -32,11 +32,11 @@ class Cube(object):
     async def ensure_data(self) -> None:
         for ids in chunks(list({c.cardID for c in self.cards}), 75):
             await fetch_names(ids)
-        for c in cube.cards:
+        for c in self.cards:
             await c.ensure_data()
 
 
-async def fetch(session, url):
+async def fetch(session, url) -> str:
     async with session.get(url) as response:
         if response.status >= 400:
             raise UserFeedbackException(f"Unable to load {url}")
@@ -51,8 +51,8 @@ async def load_cubecobra_cube(cubecobra_id: str) -> Cube:
             response = await fetch(aios, url)
             cube: Cube = cattr.structure(json.loads(response), Cube)
             return cube
-    except (aiohttp.ClientError, json.JSONDecodeError):
-        raise UserFeedbackException(f"Unable to load cube list from {url}")
+    except (aiohttp.ClientError, json.JSONDecodeError) as e:
+        raise UserFeedbackException(f"Unable to load cube list from {url}") from e
 
 async def fetch_name(id: str) -> str:
     try:
@@ -60,8 +60,8 @@ async def fetch_name(id: str) -> str:
         async with aiohttp.ClientSession(timeout=timeout) as aios:
             response = await fetch(aios, f'https://api.scryfall.com/cards/{id}')
             return json.loads(response).get('name')
-    except aiohttp.ClientError:
-        raise UserFeedbackException(f"Unable to load card name from {id}")
+    except aiohttp.ClientError as e:
+        raise UserFeedbackException(f"Unable to load card name from {id}") from e
 
 async def fetch_names(ids: List[str]) -> None:
     cat = {'identifiers': [{'id': i} for i in ids]}
@@ -75,8 +75,8 @@ async def fetch_names(ids: List[str]) -> None:
                     return
             data: List[dict] = json.loads(await response.text())['data']
             SF_NAMES.update({d['id']: d['name'] for d in data})
-    except aiohttp.ClientError:
-        raise UserFeedbackException(f"Unable to load card name from {ids}")
+    except aiohttp.ClientError as e:
+        raise UserFeedbackException(f"Unable to load card name from {ids}") from e
 
 def chunks(lst: list, n: int):
     """Yield successive n-sized chunks from lst."""
