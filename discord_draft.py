@@ -231,7 +231,7 @@ class GuildDraft:
             return
         content = generate_file_content(self.draft.deck_of(player_id))
         file = BytesIO(bytes(content, 'utf-8'))
-        await messagable.send(content=f"[{self.id_with_guild()}] Your deck", file=File(fp=file, filename=f"{self.guild.name}_{time.strftime('%Y%m%d')}.txt"))
+        await messagable.send(content=f"[{self.id_with_guild()}] Your deck", file=File(file=file, filename=f"{self.guild.name}_{time.strftime('%Y%m%d')}.txt"))
 
     async def save_state(self, redis: Redis) -> None:
         state = json.dumps(cattr.unstructure(self.draft))
