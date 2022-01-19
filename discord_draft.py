@@ -123,8 +123,8 @@ class GuildDraft:
         for page in range(0, int(len(cards) / 5) + 1):
             row = cards[5 * page: 5 * page + 5]
             if row is not None and len(row) > 0:
-                cards = list(row)
-                image_file = await image_fetcher.download_image_async(cards)
+                cardlist = list(row)
+                image_file = await image_fetcher.download_image_async(cardlist)
                 await send_image_with_retry(messageable, image_file)
         await self.send_deckfile_to_player(messageable, player_id)
 
