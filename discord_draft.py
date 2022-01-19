@@ -51,8 +51,15 @@ class GuildDraft:
     uuid: str = ''
     messages_by_player: Dict[int, dict] = attr.ib(factory=dict)
     draft: Optional[Draft] = None
-    start_channel_id: Optional[int] = None
     abandon_votes: Set[int] = attr.ib(factory=set)
+
+    @property
+    def start_channel_id(self) -> Optional[int]:
+        return self.draft.metadata.get('start_channel_id', None)
+
+    @start_channel_id.setter
+    def start_channel_id(self, value: int) -> None:
+        self.draft.metadata['start_channel_id'] = value
 
     def id(self) -> str:
         return self.uuid
