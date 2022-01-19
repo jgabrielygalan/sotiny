@@ -91,7 +91,7 @@ class GuildDraft:
         await asyncio.gather(*[self.send_pack_to_player(intro, p) for p in players_to_update])
 
     async def pick(self, player_id, message_id=None, emoji: str = None) -> None:
-        if message_id is not None and emoji is not None:
+        if message_id is not None and emoji is not None and self.draft is not None:
             page_number = self.messages_by_player[player_id][message_id]["row"]
             item_number = NUMBERS_BY_EMOJI[emoji]
             print("Player {u} reacted with {n} for row {i}".format(u=player_id, n=item_number, i=page_number))

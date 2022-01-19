@@ -3,7 +3,7 @@ import os
 import re
 import unicodedata
 import urllib.request
-from typing import List
+from typing import Iterable, List
 
 import aiohttp
 from PIL import Image
@@ -15,7 +15,7 @@ COMPOSITE="composite"
 class FetchException(Exception):
     pass
 
-def pdm_composite_url(cards: List[str]) -> str:
+def pdm_composite_url(cards: Iterable[str]) -> str:
     return 'https://pennydreadfulmagic.com/image/{0}/'.format('|'.join(cards))
 
 async def download_image_async(cards: List[str]):

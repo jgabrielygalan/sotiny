@@ -45,7 +45,7 @@ class DraftPlayer:
             self.current_pack = self.queue.pop(0)
         return current_pack
 
-    def autopick(self) -> Booster:
+    def autopick(self) -> Optional[Booster]:
         return self.pick(1)
 
     def last_pick(self) -> str:

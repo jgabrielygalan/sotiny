@@ -108,7 +108,7 @@ class GuildData:
         self.players = {}
         self.drafts_in_progress.append(draft)
 
-    async def try_pick(self, message_id: int, player: int, emoji: str | int = None) -> bool:
+    async def try_pick(self, message_id: int, player: int, emoji: str) -> bool:
         draft: Optional[GuildDraft] = next((x for x in self.drafts_in_progress if x.has_message(message_id)), None)
         if draft is None:
             return False
