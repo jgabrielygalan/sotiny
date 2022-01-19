@@ -43,22 +43,6 @@ class CubeDrafter(Scale):
             return await self.setup_guild(ctx.guild)
         return guild
 
-    async def cog_command_error(self, ctx: Context, error) -> None:
-        print(error)
-        traceback.print_exception(type(error), error, error.__traceback__)
-        if isinstance(error, UserFeedbackException):
-            await ctx.send(f"{ctx.author.mention}: {error}")
-        elif isinstance(error, PrivateMessageOnly):
-            await ctx.send("That command can only be used in Private Message with the bot")
-        elif isinstance(error, NoPrivateMessage):
-            await ctx.send("You can't use this command in a private message")
-        elif isinstance(error, CommandCheckFailure):
-            await ctx.send(error)
-        elif isinstance(error, CommandException):
-            await ctx.send(f"Error executing command `{ctx.command.name}`: {str(error)}")
-        else:
-            await ctx.send("There was an error processing your command")
-
     @listen()
     async def on_ready(self):
         print("Bot is ready (from the Cog)")
@@ -254,14 +238,14 @@ class CubeDrafter(Scale):
         if draft_id is None:
             drafts = await self.find_drafts_by_player(ctx)
             if not drafts:
-                raise CommandCheckFailure("You are not currently in a draft")
+                raise CommandException("You are not currently in a draft")
             if only_active:
                 drafts = [d for d in drafts if d.draft and d.draft.player_by_id(ctx.author.id).current_pack]
             if not drafts:
-                raise CommandCheckFailure("You have no packs in front of you")
+                raise CommandException("You have no packs in front of you")
             if len(drafts) > 1:
                 ids = "\n".join([f"{x.guild.name}: **{x.id()}**" for x in drafts])
-                raise CommandCheckFailure("You are playing in several drafts. Please specify the draft id:\n" + ids)
+                raise CommandException("You are playing in several drafts. Please specify the draft id:\n" + ids)
             else:
                 return drafts[0]
         else:

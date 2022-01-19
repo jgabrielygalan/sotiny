@@ -1,9 +1,12 @@
 import os
+import traceback
 from dis_snek.models.listener import listen
 from traceback_with_variables import activate_by_import  # noqa
 
 import dotenv
-from dis_snek import Snake
+from dis_snek import Snake, Context, CommandCheckFailure, CommandException
+
+from cog_exceptions import NoPrivateMessage, PrivateMessageOnly, UserFeedbackException
 
 dotenv.load_dotenv()
 
@@ -11,8 +14,25 @@ if not os.path.exists('drafts'):
     os.mkdir('drafts')
 
 PREFIX = os.getenv('BOT_PREFIX', default='>')
-bot = Snake(default_prefix=PREFIX)
-# bot.owner_ids = {154363842451734528, 323861986356232204, 411664250768195586}
+
+class Bot(Snake):
+    async def on_command_error(self, ctx: Context, error: Exception, *args, **kwargs) -> None:
+        print(error)
+        traceback.print_exception(type(error), error, error.__traceback__)
+        if isinstance(error, UserFeedbackException):
+            await ctx.send(f"{ctx.author.mention}: {error}")
+        elif isinstance(error, PrivateMessageOnly):
+            await ctx.send("That command can only be used in Private Message with the bot")
+        elif isinstance(error, NoPrivateMessage):
+            await ctx.send("You can't use this command in a private message")
+        elif isinstance(error, CommandCheckFailure):
+            await ctx.send(str(error))
+        elif isinstance(error, CommandException):
+            await ctx.send(str(error))
+        else:
+            await ctx.send("There was an error processing your command")
+
+bot = Bot(default_prefix=PREFIX)
 
 @listen()
 async def on_ready() -> None:
