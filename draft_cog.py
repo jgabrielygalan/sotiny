@@ -6,7 +6,6 @@ import aioredis
 from dis_snek import TYPE_CHECK_FUNCTION, Context, Scale, Snake
 import dis_snek
 from dis_snek.errors import CommandException
-from dis_snek.models.checks import guild_only
 from dis_snek.models.command import check
 from dis_snek.models.context import MessageContext
 from dis_snek.models.listener import listen
