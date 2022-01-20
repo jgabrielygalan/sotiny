@@ -3,10 +3,9 @@ import traceback
 from typing import Dict, Optional, List
 
 import aioredis
-from dis_snek import Context, Scale, Snake
+from dis_snek import TYPE_CHECK_FUNCTION, Context, Scale, Snake
 import dis_snek
-from dis_snek.errors import CommandCheckFailure, CommandException
-from dis_snek.models import checks
+from dis_snek.errors import CommandException
 from dis_snek.models.checks import guild_only
 from dis_snek.models.command import check
 from dis_snek.models.context import MessageContext
@@ -23,6 +22,25 @@ from guild import GuildData
 DEFAULT_PACK_NUMBER = 3
 DEFAULT_CARD_NUMBER = 15
 
+def dm_only() -> TYPE_CHECK_FUNCTION:
+    """This command may only be ran in a DM."""
+
+    async def check(ctx: Context) -> bool:
+        if ctx.guild:
+            raise PrivateMessageOnly("This command may only be ran in a DM.")
+        return True
+
+    return check
+
+def guild_only() -> TYPE_CHECK_FUNCTION:
+    """This command may only be ran in a guild."""
+
+    async def check(ctx: Context) -> bool:
+        if not ctx.guild:
+            raise NoPrivateMessage("This command may only be ran in a guild.")
+        return True
+
+    return check
 
 class CubeDrafter(Scale):
     def __init__(self, bot: Snake) -> None:
@@ -101,7 +119,7 @@ class CubeDrafter(Scale):
     join = molter.message_command(name='join')(play.callback)
 
     @molter.message_command(name='leave')
-    @check(checks.guild_only())
+    @check(guild_only())
     async def cancel(self, ctx):
         """Cancel your registration for an upcoming draft."""
         player = ctx.author
@@ -115,7 +133,7 @@ class CubeDrafter(Scale):
             await ctx.send("{mention}, you are not registered for the draft, I can't cancel".format(mention=ctx.author.mention))
 
     @molter.message_command(name='players', help='List registered players for the next draft')
-    @check(checks.guild_only())
+    @check(guild_only())
     async def players(self, ctx):
         guild = await self.get_guild(ctx)
 
@@ -125,7 +143,7 @@ class CubeDrafter(Scale):
             await ctx.send("The following players are registered for the next draft: {p}".format(p=", ".join([p.nick or p.user.username for p in guild.get_registered_players()])))
 
     @molter.message_command(name='start', help="Start the draft with the registered players. Packs is the number of packs to open per player (default 3). cards is the number of cards per booster (default 15). cube is the CubeCobra id of a Cube (default Penny Dreadful Eternal Cube).")
-    @check(checks.guild_only())
+    @check(guild_only())
     async def start(self, ctx: MessageContext) -> None:
         guild = await self.get_guild(ctx)
         if guild.no_registered_players():
@@ -170,7 +188,7 @@ class CubeDrafter(Scale):
                 await ctx.send(prefix + "No pending players")
 
     @molter.message_command(name='deck', help="Show your current deck as images")
-    @check(checks.dm_only())
+    @check(dm_only())
     async def my_deck(self, ctx, draft_id = None):
         draft = await self.find_draft_or_send_error(ctx, draft_id)
         if draft is not None:
@@ -251,7 +269,7 @@ class CubeDrafter(Scale):
         else:
             draft = self.find_draft_by_id(draft_id)
             if draft is None:
-                raise CommandCheckFailure("You are not playing any draft")
+                raise CommandException("You are not playing any draft")
             return draft
 
     async def find_drafts_by_player(self, ctx: Context) -> List[GuildDraft]:

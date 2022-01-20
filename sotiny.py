@@ -26,7 +26,7 @@ class Bot(Snake):
         elif isinstance(error, NoPrivateMessage):
             await ctx.send("You can't use this command in a private message")
         elif isinstance(error, CommandCheckFailure):
-            await ctx.send(str(error))
+            await ctx.send('You cannot use that command in this channel')
         elif isinstance(error, CommandException):
             await ctx.send(str(error))
         else:
