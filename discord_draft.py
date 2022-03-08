@@ -195,7 +195,7 @@ class GuildDraft:
                 text += ' and adds a new booster to the draft.'
             for player in self.players.values():
                 coroutines.append(player.send(text))
-            await self.guild.guild.get_channel(self.start_channel_id).send(text, file=File(await image_fetcher.download_image_async([effect[1]])))
+            await self.guild.guild.fetch_channel(self.start_channel_id).send(text, file=File(await image_fetcher.download_image_async([effect[1]])))
 
         for player, autopicks in updates.items():
             deck = ''
@@ -221,7 +221,7 @@ class GuildDraft:
         await asyncio.gather(*coroutines)
 
         if self.draft.is_draft_finished():
-            await self.guild.guild.get_channel(self.start_channel_id).send("Finished the draft with {p}".format(p=", ".join([p.display_name for p in self.get_players()])))
+            await self.guild.guild.fetch_channel(self.start_channel_id).send("Finished the draft with {p}".format(p=", ".join([p.display_name for p in self.get_players()])))
             for player in self.players.values():
                 await player.send(f"[{self.id_with_guild()}] The draft has finished")
                 await self.send_deckfile_to_player(player, player.id)
