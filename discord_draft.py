@@ -12,7 +12,7 @@ import aiohttp
 import attr
 import cattr
 import dis_snek
-from dis_snek.client.errors import Forbidden
+from dis_snek.client.errors import Forbidden, NotFound
 from dis_snek.client.mixins.send import SendMixin
 from dis_snek.models import ActionRow, Button, ButtonStyles, DMChannel, Message, File
 import numpy
@@ -221,7 +221,7 @@ class GuildDraft:
         await asyncio.gather(*coroutines)
 
         if self.draft.is_draft_finished():
-            await self.guild.guild.fetch_channel(self.start_channel_id).send("Finished the draft with {p}".format(p=", ".join([p.display_name for p in self.get_players()])))
+            await (await self.guild.guild.fetch_channel(self.start_channel_id)).send("Finished the draft with {p}".format(p=", ".join([p.display_name for p in self.get_players()])))
             for player in self.players.values():
                 await player.send(f"[{self.id_with_guild()}] The draft has finished")
                 await self.send_deckfile_to_player(player, player.id)
@@ -265,10 +265,15 @@ class GuildDraft:
             return
         # await self.guild.guild.query_members(user_ids=self.draft.players)
         for player in self.draft.players:
-            self.players[player] = await self.guild.guild.fetch_member(player)
-            self.messages_by_player[player] = dict()
-            if self.draft.player_by_id(player).current_pack is not None:
-                await self.send_current_pack_to_player("Bump: ", player)
+            try:
+                self.players[player] = await self.guild.guild.fetch_member(player)
+                self.messages_by_player[player] = dict()
+                if self.draft.player_by_id(player).current_pack is not None:
+                    await self.send_current_pack_to_player("Bump: ", player)
+            except NotFound:
+                print(f'{self.uuid} failed to reload, {player} not found')
+                return
+
 
 async def send_image_with_retry(user: SendMixin, image_file: str, text: str = '', **kwargs) -> Message:
     text = escape_underscores(text)
