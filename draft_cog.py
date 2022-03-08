@@ -1,16 +1,12 @@
 import os
-import traceback
 from typing import Dict, Optional, List
 
 import aioredis
-from dis_snek import TYPE_CHECK_FUNCTION, Context, Scale, Snake
+from dis_snek import Context, Scale, Snake
+from dis_snek.models.snek.checks import TYPE_CHECK_FUNCTION
 import dis_snek
-from dis_snek.errors import CommandException
-from dis_snek.models.command import check
-from dis_snek.models.context import MessageContext
-from dis_snek.models.listener import listen
-from dis_snek.tasks import triggers
-from dis_snek.tasks.task import Task
+from dis_snek.client.errors import CommandException
+from dis_snek.models import check, MessageContext, listen, triggers, Task
 import molter
 
 import utils

@@ -12,12 +12,9 @@ import aiohttp
 import attr
 import cattr
 import dis_snek
-from dis_snek.models.discord_objects.components import ActionRow, Button, ButtonStyles
-from dis_snek.errors import Forbidden
-from dis_snek.mixins.send import SendMixin
-from dis_snek.models.discord_objects.channel import DMChannel
-from dis_snek.models.discord_objects.message import Message
-from dis_snek.models.file import File
+from dis_snek.client.errors import Forbidden
+from dis_snek.client.mixins.send import SendMixin
+from dis_snek.models import ActionRow, Button, ButtonStyles, DMChannel, Message, File
 import numpy
 from aioredis import Redis
 
@@ -268,7 +265,7 @@ class GuildDraft:
             return
         # await self.guild.guild.query_members(user_ids=self.draft.players)
         for player in self.draft.players:
-            self.players[player] = await self.guild.guild.get_member(player)
+            self.players[player] = await self.guild.guild.fetch_member(player)
             self.messages_by_player[player] = dict()
             if self.draft.player_by_id(player).current_pack is not None:
                 await self.send_current_pack_to_player("Bump: ", player)

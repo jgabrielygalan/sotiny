@@ -1,7 +1,7 @@
 import os
 
 import image_fetcher
-from dis_snek import Snake, Guild, Emoji, Scale
+from dis_snek import Snake, Guild, PartialEmoji, Scale
 
 class SelfGuild(Scale):
     def __init__(self, bot: Snake) -> None:
@@ -13,7 +13,7 @@ class SelfGuild(Scale):
                 return guild
         return await self.bot.create_guild(self.bot.user.name)
 
-    async def get_emoji(self, name: str) -> Emoji:
+    async def get_emoji(self, name: str) -> PartialEmoji:
         for emoji in self.bot.emojis:
             if emoji.name == name:
                 return emoji

@@ -1,10 +1,11 @@
 import os
 import traceback
-from dis_snek.models.listener import listen
+from dis_snek.models import listen
 from traceback_with_variables import activate_by_import  # noqa
 
 import dotenv
-from dis_snek import Snake, Context, CommandCheckFailure, CommandException
+from dis_snek import Intents, Snake, Context
+from dis_snek.client.errors import CommandCheckFailure, CommandException
 
 from cog_exceptions import NoPrivateMessage, PrivateMessageOnly, UserFeedbackException
 
@@ -16,6 +17,8 @@ if not os.path.exists('drafts'):
 PREFIX = os.getenv('BOT_PREFIX', default='>')
 
 class Bot(Snake):
+    sentry_token = 'https://83766626d7a64c1084fd140390175ea5@sentry.io/1757452'
+
     async def on_command_error(self, ctx: Context, error: Exception, *args, **kwargs) -> None:
         print(error)
         traceback.print_exception(type(error), error, error.__traceback__)
@@ -32,15 +35,17 @@ class Bot(Snake):
         else:
             await ctx.send("There was an error processing your command")
 
-bot = Bot(default_prefix=PREFIX)
+
+bot = Bot(default_prefix=PREFIX, fetch_members=True, intents=Intents.DEFAULT | Intents.GUILD_MEMBERS)
 
 @listen()
 async def on_ready() -> None:
     print(f'{bot.user} has connected to Discord!')
 
-bot.load_extension('dis_snek.debug_scale')
+bot.load_extension('dis_snek.ext.debug_scale')
 bot.load_extension('draft_cog')
-bot.load_extension('updater')
+bot.load_extension('dis_taipan.updater')
+bot.load_extension('dis_taipan.sentry')
 bot.load_extension('botguild')
 
 bot.start(os.getenv('DISCORD_TOKEN'))
