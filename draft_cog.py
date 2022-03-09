@@ -1,16 +1,17 @@
 import os
-from typing import Dict, Optional, List
+from typing import Dict, List, Optional
 
 import aioredis
-from dis_snek import Context, Scale, Snake
-from dis_snek.models.snek.checks import TYPE_CHECK_FUNCTION
 import dis_snek
-from dis_snek.client.errors import CommandException
-from dis_snek.models import check, MessageContext, listen, triggers, Task
 import molter
+from dis_snek import Context, Scale, Snake
+from dis_snek.client.errors import CommandException
+from dis_snek.models import MessageContext, Task, check, listen, triggers
+from dis_snek.models.snek.checks import TYPE_CHECK_FUNCTION
 
 import utils
-from cog_exceptions import NoPrivateMessage, PrivateMessageOnly, UserFeedbackException
+from cog_exceptions import (NoPrivateMessage, PrivateMessageOnly,
+                            UserFeedbackException)
 from discord_draft import GuildDraft
 from guild import GuildData
 
@@ -150,10 +151,10 @@ class CubeDrafter(Scale):
 
     @listen()
     async def on_raw_reaction_add(self, payload: dis_snek.events.MessageReactionAdd) -> None:
-        if payload.user_id == self.bot.user.id:
+        if payload.author.id == self.bot.user.id:
             return
         for guild in self.guilds_by_id.values():
-            handled = await guild.try_pick(payload.message_id, payload.user_id, payload.emoji.name)
+            handled = await guild.try_pick(payload.message.id, payload.author.id, payload.emoji.name)
             if handled:
                 await guild.save_state()
 
@@ -204,7 +205,7 @@ class CubeDrafter(Scale):
                 await ctx.send(f'{draft.id()} needs {needed - len(draft.abandon_votes)} more votes to abandon.')
 
     @molter.message_command(name='pack', help="Resend your current pack")
-    async def my_pack(self, ctx: Context, draft_id = None):
+    async def my_pack(self, ctx: MessageContext, draft_id = None):
         draft = await self.find_draft_or_send_error(ctx, draft_id, True)
         if draft is None or draft.draft is None:
             return

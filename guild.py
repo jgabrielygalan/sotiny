@@ -1,4 +1,3 @@
-from cog_exceptions import DMsClosedException
 from copy import copy
 from typing import Dict, List, Optional
 
@@ -6,8 +5,10 @@ import aioredis
 import attr
 import dis_snek
 
-from discord_draft import DEFAULT_CUBE_CUBECOBRA_ID, GuildDraft
 import cube
+from cog_exceptions import DMsClosedException
+from discord_draft import DEFAULT_CUBE_CUBECOBRA_ID, GuildDraft
+
 
 @attr.s(auto_attribs=True)
 class DraftSettings:

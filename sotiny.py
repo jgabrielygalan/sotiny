@@ -1,13 +1,14 @@
 import os
 import traceback
+
+import dotenv
+from dis_snek import Context, Intents, Snake
+from dis_snek.client.errors import CommandCheckFailure, CommandException
 from dis_snek.models import listen
 from traceback_with_variables import activate_by_import  # noqa
 
-import dotenv
-from dis_snek import Intents, Snake, Context
-from dis_snek.client.errors import CommandCheckFailure, CommandException
-
-from cog_exceptions import NoPrivateMessage, PrivateMessageOnly, UserFeedbackException
+from cog_exceptions import (NoPrivateMessage, PrivateMessageOnly,
+                            UserFeedbackException)
 
 dotenv.load_dotenv()
 

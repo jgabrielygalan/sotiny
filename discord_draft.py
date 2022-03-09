@@ -6,18 +6,18 @@ import traceback
 import urllib.request
 import uuid
 from io import BytesIO
-from typing import Dict, Iterable, List, Optional, Set, TYPE_CHECKING
+from typing import TYPE_CHECKING, Dict, Iterable, List, Optional, Set
 
 import aiohttp
 import attr
 import cattr
 import dis_snek
-from dis_snek.client.errors import Forbidden, NotFound
-from dis_snek.client.mixins.send import SendMixin
-from dis_snek.models import ActionRow, Button, ButtonStyles, DMChannel, Message, File
 import numpy
 from aioredis import Redis
-
+from dis_snek.client.errors import Forbidden, NotFound
+from dis_snek.client.mixins.send import SendMixin
+from dis_snek.models import (ActionRow, Button, ButtonStyles, DMChannel, File,
+                             Message)
 
 import image_fetcher
 from cog_exceptions import DMsClosedException, UserFeedbackException
@@ -221,7 +221,8 @@ class GuildDraft:
         await asyncio.gather(*coroutines)
 
         if self.draft.is_draft_finished():
-            await (await self.guild.guild.fetch_channel(self.start_channel_id)).send("Finished the draft with {p}".format(p=", ".join([p.display_name for p in self.get_players()])))
+            if self.start_channel_id:
+                await (await self.guild.guild.fetch_channel(self.start_channel_id)).send("Finished the draft with {p}".format(p=", ".join([p.display_name for p in self.get_players()])))
             for player in self.players.values():
                 await player.send(f"[{self.id_with_guild()}] The draft has finished")
                 await self.send_deckfile_to_player(player, player.id)

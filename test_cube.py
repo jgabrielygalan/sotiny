@@ -1,5 +1,7 @@
 import pytest
+
 import cube
+
 
 @pytest.mark.vcr(record_mode='new_episodes')
 @pytest.mark.asyncio

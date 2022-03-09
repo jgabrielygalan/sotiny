@@ -1,8 +1,10 @@
 import json
 from typing import Dict, List, Optional
+
+import aiohttp
 import attr
 import cattr
-import aiohttp
+
 from cog_exceptions import UserFeedbackException
 
 SF_NAMES: Dict[str, str] = {}
