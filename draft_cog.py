@@ -2,6 +2,7 @@ import os
 from typing import Dict, List, Optional
 
 import aioredis
+from dis_snek import ComponentContext, InteractionContext, Modal, ModalContext, ShortText, slash_command
 import dis_snek
 import molter
 from dis_snek import Context, Scale, Snake
@@ -226,25 +227,63 @@ class CubeDrafter(Scale):
             list = divider.join([f"[{x.guild.name}:{x.id()}] {x.draft.number_of_packs} packs ({x.draft.cards_per_booster} cards). {', '.join([p.display_name for p in x.get_players()])}" for x in drafts])
             await ctx.send(f"{list}")
 
-    # @commands.guild_only()
-    # @flags.add_flag('--packs', type=int, default=3)
-    # @flags.add_flag('--cards-per-pack', type=int, default=15)
-    # @flags.add_flag('--players', type=int, default=8)
-    # @flags.command(name='setup')
-    async def setup(self, ctx, cube: Optional[str], **flags) -> None:
+    @molter.message_command('setup')
+    async def m_setup(self, ctx):
+        await ctx.send('This command has been replace by `/setup-cube`')
+
+    @slash_command('setup-cube')
+    async def setup(self, ctx: InteractionContext) -> None:
         """Set up an upcoming draft"""
         guild = await self.get_guild(ctx)
-        packs, cards = validate_and_cast_start_input(flags['packs'], flags['cards_per_pack'])
-        guild.setup(packs, cards, cube, flags['players'])
-        if cube:
-            try:
-                data = await guild.pending_conf.cubedata()
-                await ctx.send(f"Okay. I'll start a draft of {data.name} by {data.owner_name} (`{data.shortID}`) when we have {flags['players']} players")
-            except Exception:
-                await ctx.send(f"Unable to load data for https://cubecobra.com/cube/overview/{cube}, please double-check the ID and try again.")
-                raise
-        else:
-            await ctx.send(f"Okay. I'll start a draft when we have {flags['players']} players")
+        config = Modal(
+            title="Setup Draft",
+            custom_id='setup-cube',
+            components=[
+                ShortText(
+                    label="Cube ID",
+                    custom_id="cube_id",
+                    value=guild.pending_conf.cube_id,
+                    required=True,
+                ),
+                ShortText(
+                    label="Number of players",
+                    custom_id="max_players",
+                    value=guild.pending_conf.max_players,
+                    required=True,
+                ),
+                ShortText(
+                    label="Number of Packs",
+                    custom_id="number_of_packs",
+                    value=guild.pending_conf.number_of_packs,
+                    required=True,
+                ),
+                ShortText(
+                    label="Cards per booster",
+                    custom_id="cards_per_booster",
+                    value=guild.pending_conf.cards_per_booster,
+                    required=True,
+                ),
+            ]
+        )
+        print('sending modal')
+        await ctx.send_modal(config)
+        modal_ctx: ModalContext = await ctx.bot.wait_for_modal(config)
+        print('got modal')
+        print(repr(modal_ctx))
+
+        guild = await self.get_guild(modal_ctx)
+        cube_id = modal_ctx.responses['cube_id']
+        max_players = int(modal_ctx.responses['max_players'])
+        number_of_packs = int(modal_ctx.responses['number_of_packs'])
+        cards_per_booster = int(modal_ctx.responses['cards_per_booster'])
+        guild.setup(number_of_packs, cards_per_booster, cube_id, max_players)
+        try:
+            data = await guild.pending_conf.cubedata()
+            await modal_ctx.send(f"Okay. I'll start a draft of {data.name} by {data.owner_name} (`{data.shortID}`) when we have {max_players} players",
+            components=[])
+        except Exception:
+            await modal_ctx.send(f"Unable to load data for https://cubecobra.com/cube/overview/{cube_id}, please double-check the ID and try again.")
+            raise
         await guild.save_state()
 
     async def find_draft_or_send_error(self, ctx, draft_id=None, only_active=False) -> GuildDraft:

@@ -267,7 +267,11 @@ class GuildDraft:
         # await self.guild.guild.query_members(user_ids=self.draft.players)
         for player in self.draft.players:
             try:
-                self.players[player] = await self.guild.guild.fetch_member(player)
+                member = await self.guild.guild.fetch_member(player)
+                if not member:
+                    print(f'{self.uuid} failed to reload, {player} not found')
+                    return
+                self.players[player] = member
                 self.messages_by_player[player] = dict()
                 if self.draft.player_by_id(player).current_pack is not None:
                     await self.send_current_pack_to_player("Bump: ", player)

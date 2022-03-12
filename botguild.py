@@ -1,6 +1,6 @@
 import os
 
-from dis_snek import Guild, PartialEmoji, Snake
+from dis_snek import Snake
 from dis_taipan.botguild import SelfGuild
 
 import image_fetcher
