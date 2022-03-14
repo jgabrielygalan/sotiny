@@ -16,7 +16,7 @@ import numpy
 from aioredis import Redis
 from dis_snek.client.errors import Forbidden, NotFound
 from dis_snek.client.mixins.send import SendMixin
-from dis_snek.models import (ActionRow, Button, ButtonStyles, DMChannel, File,
+from dis_snek.models import (ActionRow, Button, ButtonStyles, File, Member,
                              Message)
 
 import image_fetcher
@@ -46,7 +46,7 @@ class GuildDraft:
     guild: 'GuildData'
     players: Dict[int, dis_snek.Member] = attr.ib(factory=dict)
     uuid: str = ''
-    messages_by_player: Dict[int, dict] = attr.ib(factory=dict)
+    messages_by_player: Dict[int, dict] = attr.ib(factory=dict, repr=False)
     draft: Optional[Draft] = None
     abandon_votes: Set[int] = attr.ib(factory=set)
 
@@ -85,7 +85,12 @@ class GuildDraft:
         pending = self.draft.get_pending_players()
         return [self.players[x.id] for x in pending]
 
-    async def start(self, channel: dis_snek.GuildText, packs: int, cards: int, cube: str):
+    async def get_channel(self) -> Optional[dis_snek.GuildText]:
+        if self.start_channel_id is None:
+            return None
+        return await self.guild.guild.fetch_channel(self.start_channel_id)  # type: ignore
+
+    async def start(self, channel: dis_snek.GuildText, packs: int, cards: int, cube: str) -> None:
         if not self.uuid:
             self.uuid = str(uuid.uuid4()).replace('-', '')
         card_list = await get_card_list(cube)
@@ -93,12 +98,14 @@ class GuildDraft:
         self.start_channel_id = channel.id
         for p in self.players.values():
             self.messages_by_player[p.id] = {}
-        await channel.send("Starting the draft of https://cubecobra.com/cube/overview/{cube_id} with {p}".format(p=", ".join([p.display_name for p in self.get_players()]), cube_id=cube))
+        msg = await channel.send("Starting the draft of https://cubecobra.com/cube/overview/{cube_id} with {p}".format(p=", ".join([p.display_name for p in self.get_players()]), cube_id=cube))
         players_to_update = self.draft.start(packs, cards)
         intro = "The draft has started. Pack 1, Pick 1:"
         await asyncio.gather(*[self.send_pack_to_player(intro, p) for p in players_to_update])
+        thread = await msg.create_thread(self.uuid)
+        self.draft.metadata['thread_id'] = thread.id
 
-    async def pick(self, player_id, message_id=None, emoji: str = None) -> None:
+    async def pick(self, player_id: int, message_id: int, emoji: str = None) -> None:
         if message_id is not None and emoji is not None and self.draft is not None:
             page_number = self.messages_by_player[player_id][message_id]["row"]
             item_number = NUMBERS_BY_EMOJI[emoji]
@@ -135,7 +142,7 @@ class GuildDraft:
         if self.draft is None:
             return
         player_id = player.id
-        messageable: DMChannel = self.players[player_id]
+        messageable: Member = self.players[player_id]
         self.messages_by_player[player_id].clear()
         try:
             await messageable.send(f"[{self.id_with_guild()}] {intro}")
@@ -163,11 +170,10 @@ class GuildDraft:
                     await message_info["message"].add_reaction(EMOJIS_BY_NUMBER[i])
 
         if actions := [a for a in player.face_up if a in CARDS_WITH_FUNCTION]:
-            emoji_cog = self.guild.guild.bot.get_cog('SelfGuild')
-            text = ''.join([f'{emoji_cog.get_emoji(a)} {a}' for a in actions])
-            message = await messageable.send(f'Optionally activate: {text}')
-            for a in actions:
-                await message.add_reaction(emoji_cog.get_emoji(a))
+            emoji_cog = self.guild.guild._client.get_scale('EmojiGuild')
+            text = ''.join([f'{await emoji_cog.get_emoji(a)} {a}' for a in actions])
+
+            message = await messageable.send(f'Optionally activate: {text}', components=await self.conspiracy_buttons(actions))
 
     def buttons(self, cards: Iterable[str]) -> List[ActionRow]:
         return [ActionRow(
@@ -175,6 +181,19 @@ class GuildDraft:
                 Button(style=ButtonStyles.BLUE,
                        label=c,
                        custom_id=f'{i + 1}',
+                       )
+                for i, c in enumerate(cards)
+            ],
+        )]
+
+    async def conspiracy_buttons(self, cards: Iterable[str]) -> List[ActionRow]:
+        emoji_cog = self.guild.guild._client.get_scale('EmojiGuild')
+        return [ActionRow(
+            *[
+                Button(style=ButtonStyles.GREY,
+                       label=c,
+                       custom_id=f'{i + 1}',
+                       emoji=await emoji_cog.get_emoji(c),
                        )
                 for i, c in enumerate(cards)
             ],
@@ -193,9 +212,11 @@ class GuildDraft:
             text = f'{player_name} drafts {effect[1]} face up'
             if effect[1] == DraftEffect.add_booster_to_draft:
                 text += ' and adds a new booster to the draft.'
-            for player in self.players.values():
-                coroutines.append(player.send(text))
-            await self.guild.guild.fetch_channel(self.start_channel_id).send(text, file=File(await image_fetcher.download_image_async([effect[1]])))
+            for p in self.players.values():
+                coroutines.append(p.send(text))
+            channel = await self.get_channel()
+            if channel is not None:
+                await channel.send(text, file=File(await image_fetcher.download_image_async([effect[1]])))
 
         for player, autopicks in updates.items():
             deck = ''
@@ -221,8 +242,9 @@ class GuildDraft:
         await asyncio.gather(*coroutines)
 
         if self.draft.is_draft_finished():
-            if self.start_channel_id:
-                await (await self.guild.guild.fetch_channel(self.start_channel_id)).send("Finished the draft with {p}".format(p=", ".join([p.display_name for p in self.get_players()])))
+            channel = await self.get_channel()
+            if channel is not None:
+                await channel.send("Finished the draft with {p}".format(p=", ".join([p.display_name for p in self.get_players()])))
             for player in self.players.values():
                 await player.send(f"[{self.id_with_guild()}] The draft has finished")
                 await self.send_deckfile_to_player(player, player.id)

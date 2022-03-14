@@ -3,6 +3,7 @@ from typing import Dict, List, Optional
 
 import aioredis
 import attr
+import attrs
 import dis_snek
 
 import cube
@@ -25,10 +26,21 @@ class DraftSettings:
         self._cubedata = await cube.load_cubecobra_cube(self.cube_id)
         return self._cubedata
 
+@attrs.define(init=False, auto_attribs=True)
 class GuildData:
     """
     Maintains state about a Guild, and handles draft registration
     """
+    guild: dis_snek.Guild
+    redis: aioredis.Redis
+
+    id: int
+    name: str
+    role: Optional[dis_snek.Role]
+    drafts_in_progress: List[GuildDraft] = attr.ib(default=attr.Factory(list), repr=lambda drafts: '[' + ', '.join(f'Draft({d.uuid},...)' for d in drafts) + ']')
+    players: Dict[int, dis_snek.Member] = attr.ib(default=attr.Factory(dict))
+    pending_conf: DraftSettings = attr.ib(default=attr.Factory(DraftSettings))
+
     def __init__(self, guild: dis_snek.Guild, redis_client: aioredis.Redis) -> None:
         self.redis = redis_client
         self.guild = guild

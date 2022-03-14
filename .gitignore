@@ -9,3 +9,5 @@ __pycache__
 notes.txt
 .mypy_cache/
 drafts/*.json
+
+/emoji_images/*.png

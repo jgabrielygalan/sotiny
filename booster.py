@@ -7,7 +7,7 @@ import attr
 class Booster(object):
     cards: List[str]
     number: int
-    pick_number = 1
+    pick_number: int = 1
 
     def is_empty(self) -> bool:
         return self.number_of_cards() == 0

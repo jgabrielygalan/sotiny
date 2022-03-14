@@ -1,10 +1,10 @@
 import os
-import traceback
 
 import dotenv
-from dis_snek import Context, Intents, Snake
+from dis_snek import Intents, Snake
 from dis_snek.client.errors import CommandCheckFailure, CommandException
 from dis_snek.models import listen
+from dis_taipan.protocols import SendableContext
 from traceback_with_variables import activate_by_import  # noqa
 
 from cog_exceptions import (NoPrivateMessage, PrivateMessageOnly,
@@ -20,9 +20,10 @@ PREFIX = os.getenv('BOT_PREFIX', default='>')
 class Bot(Snake):
     sentry_token = 'https://83766626d7a64c1084fd140390175ea5@sentry.io/1757452'
 
-    async def on_command_error(self, ctx: Context, error: Exception, *args, **kwargs) -> None:
-        print(error)
-        traceback.print_exception(type(error), error, error.__traceback__)
+    async def on_command_error(self, ctx: SendableContext, error: Exception, *args, **kwargs) -> None:
+        super().on_command_error(ctx, error, *args, **kwargs)
+        # print(error)
+        # traceback.print_exception(type(error), error, error.__traceback__)
         if isinstance(error, UserFeedbackException):
             await ctx.send(f"{ctx.author.mention}: {error}")
         elif isinstance(error, PrivateMessageOnly):

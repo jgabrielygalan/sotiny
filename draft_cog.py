@@ -1,14 +1,16 @@
 import os
-from typing import Dict, List, Optional
+from typing import Dict, List
 
 import aioredis
-from dis_snek import ComponentContext, InteractionContext, Modal, ModalContext, ShortText, slash_command
 import dis_snek
 import molter
-from dis_snek import Context, Scale, Snake
+from dis_snek import (Context, InteractionContext, Modal, ModalContext, Scale,
+                      ShortText, Snake, slash_command)
 from dis_snek.client.errors import CommandException
-from dis_snek.models import MessageContext, Task, check, listen, triggers
+from dis_snek.models import (IntervalTrigger, MessageContext, Task, check,
+                             listen)
 from dis_snek.models.snek.checks import TYPE_CHECK_FUNCTION
+from dis_taipan.protocols import SendableContext
 
 import utils
 from cog_exceptions import (NoPrivateMessage, PrivateMessageOnly,
@@ -92,7 +94,7 @@ class CubeDrafter(Scale):
 
     @molter.message_command()
     @check(guild_only())
-    async def play(self, ctx: Context):
+    async def play(self, ctx: SendableContext):
         """
         Register to play a draft
         """
@@ -228,7 +230,7 @@ class CubeDrafter(Scale):
             await ctx.send(f"{list}")
 
     @molter.message_command('setup')
-    async def m_setup(self, ctx):
+    async def m_setup(self, ctx: MessageContext) -> None:
         await ctx.send('This command has been replace by `/setup-cube`')
 
     @slash_command('setup-cube')
@@ -279,8 +281,7 @@ class CubeDrafter(Scale):
         guild.setup(number_of_packs, cards_per_booster, cube_id, max_players)
         try:
             data = await guild.pending_conf.cubedata()
-            await modal_ctx.send(f"Okay. I'll start a draft of {data.name} by {data.owner_name} (`{data.shortID}`) when we have {max_players} players",
-            components=[])
+            await modal_ctx.send(f"Okay. I'll start a draft of {data.name} by {data.owner_name} (`{data.shortID}`) when we have {max_players} players")
         except Exception:
             await modal_ctx.send(f"Unable to load data for https://cubecobra.com/cube/overview/{cube_id}, please double-check the ID and try again.")
             raise
@@ -323,7 +324,7 @@ class CubeDrafter(Scale):
                 return draft
         return None
 
-    @Task.create(triggers.IntervalTrigger(minutes=1))
+    @Task.create(IntervalTrigger(minutes=1))
     async def status(self) -> None:
         drafts = []
         count = 0
