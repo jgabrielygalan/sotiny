@@ -21,7 +21,6 @@ class Bot(Snake):
     sentry_token = 'https://83766626d7a64c1084fd140390175ea5@sentry.io/1757452'
 
     async def on_command_error(self, ctx: SendableContext, error: Exception, *args, **kwargs) -> None:
-        super().on_command_error(ctx, error, *args, **kwargs)
         # print(error)
         # traceback.print_exception(type(error), error, error.__traceback__)
         if isinstance(error, UserFeedbackException):
@@ -36,6 +35,7 @@ class Bot(Snake):
             await ctx.send(str(error))
         else:
             await ctx.send("There was an error processing your command")
+        await super().on_command_error(ctx, error, *args, **kwargs)
 
 
 bot = Bot(default_prefix=PREFIX, fetch_members=True, intents=Intents.DEFAULT | Intents.GUILD_MEMBERS)

@@ -43,7 +43,7 @@ class GuildDraft:
     """
     Discord-aware wrapper for a Draft.
     """
-    guild: 'GuildData'
+    guild: 'GuildData' = attr.ib(repr=False)
     players: Dict[int, dis_snek.Member] = attr.ib(factory=dict)
     uuid: str = ''
     messages_by_player: Dict[int, dict] = attr.ib(factory=dict, repr=False)

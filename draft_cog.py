@@ -2,6 +2,7 @@ import os
 from typing import Dict, List
 
 import aioredis
+from dis_snek import Timestamp
 import dis_snek
 import molter
 from dis_snek import (Context, InteractionContext, Modal, ModalContext, Scale,
@@ -66,8 +67,12 @@ class CubeDrafter(Scale):
         for guild in self.bot.guilds:
             print("Ready on guild: {n}".format(n=guild.name))
             await self.setup_guild(guild)
-        self.status.start()
         self.readied = True
+
+    @listen()
+    async def on_startup(self):
+        self.status.start()
+        self.timeout.start()
 
     async def setup_guild(self, guild: dis_snek.Guild) -> GuildData:
         if not guild.id in self.guilds_by_id:
@@ -338,6 +343,19 @@ class CubeDrafter(Scale):
             game = f'{len(drafts)} drafts across {len(self.guilds_by_id)} guilds.'
         await self.bot.change_presence(activity=game)
 
+    @Task.create(IntervalTrigger(minutes=1))
+    async def timeout(self) -> None:
+        for guild in self.guilds_by_id.values():
+            for draft in guild.drafts_in_progress:
+                for player in draft.get_pending_players():
+                    msg = list(draft.messages_by_player[player.id].values())[0]
+                    age = (Timestamp.utcnow() - msg['message'].timestamp).total_seconds()
+                    if 60 * 60 * 12 + 60 > age > 60 * 60 * 12:
+                        player.send('You have been idle for 12 hours. After another 12 hours, a card will be picked automatically.')
+                    elif age > 60 * 60 * 24:
+                        dp = draft.draft.player_by_id(player.id)
+                        draft.draft.autopick(dp)
+                    print(f"{player.display_name} has been holding a pack for {age} seconds")
 
 def validate_and_cast_start_input(packs: int, cards: int):
     if packs is None:
