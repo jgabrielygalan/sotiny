@@ -351,11 +351,12 @@ class CubeDrafter(Scale):
                     msg = list(draft.messages_by_player[player.id].values())[0]
                     age = (Timestamp.utcnow() - msg['message'].timestamp).total_seconds()
                     if 60 * 60 * 12 + 60 > age > 60 * 60 * 12:
+                        print(f"{player.display_name} has been holding a pack for {age / 60} minutes")
                         player.send('You have been idle for 12 hours. After another 12 hours, a card will be picked automatically.')
                     elif age > 60 * 60 * 24:
+                        print(f"{player.display_name} has been holding a pack for {age / 60} minutes")
                         dp = draft.draft.player_by_id(player.id)
                         draft.draft.autopick(dp)
-                    print(f"{player.display_name} has been holding a pack for {age} seconds")
 
 def validate_and_cast_start_input(packs: int, cards: int):
     if packs is None:
