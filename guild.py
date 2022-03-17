@@ -51,14 +51,10 @@ class GuildData:
         self.players: Dict[int, dis_snek.Member] = {}  # players registered for the next draft
         self.pending_conf: DraftSettings = DraftSettings(3, 15, 8, DEFAULT_CUBE_CUBECOBRA_ID)
 
-    async def add_player(self, player: dis_snek.Member) -> None:
+    async def add_player(self, player: dis_snek.Member | dis_snek.User) -> None:
         self.players[player.id] = player
-        if self.role is not None:
-            await player.add_role(self.role)
 
-    async def remove_player(self, player: dis_snek.Member) -> None:
-        if self.role is not None:
-            await player.remove_role(self.role)
+    async def remove_player(self, player: dis_snek.Member | dis_snek.User) -> None:
         if player.id in self.players:
             del self.players[player.id]
 
@@ -121,7 +117,10 @@ class GuildData:
         self.players = {}
         self.drafts_in_progress.append(draft)
 
-    async def try_pick(self, message_id: int, player: int, emoji: str) -> bool:
+    async def try_pick(self, message_id: int, player: int, emoji: Optional[str]) -> bool:
+        if emoji is None:
+            return False
+
         draft: Optional[GuildDraft] = next((x for x in self.drafts_in_progress if x.has_message(message_id)), None)
         if draft is None:
             return False

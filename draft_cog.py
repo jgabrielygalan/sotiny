@@ -1,5 +1,5 @@
 import os
-from typing import Dict, List
+from typing import Dict, List, cast
 
 import aioredis
 from dis_snek import Timestamp
@@ -13,10 +13,8 @@ from dis_snek.models import (IntervalTrigger, MessageContext, Task, check,
 from dis_snek.models.snek.checks import TYPE_CHECK_FUNCTION
 from dis_taipan.protocols import SendableContext
 
-import utils
-from cog_exceptions import (NoPrivateMessage, PrivateMessageOnly,
-                            UserFeedbackException)
-from discord_draft import GuildDraft
+from cog_exceptions import (NoPrivateMessage, PrivateMessageOnly)
+from discord_draft import GuildDraft, MessageData
 from guild import GuildData
 
 DEFAULT_PACK_NUMBER = 3
@@ -53,7 +51,7 @@ class CubeDrafter(Scale):
             self.redis = None
             print('Could not connect to redis')
 
-    async def get_guild(self, ctx: Context) -> GuildData:
+    async def get_guild(self, ctx: SendableContext) -> GuildData:
         if not ctx.guild:
             raise NoPrivateMessage
         guild = self.guilds_by_id.get(ctx.guild.id)
@@ -62,7 +60,7 @@ class CubeDrafter(Scale):
         return guild
 
     @listen()
-    async def on_ready(self):
+    async def on_ready(self) -> None:
         print("Bot is ready (from the Cog)")
         for guild in self.bot.guilds:
             print("Ready on guild: {n}".format(n=guild.name))
@@ -313,7 +311,7 @@ class CubeDrafter(Scale):
                 raise CommandException("You are not playing any draft")
             return draft
 
-    async def find_drafts_by_player(self, ctx: Context) -> List[GuildDraft]:
+    async def find_drafts_by_player(self, ctx: SendableContext) -> List[GuildDraft]:
         player = ctx.author
         if ctx.guild:  # Don't leak other guilds if invoked in a guild context.
             return (await self.get_guild(ctx)).get_drafts_for_player(player)
@@ -352,25 +350,10 @@ class CubeDrafter(Scale):
                     age = (Timestamp.utcnow() - msg['message'].timestamp).total_seconds()
                     if 60 * 60 * 12 + 60 > age > 60 * 60 * 12:
                         print(f"{player.display_name} has been holding a pack for {age / 60} minutes")
-                        player.send('You have been idle for 12 hours. After another 12 hours, a card will be picked automatically.')
+                        player.send('You have been idle for 12 hours. After another 12 hours, a card will be picked automatically.', reply_to=msg['message'])
                     elif age > 60 * 60 * 24:
                         print(f"{player.display_name} has been holding a pack for {age / 60} minutes")
-                        dp = draft.draft.player_by_id(player.id)
-                        draft.draft.autopick(dp)
+                        await guild.try_pick(msg['message'].id, player.id, "1")
 
-def validate_and_cast_start_input(packs: int, cards: int):
-    if packs is None:
-        packs = DEFAULT_PACK_NUMBER
-    if cards is None:
-        cards = DEFAULT_CARD_NUMBER
-
-    packs_valid = utils.safe_cast(packs, int, 0)
-    if packs_valid <= 0:
-        raise UserFeedbackException("packs should be a number greater than 0")
-    cards_valid = utils.safe_cast(cards, int, 0)
-    if cards_valid <= 1:
-        raise UserFeedbackException("cards should be a number greater than 1")
-    return (packs_valid, cards_valid)
-
-def setup(bot: Snake):
+def setup(bot: Snake) -> None:
     CubeDrafter(bot)

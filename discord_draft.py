@@ -6,7 +6,7 @@ import traceback
 import urllib.request
 import uuid
 from io import BytesIO
-from typing import TYPE_CHECKING, Dict, Iterable, List, Optional, Set
+from typing import TYPE_CHECKING, Dict, Iterable, List, Optional, Set, TypedDict
 
 import aiohttp
 import attr
@@ -38,6 +38,11 @@ DEFAULT_CUBE_CUBECOBRA_ID = "penny_dreadful"
 class FetchException(Exception):
     pass
 
+class MessageData(TypedDict):
+    row: int
+    message: Message
+    len: int
+
 @attr.s(auto_attribs=True)
 class GuildDraft:
     """
@@ -46,7 +51,7 @@ class GuildDraft:
     guild: 'GuildData' = attr.ib(repr=False)
     players: Dict[int, dis_snek.Member] = attr.ib(factory=dict)
     uuid: str = ''
-    messages_by_player: Dict[int, dict] = attr.ib(factory=dict, repr=False)
+    messages_by_player: Dict[int, Dict[int, MessageData]] = attr.ib(factory=dict, repr=False) # messages_by_player[player_id][message_id] = MessageData
     draft: Optional[Draft] = None
     abandon_votes: Set[int] = attr.ib(factory=set)
 
@@ -81,7 +86,7 @@ class GuildDraft:
                 return True
         return False
 
-    def get_pending_players(self):
+    def get_pending_players(self) -> List[dis_snek.Member]:
         pending = self.draft.get_pending_players()
         return [self.players[x.id] for x in pending]
 
