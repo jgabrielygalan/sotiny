@@ -87,6 +87,8 @@ class GuildDraft:
         return False
 
     def get_pending_players(self) -> List[dis_snek.Member]:
+        if not self.draft:
+            return []
         pending = self.draft.get_pending_players()
         return [self.players[x.id] for x in pending]
 
@@ -250,9 +252,9 @@ class GuildDraft:
             channel = await self.get_channel()
             if channel is not None:
                 await channel.send("Finished the draft with {p}".format(p=", ".join([p.display_name for p in self.get_players()])))
-            for player in self.players.values():
-                await player.send(f"[{self.id_with_guild()}] The draft has finished")
-                await self.send_deckfile_to_player(player, player.id)
+            for member in self.players.values():
+                await member.send(f"[{self.id_with_guild()}] The draft has finished")
+                await self.send_deckfile_to_player(member, player.id)
             self.players.clear()
             self.messages_by_player.clear()
 

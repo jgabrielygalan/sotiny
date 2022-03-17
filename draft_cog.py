@@ -1,5 +1,5 @@
 import os
-from typing import Dict, List, cast
+from typing import Dict, List
 
 import aioredis
 from dis_snek import Timestamp
