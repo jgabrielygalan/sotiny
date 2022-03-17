@@ -236,7 +236,7 @@ class GuildDraft:
                 autopick_str = ', '.join(autopicks)
                 coroutines.append(messageable.send(f'[{self.id_with_guild()}] Autopicks: {autopick_str}', file=File(await image_fetcher.download_image_async(autopicks))))
 
-            if player.has_current_pack():
+            if player.current_pack is not None:
                 if player.id == player_id:
                     current_player_has_next_booster = True
                 deck = f'Deck: {", ".join(player.deck)}\n'
