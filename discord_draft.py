@@ -111,6 +111,8 @@ class GuildDraft:
         await asyncio.gather(*[self.send_pack_to_player(intro, p) for p in players_to_update])
         thread = await msg.create_thread(self.uuid)
         self.draft.metadata['thread_id'] = thread.id
+        for p in self.players.values():
+            await thread.add_member(p)
 
     async def pick(self, player_id: int, message_id: int, emoji: str = None) -> None:
         if message_id is not None and emoji is not None and self.draft is not None:
