@@ -1,5 +1,5 @@
 import os
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 import aioredis
 from dis_snek import Timestamp
@@ -206,12 +206,15 @@ class CubeDrafter(Scale):
             if len(draft.abandon_votes) >= needed:
                 draft.guild.drafts_in_progress.remove(draft)
                 chan = self.bot.get_channel(draft.start_channel_id)
-                await chan.send(f'{draft.id()} abandoned')
+                if chan:
+                    await chan.send(f'{draft.id()} abandoned')
+                else:
+                    await ctx.send(f'{draft.id()} abandoned')
             else:
                 await ctx.send(f'{draft.id()} needs {needed - len(draft.abandon_votes)} more votes to abandon.')
 
     @molter.message_command(name='pack', help="Resend your current pack")
-    async def my_pack(self, ctx: MessageContext, draft_id = None):
+    async def my_pack(self, ctx: MessageContext, draft_id: Optional[str] = None) -> None:
         draft = await self.find_draft_or_send_error(ctx, draft_id, True)
         if draft is None or draft.draft is None:
             return
@@ -350,7 +353,7 @@ class CubeDrafter(Scale):
                     age = (Timestamp.utcnow() - msg['message'].timestamp).total_seconds()
                     if 60 * 60 * 12 + 60 > age > 60 * 60 * 12:
                         print(f"{player.display_name} has been holding a pack for {age / 60} minutes")
-                        player.send('You have been idle for 12 hours. After another 12 hours, a card will be picked automatically.', reply_to=msg['message'])
+                        await player.send('You have been idle for 12 hours. After another 12 hours, a card will be picked automatically.', reply_to=msg['message'])
                     elif age > 60 * 60 * 24:
                         print(f"{player.display_name} has been holding a pack for {age / 60} minutes")
                         await guild.try_pick(msg['message'].id, player.id, "1")
