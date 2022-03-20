@@ -13,6 +13,7 @@ class DraftPlayer:
     deck: List[str] = attr.ib(factory=list)
     face_up: List[str] = attr.ib(factory=list)
     current_pack: Optional[Booster] = None
+    skips: int = 0
 
     def __init__(self, id: int, seat: int) -> None:
         self.id = id

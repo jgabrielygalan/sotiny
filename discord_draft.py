@@ -51,7 +51,7 @@ class GuildDraft:
     guild: 'GuildData' = attr.ib(repr=False)
     players: Dict[int, dis_snek.Member] = attr.ib(factory=dict)
     uuid: str = ''
-    messages_by_player: Dict[int, Dict[int, MessageData]] = attr.ib(factory=dict, repr=False) # messages_by_player[player_id][message_id] = MessageData
+    messages_by_player: Dict[int, Dict[int, MessageData]] = attr.ib(factory=dict, repr=False)  # messages_by_player[player_id][message_id] = MessageData
     draft: Optional[Draft] = None
     abandon_votes: Set[int] = attr.ib(factory=set)
 

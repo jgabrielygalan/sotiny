@@ -14,7 +14,7 @@ from dis_snek.models.snek.checks import TYPE_CHECK_FUNCTION
 from dis_taipan.protocols import SendableContext
 
 from cog_exceptions import (NoPrivateMessage, PrivateMessageOnly)
-from discord_draft import GuildDraft, MessageData
+from discord_draft import GuildDraft
 from guild import GuildData
 
 DEFAULT_PACK_NUMBER = 3
@@ -68,7 +68,7 @@ class CubeDrafter(Scale):
         self.readied = True
 
     @listen()
-    async def on_startup(self):
+    async def on_startup(self) -> None:
         self.status.start()
         self.timeout.start()
 
@@ -348,6 +348,8 @@ class CubeDrafter(Scale):
     async def timeout(self) -> None:
         for guild in self.guilds_by_id.values():
             for draft in guild.drafts_in_progress:
+                if not draft.draft:
+                    continue  # Typeguard
                 for player in draft.get_pending_players():
                     msg = list(draft.messages_by_player[player.id].values())[0]
                     age = (Timestamp.utcnow() - msg['message'].timestamp).total_seconds()
@@ -357,6 +359,10 @@ class CubeDrafter(Scale):
                     elif age > 60 * 60 * 24:
                         print(f"{player.display_name} has been holding a pack for {age / 60} minutes")
                         await guild.try_pick(msg['message'].id, player.id, "1")
+
+                        draft.draft.player_by_id(player.id).skips += 1
+                        print(f"{player.display_name} has been skipped {draft.draft.player_by_id(player.id).skips} times")
+
 
 def setup(bot: Snake) -> None:
     CubeDrafter(bot)
