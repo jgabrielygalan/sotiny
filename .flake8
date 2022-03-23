@@ -7,3 +7,5 @@ ignore =
 
 per-file-ignores =
     updater.py:S607
+
+max-complexity=10

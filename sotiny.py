@@ -19,11 +19,9 @@ if not os.path.exists('drafts'):
 PREFIX = os.getenv('BOT_PREFIX', default='>')
 
 class Bot(Snake):
-    sentry_token = 'https://83766626d7a64c1084fd140390175ea5@sentry.io/1757452'
+    sentry_token = 'https://ade432a5a1474198b8e1955544429250@o233010.ingest.sentry.io/6272266'
 
     async def on_command_error(self, ctx: Context, error: Exception, *args: Any, **kwargs: Any) -> None:
-        # print(error)
-        # traceback.print_exception(type(error), error, error.__traceback__)
         if isinstance(ctx, SendableContext):
             if isinstance(error, UserFeedbackException):
                 await ctx.send(f"{ctx.author.mention}: {error}")

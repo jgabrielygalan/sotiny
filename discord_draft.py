@@ -17,7 +17,7 @@ from aioredis import Redis
 from dis_snek.client.errors import Forbidden, NotFound
 from dis_snek.client.mixins.send import SendMixin
 from dis_snek.models import (ActionRow, Button, ButtonStyles, File, Member,
-                             Message)
+                             Message, User)
 
 import image_fetcher
 from cog_exceptions import DMsClosedException, UserFeedbackException
@@ -77,7 +77,7 @@ class GuildDraft:
     def get_players(self) -> Iterable[dis_snek.Member]:
         return self.players.values()
 
-    def has_player(self, player) -> bool:
+    def has_player(self, player: User | Member) -> bool:
         return player.id in self.players
 
     def has_message(self, message_id: int) -> bool:
@@ -147,7 +147,7 @@ class GuildDraft:
         player = self.draft.player_by_id(player_id)
         await self.send_pack_to_player(intro, player)
 
-    async def send_pack_to_player(self, intro: str, player: DraftPlayer, reactions=False):
+    async def send_pack_to_player(self, intro: str, player: DraftPlayer):
         if self.draft is None:
             return
         player_id = player.id
@@ -172,11 +172,6 @@ class GuildDraft:
                 message = await send_image_with_retry(messageable, image_file, components=components)
                 self.messages_by_player[player_id][message.id] = {"row": i, "message": message, "len": len(row)}
                 i += 1
-        if reactions:
-            messages = list(self.messages_by_player[player_id].values())
-            for message_info in messages:
-                for i in range(1, message_info["len"] + 1):
-                    await message_info["message"].add_reaction(EMOJIS_BY_NUMBER[i])
 
         if actions := [a for a in player.face_up if a in CARDS_WITH_FUNCTION]:
             emoji_cog = self.guild.guild._client.get_scale('EmojiGuild')
@@ -211,15 +206,16 @@ class GuildDraft:
     async def handle_pick_response(self, updates: Dict[DraftPlayer, List[str]], player_id: int, effects: List[player_card_drafteffect]) -> None:
         if self.draft is None:
             return
+        coroutines = []
+
         if player_id:
             self.messages_by_player[player_id].clear()
 
         current_player_has_next_booster = False
-        coroutines = []
         for effect in effects:
             player_name = self.players[effect[0].id].display_name
             text = f'{player_name} drafts {effect[1]} face up'
-            if effect[1] == DraftEffect.add_booster_to_draft:
+            if effect[2] == DraftEffect.add_booster_to_draft:
                 text += ' and adds a new booster to the draft.'
             for p in self.players.values():
                 coroutines.append(p.send(text))

@@ -83,21 +83,23 @@ class CubeDrafter(Scale):
         return self.guilds_by_id[guild.id]
 
     @listen()
-    async def on_guild_join(self, event: dis_snek.events.GuildJoin):
+    async def on_guild_join(self, event: dis_snek.events.GuildJoin) -> None:
         guild = event.guild
         print("Joined {n}: {r}".format(n=guild.name, r=guild.roles))
         if not guild.id in self.guilds_by_id:
             await self.setup_guild(guild)
 
     @listen()
-    async def on_guild_remove(self, guild):
-        print("Removed from {n}".format(n=guild.name))
-        if guild.id in self.guilds_by_id:
-            del self.guilds_by_id[guild.id]
+    async def on_guild_left(self, event: dis_snek.events.GuildLeft) -> None:
+        guild = event.guild
+        if guild:
+            print("Removed from {n}".format(n=guild.name))
+        if event.guild_id in self.guilds_by_id:
+            del self.guilds_by_id[event.guild_id]
 
     @molter.message_command()
     @check(guild_only())
-    async def play(self, ctx: SendableContext):
+    async def play(self, ctx: SendableContext) -> None:
         """
         Register to play a draft
         """
@@ -168,7 +170,7 @@ class CubeDrafter(Scale):
     async def on_component(self, event: dis_snek.events.Component):
         ctx: dis_snek.ComponentContext = event.context
         for guild in self.guilds_by_id.values():
-            handled = await guild.try_pick(ctx.message.id, ctx.author.id, ctx.custom_id)
+            handled = await guild.try_pick(ctx.message.id, ctx.author.id, ctx.custom_id, ctx)
             if handled:
                 await guild.save_state()
 
@@ -201,6 +203,8 @@ class CubeDrafter(Scale):
         """Vote to cancel an in-progress draft"""
         draft = await self.find_draft_or_send_error(ctx, draft_id)
         if draft is not None:
+            if draft.start_channel_id is None:
+                draft.start_channel_id = ctx.channel.id
             draft.abandon_votes.add(ctx.author.id)
             needed = min(3, len(draft.players))
             if len(draft.abandon_votes) >= needed:

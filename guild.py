@@ -4,6 +4,7 @@ from typing import Dict, List, Optional
 import aioredis
 import attr
 import attrs
+from dis_snek import ActionRow, Button, ButtonStyles, ComponentContext, InteractionContext
 import dis_snek
 
 import cube
@@ -117,7 +118,7 @@ class GuildData:
         self.players = {}
         self.drafts_in_progress.append(draft)
 
-    async def try_pick(self, message_id: int, player: int, emoji: Optional[str]) -> bool:
+    async def try_pick(self, message_id: int, player: int, emoji: Optional[str], context: Optional[ComponentContext]) -> bool:
         if emoji is None:
             return False
 
@@ -125,7 +126,14 @@ class GuildData:
         if draft is None:
             return False
         else:
+            messages = draft.messages_by_player[player].copy()
             await draft.pick(player, message_id=message_id, emoji=emoji)
+            picked = draft.draft.deck_of(player)[-1]
+            for mid, data in messages.items():
+                if mid == message_id and context is not None:
+                    await context.edit_origin(components=recolour_buttons(data['message'].components, picked))
+                else:
+                    await data['message'].edit(components=recolour_buttons(data['message'].components, None))
             return True
 
     async def remove_role(self, draft):
@@ -189,6 +197,16 @@ class GuildData:
         self.drafts_in_progress.append(draft)
         return draft
 
+
+def recolour_buttons(components: List[ActionRow], green_name: Optional[str]) -> List[ActionRow]:
+    buttons = []
+    for c in components[0].components:
+        if isinstance(c, Button):
+            if c.label == green_name:
+                buttons.append(Button(ButtonStyles.GREEN, c.label, c.emoji, disabled=True))
+            else:
+                buttons.append(Button(ButtonStyles.GREY, c.label, c.emoji, disabled=True))
+    return ActionRow(*buttons)
 
 def get_cubedrafter_role(guild: dis_snek.Guild) -> dis_snek.Role:
     return None
