@@ -132,6 +132,8 @@ class GuildData:
                     await context.edit_origin(components=recolour_buttons(data['message'].components, picked))
                 else:
                     await data['message'].edit(components=recolour_buttons(data['message'].components, picked))
+            if context is not None:
+                draft.draft.player_by_id(player.id).skips = 0
             return True
 
     async def save_state(self) -> None:
@@ -188,7 +190,7 @@ class GuildData:
         return draft
 
 
-def recolour_buttons(components: List[ActionRow], green_name: Optional[str]) -> List[ActionRow]:
+def recolour_buttons(components: List[ActionRow], green_name: Optional[str]) -> ActionRow:
     buttons = []
     for c in components[0].components:
         if isinstance(c, Button):

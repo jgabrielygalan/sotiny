@@ -153,15 +153,6 @@ class CubeDrafter(Scale):
         await guild.start(ctx)
         await guild.save_state()
 
-    @listen()
-    async def on_raw_reaction_add(self, payload: dis_snek.events.MessageReactionAdd) -> None:
-        if payload.author.id == self.bot.user.id:
-            return
-        for guild in self.guilds_by_id.values():
-            handled = await guild.try_pick(payload.message.id, payload.author.id, payload.emoji.name, None)
-            if handled:
-                await guild.save_state()
-
     @dis_snek.listen()
     async def on_component(self, event: dis_snek.events.Component) -> None:
         ctx: dis_snek.ComponentContext = event.context
@@ -360,6 +351,8 @@ class CubeDrafter(Scale):
 
                         draft.draft.player_by_id(player.id).skips += 1
                         print(f"{player.display_name} has been skipped {draft.draft.player_by_id(player.id).skips} times")
+                        if draft.draft.player_by_id(player.id).skips > 3:
+                            draft.abandon_votes.add(player.id)
 
 def swap_seats_button(draft: GuildDraft, old_player: Member) -> ActionRow:
     button = Button(
