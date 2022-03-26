@@ -2,7 +2,7 @@ import os
 from typing import Dict, List, Optional
 
 import aioredis
-from dis_snek import Timestamp
+from dis_snek import ActionRow, Button, ButtonStyles, Member, Timestamp
 import dis_snek
 import molter
 from dis_snek import (Context, InteractionContext, Modal, ModalContext, Scale,
@@ -51,7 +51,7 @@ class CubeDrafter(Scale):
             self.redis = None
             print('Could not connect to redis')
 
-    async def get_guild(self, ctx: SendableContext) -> GuildData:
+    async def get_guild(self, ctx: Context) -> GuildData:
         if not ctx.guild:
             raise NoPrivateMessage
         guild = self.guilds_by_id.get(ctx.guild.id)
@@ -75,17 +75,13 @@ class CubeDrafter(Scale):
     async def setup_guild(self, guild: dis_snek.Guild) -> GuildData:
         if not guild.id in self.guilds_by_id:
             self.guilds_by_id[guild.id] = GuildData(guild, self.redis)
-            # if self.guilds_by_id[guild.id].role is None and guild.me.guild_permissions.manage_roles:
-            #     print(f'Creating CubeDrafter Role for {guild.name}')
-            #     role = await guild.create_role(name='CubeDrafter', reason='A role assigned to anyone currently drafting a cube')
-            #     self.guilds_by_id[guild.id].role = role
             await self.guilds_by_id[guild.id].load_state()
         return self.guilds_by_id[guild.id]
 
     @listen()
     async def on_guild_join(self, event: dis_snek.events.GuildJoin) -> None:
         guild = event.guild
-        print("Joined {n}: {r}".format(n=guild.name, r=guild.roles))
+        print("Joined {n}".format(n=guild.name))
         if not guild.id in self.guilds_by_id:
             await self.setup_guild(guild)
 
@@ -99,7 +95,7 @@ class CubeDrafter(Scale):
 
     @molter.message_command()
     @check(guild_only())
-    async def play(self, ctx: SendableContext) -> None:
+    async def play(self, ctx: MessageContext) -> None:
         """
         Register to play a draft
         """
@@ -162,12 +158,12 @@ class CubeDrafter(Scale):
         if payload.author.id == self.bot.user.id:
             return
         for guild in self.guilds_by_id.values():
-            handled = await guild.try_pick(payload.message.id, payload.author.id, payload.emoji.name)
+            handled = await guild.try_pick(payload.message.id, payload.author.id, payload.emoji.name, None)
             if handled:
                 await guild.save_state()
 
     @dis_snek.listen()
-    async def on_component(self, event: dis_snek.events.Component):
+    async def on_component(self, event: dis_snek.events.Component) -> None:
         ctx: dis_snek.ComponentContext = event.context
         for guild in self.guilds_by_id.values():
             handled = await guild.try_pick(ctx.message.id, ctx.author.id, ctx.custom_id, ctx)
@@ -199,23 +195,21 @@ class CubeDrafter(Scale):
             await draft.picks(ctx, ctx.author.id)
 
     @molter.message_command()
-    async def abandon(self, ctx, draft_id = None):
+    async def abandon(self, ctx: MessageContext, draft_id = None):
         """Vote to cancel an in-progress draft"""
         draft = await self.find_draft_or_send_error(ctx, draft_id)
         if draft is not None:
             if draft.start_channel_id is None:
                 draft.start_channel_id = ctx.channel.id
-            draft.abandon_votes.add(ctx.author.id)
-            needed = min(3, len(draft.players))
-            if len(draft.abandon_votes) >= needed:
-                draft.guild.drafts_in_progress.remove(draft)
-                chan = self.bot.get_channel(draft.start_channel_id)
-                if chan:
-                    await chan.send(f'{draft.id()} abandoned')
-                else:
-                    await ctx.send(f'{draft.id()} abandoned')
+            abandoned = await draft.abandon(ctx.author.id)
+
+            chan = self.bot.get_channel(draft.start_channel_id) or ctx
+            if abandoned:
+                await chan.send(f'{draft.id()} abandoned')
             else:
-                await ctx.send(f'{draft.id()} needs {needed - len(draft.abandon_votes)} more votes to abandon.')
+                needed = min(3, len(draft.players))
+                await chan.send(f'{draft.id()} needs {needed - len(draft.abandon_votes)} more votes to abandon.')
+                # Alternatively, someone can take over your seat:', components=swap_seats_button(draft, ctx.author)
 
     @molter.message_command(name='pack', help="Resend your current pack")
     async def my_pack(self, ctx: MessageContext, draft_id: Optional[str] = None) -> None:
@@ -362,11 +356,18 @@ class CubeDrafter(Scale):
                         await player.send('You have been idle for 12 hours. After another 12 hours, a card will be picked automatically.', reply_to=msg['message'])
                     elif age > 60 * 60 * 24:
                         print(f"{player.display_name} has been holding a pack for {age / 60} minutes")
-                        await guild.try_pick(msg['message'].id, player.id, "1")
+                        await guild.try_pick(msg['message'].id, player.id, "1", None)
 
                         draft.draft.player_by_id(player.id).skips += 1
                         print(f"{player.display_name} has been skipped {draft.draft.player_by_id(player.id).skips} times")
 
+def swap_seats_button(draft: GuildDraft, old_player: Member) -> ActionRow:
+    button = Button(
+        style=ButtonStyles.PRIMARY,
+        label=f"Take {old_player.display_name}'s seat",
+        custom_id=f"swap:{draft.id()[0:7]}:{old_player.id}",
+    )
+    return ActionRow(button)
 
 def setup(bot: Snake) -> None:
     CubeDrafter(bot)

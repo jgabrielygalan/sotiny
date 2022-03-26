@@ -114,7 +114,7 @@ class GuildDraft:
         for p in self.players.values():
             await thread.add_member(p)
 
-    async def pick(self, player_id: int, message_id: int, emoji: str = None) -> None:
+    async def pick(self, player_id: int, message_id: int, emoji: str) -> None:
         if message_id is not None and emoji is not None and self.draft is not None:
             page_number = self.messages_by_player[player_id][message_id]["row"]
             item_number = NUMBERS_BY_EMOJI[emoji]
@@ -126,7 +126,11 @@ class GuildDraft:
 
         await self.handle_pick_response(info.updates, player_id, info.draft_effect)
 
-    async def picks(self, messageable, player_id):
+    async def picks(self, messageable, player_id: int) -> None:
+        if not self.draft:
+            await messageable.send("The draft hasn't started yet.")
+            return
+
         cards = self.draft.deck_of(player_id)
         if len(cards) == 0:
             await messageable.send(f"[{self.id_with_guild()}] You haven't picked any card yet")
@@ -138,7 +142,10 @@ class GuildDraft:
             if row is not None and len(row) > 0:
                 cardlist = list(row)
                 image_file = await image_fetcher.download_image_async(cardlist)
-                await send_image_with_retry(messageable, image_file)
+                if image_file:
+                    await send_image_with_retry(messageable, image_file)
+                else:
+                    await messageable.send(f"Couldn't download images for {cardlist}")
         await self.send_deckfile_to_player(messageable, player_id)
 
     async def send_current_pack_to_player(self, intro: str, player_id: int):
@@ -306,6 +313,30 @@ class GuildDraft:
                 print(f'{self.uuid} failed to reload, {player} not found')
                 return
 
+    async def abandon(self, player_id: int) -> bool:
+        self.abandon_votes.add(player_id)
+        needed = min(3, len(self.players))
+        if len(self.abandon_votes) >= needed:
+            self.guild.drafts_in_progress.remove(self)
+            return True
+        return False
+
+    async def swap_seats(self, old_player: int, new_player: int) -> bool:
+        if not self.draft or old_player not in self.draft.players or new_player in self.draft.players or old_player == new_player:
+            return False
+        member = await self.guild.guild.fetch_member(new_player)
+        if member is None:
+            return False
+        self.players[new_player] = member
+        del self.players[old_player]
+        if old_player in self.abandon_votes:
+            self.abandon_votes.remove(old_player)
+        self.draft.player_by_id(old_player).id = new_player
+        index = self.draft.players.index(old_player)
+        self.draft.players[index] = new_player
+        await self.picks(member, new_player)
+        await self.send_current_pack_to_player("Thanks for joining the draft!\n", new_player)
+        return True
 
 async def send_image_with_retry(user: SendMixin, image_file: str, text: str = '', **kwargs) -> Message:
     text = escape_underscores(text)

@@ -34,16 +34,19 @@ class Draft:
     metadata: dict[str, Any] = attr.ib(factory=dict)
 
     def player_by_id(self, player_id: int) -> DraftPlayer:
-        return self._state[self.players.index(player_id)]
+        state = self._state[self.players.index(player_id)]
+        if (state.id != player_id):
+            raise KeyError(f"Player {player_id} not found, found {state.id} instead")
+        return state
 
     def pack_of(self, player_id: int) -> Optional[Booster]:
         try:
-            return self._state[self.players.index(player_id)].current_pack
+            return self.player_by_id(player_id).current_pack
         except IndexError:
             return None
 
     def deck_of(self, player_id: int) -> List[str]:
-        return self._state[self.players.index(player_id)].deck
+        return self.player_by_id(player_id).deck
 
     def start(self, number_of_packs: int, cards_per_booster: int) -> List[DraftPlayer]:
         if number_of_packs * cards_per_booster * len(self.players) > len(self.cards):
@@ -122,9 +125,6 @@ class Draft:
                 if player not in users_to_update:
                     result[player] = []
 
-        if self.is_draft_finished():
-            print("Draft finished")
-
         return PickReturn(result, pick_effects)
 
     def check_if_draft_matters(self, player: DraftPlayer, pack: Booster) -> Optional[player_card_drafteffect]:
@@ -154,7 +154,7 @@ class Draft:
         i = player.seat
         if pack.number % 2 == 1:
             return self.players[(i + 1) % len(self.players)]
-        return self.players[i-1]
+        return self.players[i - 1]
 
 def was_last_pick_of_pack(pack: Booster) -> bool:
     return pack.is_empty()

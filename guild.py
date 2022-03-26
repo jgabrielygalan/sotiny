@@ -37,7 +37,6 @@ class GuildData:
 
     id: int
     name: str
-    role: Optional[dis_snek.Role]
     drafts_in_progress: List[GuildDraft] = attr.ib(default=attr.Factory(list), repr=lambda drafts: '[' + ', '.join(f'Draft({d.uuid},...)' for d in drafts) + ']')
     players: Dict[int, dis_snek.Member] = attr.ib(default=attr.Factory(dict))
     pending_conf: DraftSettings = attr.ib(default=attr.Factory(DraftSettings))
@@ -47,7 +46,6 @@ class GuildData:
         self.guild = guild
         self.id = guild.id
         self.name = guild.name
-        self.role = get_cubedrafter_role(guild)
         self.drafts_in_progress: List[GuildDraft] = []
         self.players: Dict[int, dis_snek.Member] = {}  # players registered for the next draft
         self.pending_conf: DraftSettings = DraftSettings(3, 15, 8, DEFAULT_CUBE_CUBECOBRA_ID)
@@ -123,7 +121,7 @@ class GuildData:
             return False
 
         draft: Optional[GuildDraft] = next((x for x in self.drafts_in_progress if x.has_message(message_id)), None)
-        if draft is None:
+        if draft is None or draft.draft is None:
             return False
         else:
             messages = draft.messages_by_player[player].copy()
@@ -133,16 +131,8 @@ class GuildData:
                 if mid == message_id and context is not None:
                     await context.edit_origin(components=recolour_buttons(data['message'].components, picked))
                 else:
-                    await data['message'].edit(components=recolour_buttons(data['message'].components, None))
+                    await data['message'].edit(components=recolour_buttons(data['message'].components, picked))
             return True
-
-    async def remove_role(self, draft):
-        if self.role is None:
-            return
-        for player in draft.get_players():
-            if not self.player_exists(player):
-                if dis_snek.utils.find(lambda m: m.name == 'CubeDrafter', player.roles):
-                    await player.remove_roles(self.role)
 
     async def save_state(self) -> None:
         if self.redis is None:
@@ -207,18 +197,3 @@ def recolour_buttons(components: List[ActionRow], green_name: Optional[str]) -> 
             else:
                 buttons.append(Button(ButtonStyles.GREY, c.label, c.emoji, disabled=True))
     return ActionRow(*buttons)
-
-def get_cubedrafter_role(guild: dis_snek.Guild) -> dis_snek.Role:
-    return None
-    role = dis_snek.utils.find(lambda m: m.name == 'CubeDrafter', guild.roles)
-    if role is None:
-        print("Guild {n} doesn't have the CubeDrafter role".format(n=guild.name))
-        return None
-    top_role = guild.me.top_role
-    print(f"{role.name} at {role.position}. {top_role.name} at {top_role.position}")
-    if role.position < top_role.position:
-        print("Guild {n} has the CubeDrafter role with id: {i}".format(n=guild.name, i=role.id))
-        return role
-    else:
-        print("Guild {n} has the CubeDrafter role with id: {i}, but with higher position than the bot, can't manage it".format(n=guild.name, i=role.id))
-        return None

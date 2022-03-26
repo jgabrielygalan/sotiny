@@ -2,7 +2,8 @@ import os
 from typing import Any
 
 import dotenv
-from dis_snek import Context, Intents, Snake
+from dis_snek.client.client import Snake
+from dis_snek import Context, Intents
 from dis_snek.client.errors import CommandCheckFailure, CommandException
 from dis_snek.models import listen
 from dis_taipan.protocols import SendableContext
