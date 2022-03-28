@@ -6,7 +6,7 @@ import traceback
 import urllib.request
 import uuid
 from io import BytesIO
-from typing import TYPE_CHECKING, Dict, Iterable, List, Optional, Set, TypedDict
+from typing import TYPE_CHECKING, Any, Dict, Iterable, List, Optional, Set, TypedDict
 
 import aiohttp
 import attr
@@ -21,7 +21,7 @@ from dis_snek.models import (ActionRow, Button, ButtonStyles, File, Member,
 
 import image_fetcher
 from cog_exceptions import DMsClosedException, UserFeedbackException
-from draft import (CARDS_WITH_FUNCTION, Draft, DraftEffect,
+from draft import (CARDS_WITH_FUNCTION, Draft, DraftEffect, Stage,
                    player_card_drafteffect)
 from draft_player import DraftPlayer
 
@@ -96,6 +96,11 @@ class GuildDraft:
         if self.start_channel_id is None:
             return None
         return await self.guild.guild.fetch_channel(self.start_channel_id)  # type: ignore
+
+    async def get_thread(self) -> Optional[dis_snek.ThreadChannel]:
+        if self.draft is None:
+            return None
+        return await self.guild.guild.fetch_thread(self.draft.metadata['thread_id'])
 
     async def start(self, channel: dis_snek.GuildText, packs: int, cards: int, cube: str) -> None:
         if not self.uuid:
@@ -257,10 +262,15 @@ class GuildDraft:
             channel = await self.get_channel()
             if channel is not None:
                 await channel.send("Finished the draft with {p}".format(p=", ".join([p.display_name for p in self.get_players()])))
+
+            thread = await self.get_thread()
+            if thread is not None:
+                await thread.send("Draft finished")
+
             for member in self.players.values():
                 await member.send(f"[{self.id_with_guild()}] The draft has finished")
-                await self.send_deckfile_to_player(member, player.id)
-            self.players.clear()
+                await self.send_deckfile_to_player(member, member.id)
+            self.draft.stage = Stage.draft_complete
             self.messages_by_player.clear()
 
     async def send_deckfile_to_player(self, messagable: SendMixin, player_id: int) -> None:
@@ -314,10 +324,14 @@ class GuildDraft:
                 return
 
     async def abandon(self, player_id: int) -> bool:
+        if self.draft is None:
+            return False
         self.abandon_votes.add(player_id)
         needed = min(3, len(self.players))
         if len(self.abandon_votes) >= needed:
             self.guild.drafts_in_progress.remove(self)
+            self.draft.stage = Stage.draft_complete
+            await self.save_state(self.guild.redis)
             return True
         return False
 
@@ -338,7 +352,7 @@ class GuildDraft:
         await self.send_current_pack_to_player("Thanks for joining the draft!\n", new_player)
         return True
 
-async def send_image_with_retry(user: SendMixin, image_file: str, text: str = '', **kwargs) -> Message:
+async def send_image_with_retry(user: SendMixin, image_file: str, text: str = '', **kwargs: Any) -> Message:
     text = escape_underscores(text)
     message = await user.send(file=image_file, content=text, **kwargs)
     if message and message.attachments and message.attachments[0].size == 0:

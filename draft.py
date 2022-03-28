@@ -9,6 +9,7 @@ from cog_exceptions import UserFeedbackException
 from draft_player import DraftPlayer
 
 DraftEffect = Enum('DraftEffect', 'no_immediate_effect add_booster_to_draft')
+Stage = Enum('Stage', 'draft_registration draft_in_progress draft_complete')
 
 player_card_drafteffect = Tuple[DraftPlayer, str, DraftEffect]
 
@@ -32,6 +33,7 @@ class Draft:
     number_of_packs: int = 3
     cards_per_booster: int = 15
     metadata: dict[str, Any] = attr.ib(factory=dict)
+    stage: Stage = Stage.draft_registration
 
     def player_by_id(self, player_id: int) -> DraftPlayer:
         state = self._state[self.players.index(player_id)]
@@ -76,7 +78,7 @@ class Draft:
         return [x for x in self._state if x.has_current_pack()]
 
     def is_draft_finished(self) -> bool:
-        return (self.is_pack_finished() and (self._opened_packs >= self.number_of_packs))
+        return (self.is_pack_finished() and (self._opened_packs >= self.number_of_packs)) or self.stage == Stage.draft_complete
 
     def is_pack_finished(self) -> bool:
         return len(self.get_pending_players()) == 0

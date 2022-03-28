@@ -38,6 +38,7 @@ class Bot(Snake):
                 return
             elif isinstance(error, CommandException):
                 await ctx.send(str(error))
+                return
             else:
                 await ctx.send("There was an error processing your command")
         await super().on_command_error(ctx, error, *args, **kwargs)
