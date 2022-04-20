@@ -133,7 +133,7 @@ class GuildData:
                 else:
                     await data['message'].edit(components=recolour_buttons(data['message'].components, picked))
             if context is not None:
-                draft.draft.player_by_id(player.id).skips = 0
+                draft.draft.player_by_id(player).skips = 0
             return True
 
     async def save_state(self) -> None:

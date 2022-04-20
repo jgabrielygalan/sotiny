@@ -340,7 +340,11 @@ class CubeDrafter(Scale):
                 if not draft.draft:
                     continue  # Typeguard
                 for player in draft.get_pending_players():
-                    msg = list(draft.messages_by_player[player.id].values())[0]
+                    mpp = draft.messages_by_player[player.id]
+                    if not mpp:
+                        print(f'WARNING: unable to time out {player} in {draft.uuid}, no messages.')
+                        continue
+                    msg = list(mpp.values())[0]
                     age = (Timestamp.utcnow() - msg['message'].timestamp).total_seconds()
                     if 60 * 60 * 12 + 60 > age > 60 * 60 * 12:
                         print(f"{player.display_name} has been holding a pack for {age / 60} minutes")
