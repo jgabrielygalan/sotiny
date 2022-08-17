@@ -11,13 +11,13 @@ from typing import TYPE_CHECKING, Any, Dict, Iterable, List, Optional, Set, Type
 import aiohttp
 import attr
 import cattr
-import dis_snek
+import naff
 import numpy
 from aioredis import Redis
-from dis_snek.client.errors import Forbidden, NotFound
-from dis_snek.client.mixins.send import SendMixin
-from dis_snek.models import (ActionRow, Button, ButtonStyles, File, Member,
-                             Message, User)
+from naff.client.errors import Forbidden, NotFound
+from naff.client.mixins.send import SendMixin
+from naff.models import (ActionRow, Button, ButtonStyles, File, Member,
+                             Message, User, GuildText, ThreadChannel)
 
 import image_fetcher
 from cog_exceptions import DMsClosedException, UserFeedbackException
@@ -49,7 +49,7 @@ class GuildDraft:
     Discord-aware wrapper for a Draft.
     """
     guild: 'GuildData' = attr.ib(repr=False)
-    players: Dict[int, dis_snek.Member] = attr.ib(factory=dict)
+    players: Dict[int, Member] = attr.ib(factory=dict)
     uuid: str = ''
     messages_by_player: Dict[int, Dict[int, MessageData]] = attr.ib(factory=dict, repr=False)  # messages_by_player[player_id][message_id] = MessageData
     draft: Optional[Draft] = None
@@ -74,7 +74,7 @@ class GuildDraft:
     def id_with_guild(self) -> str:
         return f"{self.guild.name}: {self.uuid}"
 
-    def get_players(self) -> Iterable[dis_snek.Member]:
+    def get_players(self) -> Iterable[Member]:
         return self.players.values()
 
     def has_player(self, player: User | Member) -> bool:
@@ -86,23 +86,23 @@ class GuildDraft:
                 return True
         return False
 
-    def get_pending_players(self) -> List[dis_snek.Member]:
+    def get_pending_players(self) -> List[Member]:
         if not self.draft:
             return []
         pending = self.draft.get_pending_players()
         return [self.players[x.id] for x in pending]
 
-    async def get_channel(self) -> Optional[dis_snek.GuildText]:
+    async def get_channel(self) -> Optional[GuildText]:
         if self.start_channel_id is None:
             return None
         return await self.guild.guild.fetch_channel(self.start_channel_id)  # type: ignore
 
-    async def get_thread(self) -> Optional[dis_snek.ThreadChannel]:
+    async def get_thread(self) -> Optional[ThreadChannel]:
         if self.draft is None:
             return None
         return await self.guild.guild.fetch_thread(self.draft.metadata['thread_id'])
 
-    async def start(self, channel: dis_snek.GuildText, packs: int, cards: int, cube: str) -> None:
+    async def start(self, channel: GuildText, packs: int, cards: int, cube: str) -> None:
         if not self.uuid:
             self.uuid = str(uuid.uuid4()).replace('-', '')
         card_list = await get_card_list(cube)

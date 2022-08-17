@@ -1,7 +1,7 @@
 from typing import Union
 
-from dis_snek.client.errors import CommandException, Forbidden
-from dis_snek.models import Member, User
+from naff.client.errors import CommandException, Forbidden
+from naff.models import Member, User
 
 
 class UserFeedbackException(CommandException):

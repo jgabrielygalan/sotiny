@@ -4,8 +4,8 @@ from typing import Dict, List, Optional
 import aioredis
 import attr
 import attrs
-from dis_snek import ActionRow, Button, ButtonStyles, ComponentContext, InteractionContext
-import dis_snek
+from naff import ActionRow, Button, ButtonStyles, ComponentContext, InteractionContext
+import naff
 
 import cube
 from cog_exceptions import DMsClosedException
@@ -32,42 +32,42 @@ class GuildData:
     """
     Maintains state about a Guild, and handles draft registration
     """
-    guild: dis_snek.Guild
+    guild: naff.Guild
     redis: aioredis.Redis
 
     id: int
     name: str
     drafts_in_progress: List[GuildDraft] = attr.ib(default=attr.Factory(list), repr=lambda drafts: '[' + ', '.join(f'Draft({d.uuid},...)' for d in drafts) + ']')
-    players: Dict[int, dis_snek.Member] = attr.ib(default=attr.Factory(dict))
+    players: Dict[int, naff.Member] = attr.ib(default=attr.Factory(dict))
     pending_conf: DraftSettings = attr.ib(default=attr.Factory(DraftSettings))
 
-    def __init__(self, guild: dis_snek.Guild, redis_client: aioredis.Redis) -> None:
+    def __init__(self, guild: naff.Guild, redis_client: aioredis.Redis) -> None:
         self.redis = redis_client
         self.guild = guild
         self.id = guild.id
         self.name = guild.name
         self.drafts_in_progress: List[GuildDraft] = []
-        self.players: Dict[int, dis_snek.Member] = {}  # players registered for the next draft
+        self.players: Dict[int, naff.Member] = {}  # players registered for the next draft
         self.pending_conf: DraftSettings = DraftSettings(3, 15, 8, DEFAULT_CUBE_CUBECOBRA_ID)
 
-    async def add_player(self, player: dis_snek.Member | dis_snek.User) -> None:
+    async def add_player(self, player: naff.Member | naff.User) -> None:
         self.players[player.id] = player
 
-    async def remove_player(self, player: dis_snek.Member | dis_snek.User) -> None:
+    async def remove_player(self, player: naff.Member | naff.User) -> None:
         if player.id in self.players:
             del self.players[player.id]
 
-    def is_player_registered(self, player: dis_snek.Member) -> bool:
+    def is_player_registered(self, player: naff.Member) -> bool:
         return player.id in self.players
 
-    def is_player_playing(self, player: dis_snek.Member) -> bool:
+    def is_player_playing(self, player: naff.Member) -> bool:
         draft = next((x for x in self.drafts_in_progress if x.has_player(player.id)), None)
         return draft is not None
 
     def no_registered_players(self) -> bool:
         return len(self.players) == 0
 
-    def get_registered_players(self) -> List[dis_snek.Member]:
+    def get_registered_players(self) -> List[naff.Member]:
         return list(self.players.values())
 
     def player_exists(self, player) -> bool:

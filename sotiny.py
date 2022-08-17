@@ -2,11 +2,11 @@ import os
 from typing import Any
 
 import dotenv
-from dis_snek.client.client import Snake
-from dis_snek import Context, Intents
-from dis_snek.client.errors import CommandCheckFailure, CommandException
-from dis_snek.models import listen
-from dis_taipan.protocols import SendableContext
+from naff.client.client import Client
+from naff import Context, Intents
+from naff.ext.prefixed_help import PrefixedHelpCommand
+from naff.client.errors import CommandCheckFailure, CommandException
+from naff.models import listen, SendableContext
 from traceback_with_variables import activate_by_import  # noqa
 
 from cog_exceptions import (NoPrivateMessage, PrivateMessageOnly,
@@ -19,7 +19,7 @@ if not os.path.exists('drafts'):
 
 PREFIX = os.getenv('BOT_PREFIX', default='>')
 
-class Bot(Snake):
+class Bot(Client):
     sentry_token = 'https://ade432a5a1474198b8e1955544429250@o233010.ingest.sentry.io/6272266'
 
     async def on_command_error(self, ctx: Context, error: Exception, *args: Any, **kwargs: Any) -> None:
@@ -35,7 +35,7 @@ class Bot(Snake):
                 return
             elif isinstance(error, CommandCheckFailure):
                 await ctx.send('You cannot use that command in this channel')
-                return
+                # return
             elif isinstance(error, CommandException):
                 await ctx.send(str(error))
                 return
@@ -44,16 +44,19 @@ class Bot(Snake):
         await super().on_command_error(ctx, error, *args, **kwargs)
 
 
-bot = Bot(default_prefix=PREFIX, fetch_members=True, intents=Intents.DEFAULT | Intents.GUILD_MEMBERS)
+bot = Bot(default_prefix=PREFIX, fetch_members=True, intents=Intents.DEFAULT | Intents.GUILD_MEMBERS | Intents.GUILD_MESSAGE_CONTENT)
 
 @listen()
 async def on_ready() -> None:
     print(f'{bot.user} has connected to Discord!')
 
-bot.load_extension('dis_snek.ext.debug_scale')
+bot.load_extension('naff.ext.debug_extension')
+# bot.load_extension('naff.ext.sentry')
 bot.load_extension('draft_cog')
-bot.load_extension('dis_taipan.updater')
-bot.load_extension('dis_taipan.sentry')
-bot.load_extension('botguild')
+# bot.load_extension('dis_taipan.updater')
+# bot.load_extension('botguild')
+
+help_cmd = PrefixedHelpCommand(bot)
+help_cmd.register()
 
 bot.start(os.getenv('DISCORD_TOKEN'))

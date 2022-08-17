@@ -2,16 +2,14 @@ import os
 from typing import Dict, List, Optional
 
 import aioredis
-from dis_snek import ActionRow, Button, ButtonStyles, Member, Timestamp
-import dis_snek
-import molter
-from dis_snek import (Context, InteractionContext, Modal, ModalContext, Scale,
-                      ShortText, Snake, slash_command)
-from dis_snek.client.errors import CommandException
-from dis_snek.models import (IntervalTrigger, MessageContext, Task, check,
+from naff import ActionRow, Button, ButtonStyles, Member, Timestamp
+import naff
+from naff import (Context, InteractionContext, Modal, ModalContext, Extension,
+                      ShortText, Client, slash_command, SendableContext)
+from naff.client.errors import CommandException
+from naff.models import (IntervalTrigger, PrefixedContext, Task, check,
                              listen)
-from dis_snek.models.snek.checks import TYPE_CHECK_FUNCTION
-from dis_taipan.protocols import SendableContext
+from naff.models.naff.checks import TYPE_CHECK_FUNCTION
 
 from cog_exceptions import (NoPrivateMessage, PrivateMessageOnly)
 from discord_draft import GuildDraft
@@ -40,8 +38,8 @@ def guild_only() -> TYPE_CHECK_FUNCTION:
 
     return check
 
-class CubeDrafter(Scale):
-    def __init__(self, bot: Snake) -> None:
+class CubeDrafter(Extension):
+    def __init__(self, bot: Client) -> None:
         self.bot = bot
         self.guilds_by_id: Dict[int, GuildData] = {}
         self.readied = False
@@ -51,7 +49,7 @@ class CubeDrafter(Scale):
             self.redis = None
             print('Could not connect to redis')
 
-    async def get_guild(self, ctx: Context) -> GuildData:
+    async def get_guild(self, ctx: Context | SendableContext) -> GuildData:
         if not ctx.guild:
             raise NoPrivateMessage
         guild = self.guilds_by_id.get(ctx.guild.id)
@@ -72,30 +70,30 @@ class CubeDrafter(Scale):
         self.status.start()
         self.timeout.start()
 
-    async def setup_guild(self, guild: dis_snek.Guild) -> GuildData:
+    async def setup_guild(self, guild: naff.Guild) -> GuildData:
         if not guild.id in self.guilds_by_id:
             self.guilds_by_id[guild.id] = GuildData(guild, self.redis)
             await self.guilds_by_id[guild.id].load_state()
         return self.guilds_by_id[guild.id]
 
     @listen()
-    async def on_guild_join(self, event: dis_snek.events.GuildJoin) -> None:
+    async def on_guild_join(self, event: naff.events.GuildJoin) -> None:
         guild = event.guild
         print("Joined {n}".format(n=guild.name))
         if not guild.id in self.guilds_by_id:
             await self.setup_guild(guild)
 
     @listen()
-    async def on_guild_left(self, event: dis_snek.events.GuildLeft) -> None:
+    async def on_guild_left(self, event: naff.events.GuildLeft) -> None:
         guild = event.guild
         if guild:
             print("Removed from {n}".format(n=guild.name))
         if event.guild_id in self.guilds_by_id:
-            del self.guilds_by_id[event.guild_id]
+            del self.guilds_by_id[int(event.guild_id)]
 
-    @molter.message_command()
+    @naff.prefixed_command()  # type: ignore
     @check(guild_only())
-    async def play(self, ctx: MessageContext) -> None:
+    async def play(self, ctx: PrefixedContext) -> None:
         """
         Register to play a draft
         """
@@ -116,9 +114,9 @@ class CubeDrafter(Scale):
             await guild.start(ctx)
         await guild.save_state()
 
-    join = molter.message_command(name='join')(play.callback)
+    join = naff.prefixed_command(name='join')(play.callback)
 
-    @molter.message_command(name='leave')
+    @naff.prefixed_command(name='leave')  # type: ignore
     @check(guild_only())
     async def cancel(self, ctx):
         """Cancel your registration for an upcoming draft."""
@@ -132,7 +130,7 @@ class CubeDrafter(Scale):
             print(f"{player.display_name} is not registered, can't cancel")
             await ctx.send("{mention}, you are not registered for the draft, I can't cancel".format(mention=ctx.author.mention))
 
-    @molter.message_command(name='players', help='List registered players for the next draft')
+    @naff.prefixed_command(name='players', help='List registered players for the next draft')   # type: ignore
     @check(guild_only())
     async def players(self, ctx):
         guild = await self.get_guild(ctx)
@@ -142,9 +140,9 @@ class CubeDrafter(Scale):
         else:
             await ctx.send("The following players are registered for the next draft: {p}".format(p=", ".join([p.nick or p.user.username for p in guild.get_registered_players()])))
 
-    @molter.message_command(name='start', help="Start the draft with the registered players. Packs is the number of packs to open per player (default 3). cards is the number of cards per booster (default 15). cube is the CubeCobra id of a Cube (default Penny Dreadful Eternal Cube).")
+    @naff.prefixed_command(name='start', help="Start the draft with the registered players. Packs is the number of packs to open per player (default 3). cards is the number of cards per booster (default 15). cube is the CubeCobra id of a Cube (default Penny Dreadful Eternal Cube).")  # type: ignore
     @check(guild_only())
-    async def start(self, ctx: MessageContext) -> None:
+    async def start(self, ctx: PrefixedContext) -> None:
         guild = await self.get_guild(ctx)
         if guild.no_registered_players():
             await ctx.send("Can't start the draft, there are no registered players")
@@ -153,15 +151,15 @@ class CubeDrafter(Scale):
         await guild.start(ctx)
         await guild.save_state()
 
-    @dis_snek.listen()
-    async def on_component(self, event: dis_snek.events.Component) -> None:
-        ctx: dis_snek.ComponentContext = event.context
+    @naff.listen()
+    async def on_component(self, event: naff.events.Component) -> None:
+        ctx: naff.ComponentContext = event.context
         for guild in self.guilds_by_id.values():
             handled = await guild.try_pick(ctx.message.id, ctx.author.id, ctx.custom_id, ctx)
             if handled:
                 await guild.save_state()
 
-    @molter.message_command(name='pending')
+    @naff.prefixed_command(name='pending')
     async def pending(self, ctx):
         """
         Show players who still haven't picked
@@ -178,15 +176,15 @@ class CubeDrafter(Scale):
             else:
                 await ctx.send(prefix + "No pending players")
 
-    @molter.message_command(name='deck', help="Show your current deck as images")
+    @naff.prefixed_command(name='deck', help="Show your current deck as images")  # type: ignore
     @check(dm_only())
     async def my_deck(self, ctx, draft_id = None):
         draft = await self.find_draft_or_send_error(ctx, draft_id)
         if draft is not None:
             await draft.picks(ctx, ctx.author.id)
 
-    @molter.message_command()
-    async def abandon(self, ctx: MessageContext, draft_id = None):
+    @naff.prefixed_command()
+    async def abandon(self, ctx: PrefixedContext, draft_id = None):
         """Vote to cancel an in-progress draft"""
         draft = await self.find_draft_or_send_error(ctx, draft_id)
         if draft is not None:
@@ -202,8 +200,8 @@ class CubeDrafter(Scale):
                 await chan.send(f'{draft.id()} needs {needed - len(draft.abandon_votes)} more votes to abandon.')
                 # Alternatively, someone can take over your seat:', components=swap_seats_button(draft, ctx.author)
 
-    @molter.message_command(name='pack', help="Resend your current pack")
-    async def my_pack(self, ctx: MessageContext, draft_id: Optional[str] = None) -> None:
+    @naff.prefixed_command(name='pack', help="Resend your current pack")
+    async def my_pack(self, ctx: PrefixedContext, draft_id: Optional[str] = None) -> None:
         draft = await self.find_draft_or_send_error(ctx, draft_id, True)
         if draft is None or draft.draft is None:
             return
@@ -214,7 +212,7 @@ class CubeDrafter(Scale):
 
         await draft.send_current_pack_to_player("Your pack:", ctx.author.id)
 
-    @molter.message_command(name='drafts', help="Show your in progress drafts")
+    @naff.prefixed_command(name='drafts', help="Show your in progress drafts")
     async def my_drafts(self, ctx):
         drafts = await self.find_drafts_by_player(ctx)
         if len(drafts) == 0:
@@ -224,8 +222,8 @@ class CubeDrafter(Scale):
             list = divider.join([f"[{x.guild.name}:{x.id()}] {x.draft.number_of_packs} packs ({x.draft.cards_per_booster} cards). {', '.join([p.display_name for p in x.get_players()])}" for x in drafts])
             await ctx.send(f"{list}")
 
-    @molter.message_command('setup')
-    async def m_setup(self, ctx: MessageContext) -> None:
+    @naff.prefixed_command('setup')
+    async def m_setup(self, ctx: PrefixedContext) -> None:
         await ctx.send('This command has been replace by `/setup-cube`')
 
     @slash_command('setup-cube')
@@ -245,19 +243,19 @@ class CubeDrafter(Scale):
                 ShortText(
                     label="Number of players",
                     custom_id="max_players",
-                    value=guild.pending_conf.max_players,
+                    value=str(guild.pending_conf.max_players),
                     required=True,
                 ),
                 ShortText(
                     label="Number of Packs",
                     custom_id="number_of_packs",
-                    value=guild.pending_conf.number_of_packs,
+                    value=str(guild.pending_conf.number_of_packs),
                     required=True,
                 ),
                 ShortText(
                     label="Cards per booster",
                     custom_id="cards_per_booster",
-                    value=guild.pending_conf.cards_per_booster,
+                    value=str(guild.pending_conf.cards_per_booster),
                     required=True,
                 ),
             ]
@@ -364,7 +362,7 @@ def swap_seats_button(draft: GuildDraft, old_player: Member) -> ActionRow:
         label=f"Take {old_player.display_name}'s seat",
         custom_id=f"swap:{draft.id()[0:7]}:{old_player.id}",
     )
-    return ActionRow(button)
+    return ActionRow(button)  # type: ignore
 
-def setup(bot: Snake) -> None:
+def setup(bot: Client) -> None:
     CubeDrafter(bot)
