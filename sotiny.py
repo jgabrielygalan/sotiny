@@ -20,8 +20,6 @@ if not os.path.exists('drafts'):
 PREFIX = os.getenv('BOT_PREFIX', default='>')
 
 class Bot(Client):
-    sentry_token = 'https://ade432a5a1474198b8e1955544429250@o233010.ingest.sentry.io/6272266'
-
     async def on_command_error(self, ctx: Context, error: Exception, *args: Any, **kwargs: Any) -> None:
         if isinstance(ctx, SendableContext):
             if isinstance(error, UserFeedbackException):
@@ -51,7 +49,7 @@ async def on_ready() -> None:
     print(f'{bot.user} has connected to Discord!')
 
 bot.load_extension('naff.ext.debug_extension')
-bot.load_extension('naff.ext.sentry')
+bot.load_extension('naff.ext.sentry', token='https://ade432a5a1474198b8e1955544429250@o233010.ingest.sentry.io/6272266')
 bot.load_extension('draft_cog')
 bot.load_extension('dis_taipan.updater')
 bot.load_extension('botguild')
