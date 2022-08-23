@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "54945c07f7d0b044232eaa9cec0aa6ac0b7404dd1b175f7e1a52a9845bfefb9f"
+            "sha256": "c457eda42727915f6d50c8670ff4bab909cc25a3784af81d0a7cce616864a075"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -149,6 +149,14 @@
             ],
             "markers": "python_version >= '3.6'",
             "version": "==2.1.1"
+        },
+        "dis-taipan": {
+            "hashes": [
+                "sha256:068728fd19d671aa3ba3d654e34ca2770e8e6959150c81a7dbbc0e6c8818aff5",
+                "sha256:bf51aba6046f61e515b3ab995b6be65d78aa88014a1ea9610ecff7a76b26a74b"
+            ],
+            "index": "pypi",
+            "version": "==0.3.0"
         },
         "discord-typings": {
             "hashes": [

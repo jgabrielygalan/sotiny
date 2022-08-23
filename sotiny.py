@@ -53,8 +53,8 @@ async def on_ready() -> None:
 bot.load_extension('naff.ext.debug_extension')
 bot.load_extension('naff.ext.sentry')
 bot.load_extension('draft_cog')
-# bot.load_extension('dis_taipan.updater')
-# bot.load_extension('botguild')
+bot.load_extension('dis_taipan.updater')
+bot.load_extension('botguild')
 
 help_cmd = PrefixedHelpCommand(bot)
 help_cmd.register()
