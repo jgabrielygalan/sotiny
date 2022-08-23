@@ -5,8 +5,7 @@ import aioredis
 import attr
 import attrs
 import naff
-from naff import (ActionRow, Button, ButtonStyles, ComponentContext,
-                  InteractionContext)
+from naff import (ActionRow, Button, ButtonStyles, ComponentContext)
 
 import cube
 from cog_exceptions import DMsClosedException
@@ -40,7 +39,7 @@ class GuildData:
     name: str
     drafts_in_progress: List[GuildDraft] = attr.ib(default=attr.Factory(list), repr=lambda drafts: '[' + ', '.join(f'Draft({d.uuid},...)' for d in drafts) + ']')
     players: Dict[int, naff.Member] = attr.ib(default=attr.Factory(dict))
-    pending_conf: DraftSettings = attr.ib(default=attr.Factory(DraftSettings))
+    pending_conf: DraftSettings = attr.ib(default=attr.Factory(DraftSettings))  # type: ignore
 
     def __init__(self, guild: naff.Guild, redis_client: aioredis.Redis) -> None:
         self.redis = redis_client
@@ -51,7 +50,7 @@ class GuildData:
         self.players: Dict[int, naff.Member] = {}  # players registered for the next draft
         self.pending_conf: DraftSettings = DraftSettings(3, 15, 8, DEFAULT_CUBE_CUBECOBRA_ID)
 
-    async def add_player(self, player: naff.Member | naff.User) -> None:
+    async def add_player(self, player: naff.Member) -> None:
         self.players[player.id] = player
 
     async def remove_player(self, player: naff.Member | naff.User) -> None:
@@ -62,7 +61,7 @@ class GuildData:
         return player.id in self.players
 
     def is_player_playing(self, player: naff.Member) -> bool:
-        draft = next((x for x in self.drafts_in_progress if x.has_player(player.id)), None)
+        draft = next((x for x in self.drafts_in_progress if x.has_player(player)), None)
         return draft is not None
 
     def no_registered_players(self) -> bool:
@@ -191,12 +190,14 @@ class GuildData:
         return draft
 
 
-def recolour_buttons(components: List[ActionRow], green_name: Optional[str]) -> ActionRow:
+def recolour_buttons(components: Optional[List[ActionRow]], green_name: Optional[str]) -> ActionRow:
     buttons = []
+    if not components:
+        return ActionRow()
     for c in components[0].components:
         if isinstance(c, Button):
             if c.label == green_name:
                 buttons.append(Button(ButtonStyles.GREEN, c.label, c.emoji, disabled=True))
             else:
                 buttons.append(Button(ButtonStyles.GREY, c.label, c.emoji, disabled=True))
-    return ActionRow(*buttons)
+    return ActionRow(*buttons)  # type: ignore

@@ -191,11 +191,11 @@ class GuildDraft:
             emoji_cog = self.guild.guild._client.get_scale('EmojiGuild')
             text = ''.join([f'{await emoji_cog.get_emoji(a)} {a}' for a in actions])
 
-            message = await messageable.send(f'Optionally activate: {text}', components=await self.conspiracy_buttons(actions))
+            message = await messageable.send(f'Optionally activate: {text}', components=await self.conspiracy_buttons(actions))  # type: ignore
 
     def buttons(self, cards: Iterable[str]) -> List[ActionRow]:
         return [ActionRow(
-            *[
+            *[  # type: ignore
                 Button(style=ButtonStyles.BLUE,
                        label=c,
                        custom_id=f'{i + 1}',
@@ -207,7 +207,7 @@ class GuildDraft:
     async def conspiracy_buttons(self, cards: Iterable[str]) -> List[ActionRow]:
         emoji_cog = self.guild.guild._client.get_scale('EmojiGuild')
         return [ActionRow(
-            *[
+            *[  # type: ignore
                 Button(style=ButtonStyles.GREY,
                        label=c,
                        custom_id=f'{i + 1}',
@@ -235,7 +235,9 @@ class GuildDraft:
                 coroutines.append(p.send(text))
             channel = await self.get_channel()
             if channel is not None:
-                await channel.send(text, file=File(await image_fetcher.download_image_async([effect[1]])))
+                revealed_card = await image_fetcher.download_image_async([effect[1]])
+                if revealed_card is not None:
+                    await channel.send(text, file=File(revealed_card))
 
         for player, autopicks in updates.items():
             deck = ''
@@ -244,7 +246,11 @@ class GuildDraft:
             messageable: SendMixin = self.players[player.id]
             if autopicks:
                 autopick_str = ', '.join(autopicks)
-                coroutines.append(messageable.send(f'[{self.id_with_guild()}] Autopicks: {autopick_str}', file=File(await image_fetcher.download_image_async(autopicks))))
+                image = await image_fetcher.download_image_async(autopicks)
+                file = None
+                if image:
+                    file = File(image)
+                coroutines.append(messageable.send(f'[{self.id_with_guild()}] Autopicks: {autopick_str}', file=file))
 
             if player.current_pack is not None:
                 if player.id == player_id:

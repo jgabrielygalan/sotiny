@@ -1,5 +1,5 @@
 import os
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, cast
 
 import aioredis
 import naff
@@ -96,7 +96,7 @@ class CubeDrafter(Extension):
         """
         Register to play a draft
         """
-        player = ctx.author
+        player = cast(naff.Member, ctx.author)  # Guild-only, so it will be a member
         guild = await self.get_guild(ctx)
         print(f"Registering {player.display_name} for the next draft")
         await guild.add_player(player)
