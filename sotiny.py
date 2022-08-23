@@ -2,11 +2,11 @@ import os
 from typing import Any
 
 import dotenv
-from naff.client.client import Client
 from naff import Context, Intents
-from naff.ext.prefixed_help import PrefixedHelpCommand
+from naff.client.client import Client
 from naff.client.errors import CommandCheckFailure, CommandException
-from naff.models import listen, SendableContext
+from naff.ext.prefixed_help import PrefixedHelpCommand
+from naff.models import SendableContext, listen
 from traceback_with_variables import activate_by_import  # noqa
 
 from cog_exceptions import (NoPrivateMessage, PrivateMessageOnly,
@@ -51,7 +51,7 @@ async def on_ready() -> None:
     print(f'{bot.user} has connected to Discord!')
 
 bot.load_extension('naff.ext.debug_extension')
-# bot.load_extension('naff.ext.sentry')
+bot.load_extension('naff.ext.sentry')
 bot.load_extension('draft_cog')
 # bot.load_extension('dis_taipan.updater')
 # bot.load_extension('botguild')

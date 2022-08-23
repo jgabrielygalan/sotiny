@@ -6,18 +6,18 @@ import traceback
 import urllib.request
 import uuid
 from io import BytesIO
-from typing import TYPE_CHECKING, Any, Dict, Iterable, List, Optional, Set, TypedDict
+from typing import (TYPE_CHECKING, Any, Dict, Iterable, List, Optional, Set,
+                    TypedDict)
 
 import aiohttp
 import attr
 import cattr
-import naff
 import numpy
 from aioredis import Redis
 from naff.client.errors import Forbidden, NotFound
 from naff.client.mixins.send import SendMixin
-from naff.models import (ActionRow, Button, ButtonStyles, File, Member,
-                             Message, User, GuildText, ThreadChannel)
+from naff.models import (ActionRow, Button, ButtonStyles, File, GuildText,
+                         Member, Message, ThreadChannel, User)
 
 import image_fetcher
 from cog_exceptions import DMsClosedException, UserFeedbackException
@@ -179,6 +179,8 @@ class GuildDraft:
         for row in rows:
             if row is not None and len(row) > 0:
                 image_file = await image_fetcher.download_image_async(row)
+                if image_file is None:
+                    raise RuntimeError(f"Couldn't download images for {row}")
                 cardrow: list[str] = list(row)
                 components: list[ActionRow] = self.buttons(cardrow)
                 message = await send_image_with_retry(messageable, image_file, components=components)

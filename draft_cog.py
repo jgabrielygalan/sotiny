@@ -2,16 +2,15 @@ import os
 from typing import Dict, List, Optional
 
 import aioredis
-from naff import ActionRow, Button, ButtonStyles, Member, Timestamp
 import naff
-from naff import (Context, InteractionContext, Modal, ModalContext, Extension,
-                      ShortText, Client, slash_command, SendableContext)
+from naff import (ActionRow, Button, ButtonStyles, Client, Context, Extension,
+                  InteractionContext, Member, Modal, ModalContext,
+                  SendableContext, ShortText, Timestamp, slash_command)
 from naff.client.errors import CommandException
-from naff.models import (IntervalTrigger, PrefixedContext, Task, check,
-                             listen)
+from naff.models import IntervalTrigger, PrefixedContext, Task, check, listen
 from naff.models.naff.checks import TYPE_CHECK_FUNCTION
 
-from cog_exceptions import (NoPrivateMessage, PrivateMessageOnly)
+from cog_exceptions import NoPrivateMessage, PrivateMessageOnly
 from discord_draft import GuildDraft
 from guild import GuildData
 
@@ -154,6 +153,7 @@ class CubeDrafter(Extension):
     @naff.listen()
     async def on_component(self, event: naff.events.Component) -> None:
         ctx: naff.ComponentContext = event.context
+        await ctx.defer(edit_origin=True)
         for guild in self.guilds_by_id.values():
             handled = await guild.try_pick(ctx.message.id, ctx.author.id, ctx.custom_id, ctx)
             if handled:

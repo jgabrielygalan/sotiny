@@ -4,8 +4,9 @@ from typing import Dict, List, Optional
 import aioredis
 import attr
 import attrs
-from naff import ActionRow, Button, ButtonStyles, ComponentContext, InteractionContext
 import naff
+from naff import (ActionRow, Button, ButtonStyles, ComponentContext,
+                  InteractionContext)
 
 import cube
 from cog_exceptions import DMsClosedException

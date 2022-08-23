@@ -12,7 +12,7 @@ pillow = "*"
 python-dotenv = "*"
 traceback-with-variables = "*"
 orjson = "*"
-naff = "==1.7.1"
+naff = {extras = ["sentry"], ref = "dev", git = "https://github.com/NAFTeam/NAFF.git"}
 
 [dev-packages]
 flake8 = "*"
