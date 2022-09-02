@@ -96,16 +96,23 @@ class CubeDrafter(Extension):
         """
         Register to play a draft
         """
+        await self.register_player(ctx, True)
+
+    async def register_player(self, ctx: SendableContext, embed: bool) -> None:
         player = cast(naff.Member, ctx.author)  # Guild-only, so it will be a member
         guild = await self.get_guild(ctx)
         print(f"Registering {player.display_name} for the next draft")
         await guild.add_player(player)
         num_players = len(guild.players)
         if num_players == 1:
-            msg = f"{ctx.author.mention}, I have registered you for a draft of https://cubecobra.com/cube/overview/{guild.pending_conf.cube_id}"
+            msg = f"{player.mention}, I have registered you for a draft of "
+            if embed:
+                msg += f"https://cubecobra.com/cube/overview/{guild.pending_conf.cube_id}"
+            else:
+                msg += f"<https://cubecobra.com/cube/overview/{guild.pending_conf.cube_id}>"
         else:
             cubeinfo = await guild.pending_conf.cubedata()
-            msg = f"{ctx.author.mention}, I have registered you for the next draft of {cubeinfo.name}"
+            msg = f"{player.mention}, I have registered you for the next draft of {cubeinfo.name}"
         if guild.pending_conf.max_players:
             msg = msg + f'\nYou are player {num_players} of {guild.pending_conf.max_players}'
         await ctx.send(msg)
@@ -154,6 +161,9 @@ class CubeDrafter(Extension):
     async def on_component(self, event: naff.events.Component) -> None:
         ctx: naff.ComponentContext = event.context
         await ctx.defer(edit_origin=True)
+        if ctx.custom_id == 'join_draft':
+            await self.register_player(ctx, False)
+            return
         for guild in self.guilds_by_id.values():
             handled = await guild.try_pick(ctx.message.id, ctx.author.id, ctx.custom_id, ctx)
             if handled:
@@ -274,7 +284,8 @@ class CubeDrafter(Extension):
         guild.setup(number_of_packs, cards_per_booster, cube_id, max_players)
         try:
             data = await guild.pending_conf.cubedata()
-            await modal_ctx.send(f"Okay. I'll start a draft of {data.name} by {data.owner_name} (`{data.shortID}`) when we have {max_players} players")
+            await modal_ctx.send(f"Okay. I'll start a draft of {data.name} by {data.owner_name} (`{data.shortID}`) when we have {max_players} players",
+            components=[Button(ButtonStyles.GREEN, "JOIN", custom_id='join_draft')])
         except Exception:
             await modal_ctx.send(f"Unable to load data for https://cubecobra.com/cube/overview/{cube_id}, please double-check the ID and try again.")
             raise
