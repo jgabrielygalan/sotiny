@@ -353,18 +353,29 @@ class CubeDrafter(Extension):
                     if not mpp:
                         print(f'WARNING: unable to time out {player} in {draft.uuid}, no messages.')
                         continue
+
+                    draft_player = draft.draft.player_by_id(player.id)
                     msg = list(mpp.values())[0]
                     age = (Timestamp.utcnow() - msg['message'].timestamp).total_seconds()
-                    if 60 * 60 * 12 + 60 > age > 60 * 60 * 12:
+                    if draft_player.skips == 0:
+                        timeout = 60 * 60 * 24
+                    elif draft_player.skips == 1:
+                        timeout = 60 * 60 * 12
+                    elif draft_player.skips == 2:
+                        timeout = 60 * 60 * 6
+                    else:
+                        timeout = 60 * 60 * 1
+                    if (timeout / 2) + 60 > age > (timeout / 2):
                         print(f"{player.display_name} has been holding a pack for {age / 60} minutes")
                         await player.send('You have been idle for 12 hours. After another 12 hours, a card will be picked automatically.', reply_to=msg['message'])
-                    elif age > 60 * 60 * 24:
+                    elif age > timeout:
                         print(f"{player.display_name} has been holding a pack for {age / 60} minutes")
                         await guild.try_pick(msg['message'].id, player.id, "1", None)
 
-                        draft.draft.player_by_id(player.id).skips += 1
-                        print(f"{player.display_name} has been skipped {draft.draft.player_by_id(player.id).skips} times")
-                        if draft.draft.player_by_id(player.id).skips > 3:
+                        draft_player.skips += 1
+                        print(f"{player.display_name} has been skipped {draft_player.skips} times")
+
+                        if draft_player.skips > 3:
                             draft.abandon_votes.add(player.id)
 
 def swap_seats_button(draft: GuildDraft, old_player: Member) -> ActionRow:
