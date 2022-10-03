@@ -20,7 +20,7 @@ if not os.path.exists('drafts'):
 PREFIX = os.getenv('BOT_PREFIX', default='>')
 
 class Bot(Client):
-    async def on_command_error(self, ctx: Context, error: Exception, *args: Any, **kwargs: Any) -> None:
+    async def on_command_error(self, ctx: SendableContext, error: Exception, *args: Any, **kwargs: Any) -> None:
         if isinstance(ctx, SendableContext):
             if isinstance(error, UserFeedbackException):
                 await ctx.send(f"{ctx.author.mention}: {error}")
@@ -33,7 +33,7 @@ class Bot(Client):
                 return
             elif isinstance(error, CommandCheckFailure):
                 await ctx.send('You cannot use that command in this channel')
-                # return
+                return
             elif isinstance(error, CommandException):
                 await ctx.send(str(error))
                 return
@@ -49,7 +49,7 @@ async def on_ready() -> None:
     print(f'{bot.user} has connected to Discord!')
 
 bot.load_extension('naff.ext.debug_extension')
-bot.load_extension('naff.ext.sentry', token='https://ade432a5a1474198b8e1955544429250@o233010.ingest.sentry.io/6272266')
+bot.load_extension('naff.ext.sentry', token='https://ade432a5a1474198b8e1955544429250@o233010.ingest.sentry.io/6272266')  # type: ignore
 bot.load_extension('draft_cog')
 bot.load_extension('dis_taipan.updater')
 bot.load_extension('botguild')
@@ -57,4 +57,8 @@ bot.load_extension('botguild')
 help_cmd = PrefixedHelpCommand(bot)
 help_cmd.register()
 
-bot.start(os.getenv('DISCORD_TOKEN'))
+TOKEN = os.getenv('DISCORD_TOKEN')
+if not TOKEN:
+    print('Please set DISCORD_TOKEN')
+else:
+    bot.start(TOKEN)

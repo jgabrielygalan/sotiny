@@ -5,7 +5,7 @@ import aioredis
 import attr
 import attrs
 import naff
-from naff import (ActionRow, Button, ButtonStyles, ComponentContext)
+from naff import (ActionRow, Button, ButtonStyles, ComponentContext, SendableContext)
 
 import cube
 from cog_exceptions import DMsClosedException
@@ -101,7 +101,7 @@ class GuildData:
             players = int(players.decode())
         self.pending_conf = DraftSettings(packs, cards, players, cube)
 
-    async def start(self, ctx):
+    async def start(self, ctx: SendableContext) -> None:
         players = copy(self.players)
         draft = GuildDraft(self, players)
         try:
