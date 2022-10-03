@@ -12,8 +12,8 @@ pillow = "*"
 python-dotenv = "*"
 traceback-with-variables = "*"
 orjson = "*"
-naff = {extras = ["sentry"], ref = "dev", git = "https://github.com/NAFTeam/NAFF.git"}
 dis-taipan = "*"
+naff = {extras = ["sentry"], version = "*"}
 
 [dev-packages]
 flake8 = "*"
