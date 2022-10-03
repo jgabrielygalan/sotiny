@@ -384,7 +384,7 @@ def swap_seats_button(draft: GuildDraft, old_player: Member) -> ActionRow:
         label=f"Take {old_player.display_name}'s seat",
         custom_id=f"swap:{draft.id()[0:7]}:{old_player.id}",
     )
-    return ActionRow(button)  # type: ignore
+    return ActionRow(button)
 
 def setup(bot: Client) -> None:
     CubeDrafter(bot)

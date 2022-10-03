@@ -6,7 +6,7 @@ import traceback
 import urllib.request
 import uuid
 from io import BytesIO
-from typing import (TYPE_CHECKING, Any, Dict, Iterable, List, Optional, Set,
+from typing import (TYPE_CHECKING, Any, Dict, Iterable, List, Optional, Sequence, Set,
                     TypedDict)
 
 import aiohttp
@@ -152,13 +152,13 @@ class GuildDraft:
                     await messageable.send(f"Couldn't download images for {cardlist}")
         await self.send_deckfile_to_player(messageable, player_id)
 
-    async def send_current_pack_to_player(self, intro: str, player_id: int):
+    async def send_current_pack_to_player(self, intro: str, player_id: int) -> None:
         if self.draft is None:
             return
         player = self.draft.player_by_id(player_id)
         await self.send_pack_to_player(intro, player)
 
-    async def send_pack_to_player(self, intro: str, player: DraftPlayer):
+    async def send_pack_to_player(self, intro: str, player: DraftPlayer) -> None:
         if self.draft is None:
             return
         player_id = player.id
@@ -190,7 +190,7 @@ class GuildDraft:
             emoji_cog = self.guild.guild._client.get_scale('EmojiGuild')
             text = ''.join([f'{await emoji_cog.get_emoji(a)} {a}' for a in actions])
 
-            message = await messageable.send(f'Optionally activate: {text}', components=await self.conspiracy_buttons(actions))  # type: ignore
+            message = await messageable.send(f'Optionally activate: {text}', components=await self.conspiracy_buttons(actions))
 
     def buttons(self, cards: Iterable[str]) -> List[ActionRow]:
         return [ActionRow(
@@ -388,7 +388,7 @@ def escape_underscores(s: str) -> str:
     return new_s
 
 
-def generate_file_content(cards):
+def generate_file_content(cards: Sequence[str]) -> str:
     return "\n".join(["1 {c}".format(c=card) for card in cards])
 
 async def fetch(session, url):

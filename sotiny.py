@@ -2,7 +2,7 @@ import os
 from typing import Any
 
 import dotenv
-from naff import Context, Intents
+from naff import Intents
 from naff.client.client import Client
 from naff.client.errors import CommandCheckFailure, CommandException
 from naff.ext.prefixed_help import PrefixedHelpCommand
