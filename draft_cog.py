@@ -367,7 +367,7 @@ class CubeDrafter(Extension):
                         timeout = 60 * 60 * 1
                     if (timeout / 2) + 60 > age > (timeout / 2):
                         print(f"{player.display_name} has been holding a pack for {age / 60} minutes")
-                        await player.send('You have been idle for 12 hours. After another 12 hours, a card will be picked automatically.', reply_to=msg['message'])
+                        await player.send(f'You have been idle for {timeout / 2 / 60 / 60} hours. After another {timeout / 2 / 60 / 60} hours, a card will be picked automatically.', reply_to=msg['message'])
                     elif age > timeout:
                         print(f"{player.display_name} has been holding a pack for {age / 60} minutes")
                         await guild.try_pick(msg['message'].id, player.id, "1", None)
