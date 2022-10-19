@@ -7,7 +7,7 @@ from naff import (ActionRow, Button, ButtonStyles, Client, Context, Extension,
                   InteractionContext, Member, Modal, ModalContext,
                   SendableContext, ShortText, Timestamp, slash_command)
 from naff.client.errors import CommandException
-from naff.models import IntervalTrigger, PrefixedContext, Task, check, listen
+from naff.models import IntervalTrigger, PrefixedContext, Task, check, listen, MessageFlags
 from naff.models.naff.checks import TYPE_CHECK_FUNCTION
 
 from cog_exceptions import NoPrivateMessage, PrivateMessageOnly
@@ -101,6 +101,12 @@ class CubeDrafter(Extension):
     async def register_player(self, ctx: SendableContext, embed: bool) -> None:
         player = cast(naff.Member, ctx.author)  # Guild-only, so it will be a member
         guild = await self.get_guild(ctx)
+        if player.id in guild.players:
+            if isinstance(ctx, InteractionContext):
+                flags = MessageFlags.EPHEMERAL
+            else:
+                flags = MessageFlags.NONE
+            await ctx.send(f'You are already registered, waiting for {guild.pending_conf.max_players - len(guild.players)} more players.', flags=flags)
         print(f"Registering {player.display_name} for the next draft")
         await guild.add_player(player)
         num_players = len(guild.players)
