@@ -13,6 +13,7 @@ from naff.models.naff.checks import TYPE_CHECK_FUNCTION
 
 from cog_exceptions import NoPrivateMessage, PrivateMessageOnly
 from discord_draft import GuildDraft
+from draftbot import DraftBot
 from guild import GuildData
 
 DEFAULT_PACK_NUMBER = 3
@@ -377,7 +378,10 @@ class CubeDrafter(Extension):
                         await player.send(f'You have been idle for {timeout / 2 / 60 / 60} hours. After another {timeout / 2 / 60 / 60} hours, a card will be picked automatically.', reply_to=msg['message'])
                     elif age > timeout:
                         print(f"{player.display_name} has been holding a pack for {age / 60} minutes")
-                        await guild.try_pick(msg['message'].id, player.id, "1", None)
+                        bot = DraftBot(draft_player)
+                        c = await bot.pick()
+                        i = str(c in draft_player.current_pack.cards or 1)
+                        await guild.try_pick(msg['message'].id, player.id, i, None)
 
                         draft_player.skips += 1
                         print(f"{player.display_name} has been skipped {draft_player.skips} times")

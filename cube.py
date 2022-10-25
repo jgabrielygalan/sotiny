@@ -1,5 +1,7 @@
+from __future__ import annotations
+
 import json
-from typing import Dict, List, Optional
+from typing import Any, List, Optional
 
 import aiohttp
 import attr
@@ -7,20 +9,27 @@ import cattr
 
 from cog_exceptions import UserFeedbackException
 
-SF_NAMES: Dict[str, str] = {}
+SF_NAMES: dict[str, str] = {}
+SF_DATA: dict[str, dict] = {}
+CARD_INFO: dict[str, Card] = {}
 
 @attr.s(auto_attribs=True)
 class Card(object):
     cardID: str
     imgUrl: Optional[str] = None
     name: str = ''
+    colors: list[str] = []
 
-    async def ensure_data(self) -> None:
+    async def ensure_data(self) -> Card:
         if not self.name:
             _name = SF_NAMES.get(self.cardID)
-            if _name is None:
-                _name = await fetch_name(self.cardID)
-            self.name = _name
+            if _name:
+                self.name = _name
+            else:
+                await fetch_name(self.cardID)
+
+        CARD_INFO[self.name] = self
+        return self
 
 @attr.s(auto_attribs=True)
 class Cube(object):
@@ -56,14 +65,24 @@ async def load_cubecobra_cube(cubecobra_id: str) -> Cube:
     except (aiohttp.ClientError, json.JSONDecodeError) as e:
         raise UserFeedbackException(f"Unable to load cube list from {url}") from e
 
-async def fetch_name(id: str) -> str:
+async def fetch_data(id: str) -> dict[str, Any]:
+    if id in SF_DATA:
+        return SF_DATA[id]
     try:
         timeout = aiohttp.ClientTimeout(total=10)
         async with aiohttp.ClientSession(timeout=timeout) as aios:
+
             response = await fetch(aios, f'https://api.scryfall.com/cards/{id}')
-            return json.loads(response).get('name')
+            sf = json.loads(response)
+            SF_DATA[id] = sf
+            return sf
     except aiohttp.ClientError as e:
         raise UserFeedbackException(f"Unable to load card name from {id}") from e
+
+
+async def fetch_name(id: str) -> None:
+    sf = await fetch_data(id)
+    return sf.get('name')
 
 async def fetch_names(ids: List[str]) -> None:
     cat = {'identifiers': [{'id': i} for i in ids]}
@@ -77,6 +96,7 @@ async def fetch_names(ids: List[str]) -> None:
                     return
             data: List[dict] = json.loads(await response.text())['data']
             SF_NAMES.update({d['id']: d['name'] for d in data})
+            SF_DATA.update({d['id']: d for d in data})
     except aiohttp.ClientError as e:
         raise UserFeedbackException(f"Unable to load card name from {ids}") from e
 
@@ -84,3 +104,20 @@ def chunks(lst: list, n: int):
     """Yield successive n-sized chunks from lst."""
     for i in range(0, len(lst), n):
         yield lst[i:i + n]
+
+async def fetch_card(name: str) -> Card:
+    if name in CARD_INFO:
+        return CARD_INFO[name]
+    try:
+        timeout = aiohttp.ClientTimeout(total=10)
+        async with aiohttp.ClientSession(timeout=timeout) as aios:
+            async with aios.get(f"https://api.scryfall.com/cards/named?exact={name}") as response:
+                if response.status >= 400:
+                    print(await response.text())
+                    return
+                data: List[dict] = json.loads(await response.text())
+                card = Card(data['id'], name=data['name'], colors=data['colors'])
+                CARD_INFO[card.name] = card
+                return card
+    except aiohttp.ClientError as e:
+        raise UserFeedbackException(f"Unable to load card name: {name}") from e

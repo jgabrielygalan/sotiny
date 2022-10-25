@@ -7,6 +7,7 @@ import cube
 @pytest.mark.asyncio
 async def test_long_id():
     fun = await cube.load_cubecobra_cube("5d7488c28d85b07c66d22162")
+    await fun.ensure_data()
     assert "Fun with Multiples" == fun.name
 
 
@@ -15,3 +16,4 @@ async def test_long_id():
 async def test_a93():
     a93 = await cube.load_cubecobra_cube("a93")
     assert a93.cards
+
