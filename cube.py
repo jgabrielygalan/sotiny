@@ -80,9 +80,9 @@ async def fetch_data(id: str) -> dict[str, Any]:
         raise UserFeedbackException(f"Unable to load card name from {id}") from e
 
 
-async def fetch_name(id: str) -> None:
+async def fetch_name(id: str) -> str:
     sf = await fetch_data(id)
-    return sf.get('name')
+    return sf['name']
 
 async def fetch_names(ids: List[str]) -> None:
     cat = {'identifiers': [{'id': i} for i in ids]}
@@ -114,8 +114,8 @@ async def fetch_card(name: str) -> Card:
             async with aios.get(f"https://api.scryfall.com/cards/named?exact={name}") as response:
                 if response.status >= 400:
                     print(await response.text())
-                    return
-                data: List[dict] = json.loads(await response.text())
+                    raise UserFeedbackException(f"Unable to load card name: {name}")
+                data: dict[str, Any] = json.loads(await response.text())
                 card = Card(data['id'], name=data['name'], colors=data['colors'])
                 CARD_INFO[card.name] = card
                 return card

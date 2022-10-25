@@ -365,7 +365,9 @@ class CubeDrafter(Extension):
                     draft_player = draft.draft.player_by_id(player.id)
                     msg = list(mpp.values())[0]
                     age = (Timestamp.utcnow() - msg['message'].timestamp).total_seconds()
-                    if draft_player.skips == 0:
+                    if draft_player.current_pack is None:
+                        continue  # typeguard
+                    elif draft_player.skips == 0:
                         timeout = 60 * 60 * 24
                     elif draft_player.skips == 1:
                         timeout = 60 * 60 * 12
