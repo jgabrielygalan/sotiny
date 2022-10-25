@@ -7,7 +7,8 @@ from naff import (ActionRow, Button, ButtonStyles, Client, Context, Extension,
                   InteractionContext, Member, Modal, ModalContext,
                   SendableContext, ShortText, Timestamp, slash_command)
 from naff.client.errors import CommandException
-from naff.models import IntervalTrigger, PrefixedContext, Task, check, listen, MessageFlags
+from naff.models import (IntervalTrigger, MessageFlags, PrefixedContext, Task,
+                         check, listen)
 from naff.models.naff.checks import TYPE_CHECK_FUNCTION
 
 from cog_exceptions import NoPrivateMessage, PrivateMessageOnly
@@ -390,7 +391,7 @@ def swap_seats_button(draft: GuildDraft, old_player: Member) -> ActionRow:
         label=f"Take {old_player.display_name}'s seat",
         custom_id=f"swap:{draft.id()[0:7]}:{old_player.id}",
     )
-    return ActionRow(button)
+    return ActionRow(button)  # type: ignore
 
 def setup(bot: Client) -> None:
     CubeDrafter(bot)

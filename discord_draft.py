@@ -6,8 +6,8 @@ import traceback
 import urllib.request
 import uuid
 from io import BytesIO
-from typing import (TYPE_CHECKING, Any, Dict, Iterable, List, Optional, Sequence, Set,
-                    TypedDict)
+from typing import (TYPE_CHECKING, Any, Coroutine, Dict, Iterable, List,
+                    Optional, Sequence, Set, TypedDict)
 
 import aiohttp
 import attr
@@ -16,8 +16,10 @@ import numpy
 from aioredis import Redis
 from naff.client.errors import Forbidden, NotFound
 from naff.client.mixins.send import SendMixin
-from naff.models import (ActionRow, Button, ButtonStyles, File, GuildText,
-                         Member, Message, ThreadChannel, User)
+from naff.models import (ActionRow, Button, ButtonStyles, File, Member,
+                         Message, User)
+from naff.models.discord.channel import (TYPE_MESSAGEABLE_CHANNEL, GuildText,
+                                         ThreadChannel)
 
 import image_fetcher
 from cog_exceptions import DMsClosedException, UserFeedbackException
@@ -102,7 +104,7 @@ class GuildDraft:
             return None
         return await self.guild.guild.fetch_thread(self.draft.metadata['thread_id'])
 
-    async def start(self, channel: GuildText, packs: int, cards: int, cube: str) -> None:
+    async def start(self, channel: TYPE_MESSAGEABLE_CHANNEL, packs: int, cards: int, cube: str) -> None:
         if not self.uuid:
             self.uuid = str(uuid.uuid4()).replace('-', '')
         card_list = await get_card_list(cube)
@@ -219,7 +221,7 @@ class GuildDraft:
     async def handle_pick_response(self, updates: Dict[DraftPlayer, List[str]], player_id: int, effects: List[player_card_drafteffect]) -> None:
         if self.draft is None:
             return
-        coroutines = []
+        coroutines: list[Coroutine] = []
 
         if player_id:
             self.messages_by_player[player_id].clear()
@@ -260,8 +262,8 @@ class GuildDraft:
                 coroutines.append(self.send_pack_to_player(intro, player))
 
         if not current_player_has_next_booster and not self.draft.is_draft_finished():
-            list = ", ".join([p.display_name for p in self.get_pending_players()])
-            coroutines.append(self.players[player_id].send(f"[{self.id_with_guild()}] Waiting for other players to make their picks: {list}"))
+            pending = ", ".join([p.display_name for p in self.get_pending_players()])
+            coroutines.append(self.players[player_id].send(f"[{self.id_with_guild()}] Waiting for other players to make their picks: {pending}"))
 
         await asyncio.gather(*coroutines)
 

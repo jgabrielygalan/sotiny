@@ -49,7 +49,7 @@ async def on_ready() -> None:
     print(f'{bot.user} has connected to Discord!')
 
 bot.load_extension('naff.ext.debug_extension')
-bot.load_extension('naff.ext.sentry', token='https://ade432a5a1474198b8e1955544429250@o233010.ingest.sentry.io/6272266')  # type: ignore
+bot.load_extension('naff.ext.sentry', token='https://0a929451f9db4b00ac7bfbee77c3fd4e@sentry.redpoint.games/11')
 bot.load_extension('draft_cog')
 bot.load_extension('dis_taipan.updater')
 bot.load_extension('botguild')

@@ -5,7 +5,8 @@ import aioredis
 import attr
 import attrs
 import naff
-from naff import (ActionRow, Button, ButtonStyles, ComponentContext, SendableContext)
+from naff import (ActionRow, Button, ButtonStyles, ComponentContext,
+                  SendableContext)
 
 import cube
 from cog_exceptions import DMsClosedException
