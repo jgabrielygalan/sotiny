@@ -116,7 +116,7 @@ async def fetch_card(name: str) -> Card:
                     print(await response.text())
                     raise UserFeedbackException(f"Unable to load card name: {name}")
                 data: dict[str, Any] = json.loads(await response.text())
-                card = Card(data['id'], name=data['name'], colors=data['colors'])
+                card = Card(data['id'], name=data['name'], colors=data.get('colors', []))
                 CARD_INFO[card.name] = card
                 return card
     except aiohttp.ClientError as e:
