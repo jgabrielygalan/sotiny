@@ -382,7 +382,9 @@ class CubeDrafter(Extension):
                         print(f"{player.display_name} has been holding a pack for {age / 60} minutes")
                         bot = DraftBot(draft_player)
                         c = await bot.pick()
-                        i = str(c in draft_player.current_pack.cards or 1)
+                        if c is None:
+                            c = ""
+                        i = str(draft_player.current_pack.cards.index(c) + 1 or 1)
                         await guild.try_pick(msg['message'].id, player.id, i, None)
 
                         draft_player.skips += 1

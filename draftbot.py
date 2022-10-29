@@ -4,8 +4,9 @@ from draft_player import DraftPlayer
 from cube import CARD_INFO, Card, fetch_card
 import numpy
 
+
 @attrs.define()
-class DraftBot():
+class DraftBot:
     player: DraftPlayer
 
     async def pick(self) -> Optional[str]:
@@ -14,29 +15,31 @@ class DraftBot():
         """
         pack = self.player.current_pack
         if pack is None:
-            return
-        wubrg = numpy.array([0,0,0,0,0])
+            return None
+        wubrg = numpy.array([0, 0, 0, 0, 0])
         deck: list[Card] = [await fetch_card(c) for c in self.player.deck]
         for card in deck:
-            wubrg += numpy.array([
-            'W' in card.colors,
-            'U' in card.colors,
-            'B' in card.colors,
-            'R' in card.colors,
-            'G' in card.colors,
-            ])
+            wubrg += numpy.array(
+                [
+                    "W" in card.colors,
+                    "U" in card.colors,
+                    "B" in card.colors,
+                    "R" in card.colors,
+                    "G" in card.colors,
+                ]
+            )
 
         def weight(card: Card) -> int:
             w = 0
-            if 'W' in card.colors:
+            if "W" in card.colors:
                 w += wubrg[0]
-            if 'U' in card.colors:
+            if "U" in card.colors:
                 w += wubrg[1]
-            if 'B' in card.colors:
+            if "B" in card.colors:
                 w += wubrg[2]
-            if 'R' in card.colors:
+            if "R" in card.colors:
                 w += wubrg[3]
-            if 'G' in card.colors:
+            if "G" in card.colors:
                 w += wubrg[4]
             return w
 
