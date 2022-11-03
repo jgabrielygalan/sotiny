@@ -384,7 +384,10 @@ class CubeDrafter(Extension):
                         c = await bot.pick()
                         if c is None:
                             c = ""
-                        i = str(draft_player.current_pack.cards.index(c) + 1 or 1)
+                        try:
+                            i = str(draft_player.current_pack.cards.index(c) + 1)
+                        except ValueError:
+                            i = "1"
                         await guild.try_pick(msg['message'].id, player.id, i, None)
 
                         draft_player.skips += 1
