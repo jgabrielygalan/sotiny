@@ -123,7 +123,9 @@ class GuildDraft:
     async def pick(self, player_id: int, message_id: int, emoji: str) -> None:
         if message_id is not None and emoji is not None and self.draft is not None:
             page_number = self.messages_by_player[player_id][message_id]["row"]
-            item_number = NUMBERS_BY_EMOJI[emoji]
+            item_number = NUMBERS_BY_EMOJI.get(emoji)
+            if item_number is None:
+                item_number = int(emoji)
             print("Player {u} reacted with {n} for row {i}".format(u=player_id, n=item_number, i=page_number))
             info = self.draft.pick(player_id, item_number + (5 * (page_number - 1)))
         else:

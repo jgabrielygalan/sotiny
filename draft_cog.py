@@ -391,6 +391,11 @@ class CubeDrafter(Extension):
                         await guild.try_pick(msg['message'].id, player.id, i, None)
 
                         draft_player.skips += 1
+                        if draft.draft.metadata.get('total_skips') is None:
+                            draft.draft.metadata['total_skips'] = {}
+                        if draft.draft.metadata['total_skips'].get(player.id) is None:
+                            draft.draft.metadata['total_skips'][player.id] = 0
+                        draft.draft.metadata['total_skips'][player.id] += 1
                         print(f"{player.display_name} has been skipped {draft_player.skips} times")
 
                         if draft_player.skips > 3:
