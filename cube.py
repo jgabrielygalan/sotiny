@@ -6,6 +6,7 @@ from typing import Any, List, Optional
 import aiohttp
 import attr
 import cattr
+from cattr.errors import ClassValidationError
 
 from cog_exceptions import UserFeedbackException
 
@@ -18,7 +19,7 @@ class Card(object):
     cardID: str
     imgUrl: Optional[str] = None
     name: str = ''
-    colors: list[str] = []
+    colors: Optional[list[str]] = []
 
     async def ensure_data(self) -> Card:
         if not self.name:
@@ -27,7 +28,8 @@ class Card(object):
                 self.name = _name
             else:
                 await fetch_name(self.cardID)
-
+        if self.colors is None:
+            self.colors = []
         CARD_INFO[self.name] = self
         return self
 
@@ -64,6 +66,9 @@ async def load_cubecobra_cube(cubecobra_id: str) -> Cube:
             return cube
     except (aiohttp.ClientError, json.JSONDecodeError) as e:
         raise UserFeedbackException(f"Unable to load cube list from {url}") from e
+    except ClassValidationError as e:
+        raise UserFeedbackException(f"Unable to parse cube data from {url}") from e
+
 
 async def fetch_data(id: str) -> dict[str, Any]:
     if id in SF_DATA:

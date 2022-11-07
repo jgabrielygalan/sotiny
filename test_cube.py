@@ -13,6 +13,12 @@ async def test_long_id() -> None:
 
 @pytest.mark.vcr(record_mode='new_episodes')
 @pytest.mark.asyncio
+async def test_penny_dreadful() -> None:
+    pd = await cube.load_cubecobra_cube("penny_dreadful")
+    assert pd.cards
+
+@pytest.mark.vcr(record_mode='new_episodes')
+@pytest.mark.asyncio
 async def test_a93() -> None:
     a93 = await cube.load_cubecobra_cube("a93")
     assert a93.cards

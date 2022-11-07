@@ -13,8 +13,8 @@ interactions:
         sparkmage shrieked, calling on the rage of the storms of his youth. To his
         surprise, the sky responded with a fierce energy he''d never thought to see
         again.","card_back_id":"0aeebaf5-8c7d-4636-9e82-8c27447861f7","artist":"Christopher
-        Moeller","artist_ids":["21e10012-06ae-44f2-b38d-3824dd2e73d4"],"illustration_id":"013e7eda-ef8e-44cd-9832-4033d9de1c34","border_color":"black","frame":"2015","full_art":false,"textless":false,"booster":true,"story_spotlight":false,"edhrec_rank":301,"preview":{"source":"Eric
-        Portnoy","source_uri":"https://twitter.com/BarbarianSSJ/status/1538542312636153856","previewed_at":"2022-06-19"},"prices":{"usd":"1.03","usd_foil":"0.98","usd_etched":null,"eur":"1.15","eur_foil":"1.57","tix":"0.93"},"related_uris":{"gatherer":"https://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=571450","tcgplayer_infinite_articles":"https://infinite.tcgplayer.com/search?contentMode=article\u0026game=magic\u0026partner=scryfall\u0026q=Lightning+Bolt\u0026utm_campaign=affiliate\u0026utm_medium=api\u0026utm_source=scryfall","tcgplayer_infinite_decks":"https://infinite.tcgplayer.com/search?contentMode=deck\u0026game=magic\u0026partner=scryfall\u0026q=Lightning+Bolt\u0026utm_campaign=affiliate\u0026utm_medium=api\u0026utm_source=scryfall","edhrec":"https://edhrec.com/route/?cc=Lightning+Bolt"},"purchase_uris":{"tcgplayer":"https://www.tcgplayer.com/product/276484?page=1\u0026utm_campaign=affiliate\u0026utm_medium=api\u0026utm_source=scryfall","cardmarket":"https://www.cardmarket.com/en/Magic/Products/Search?referrer=scryfall\u0026searchString=Lightning+Bolt\u0026utm_campaign=card_prices\u0026utm_medium=text\u0026utm_source=scryfall","cardhoarder":"https://www.cardhoarder.com/cards/101718?affiliate_id=scryfall\u0026ref=card-profile\u0026utm_campaign=affiliate\u0026utm_medium=card\u0026utm_source=scryfall"}}'
+        Moeller","artist_ids":["21e10012-06ae-44f2-b38d-3824dd2e73d4"],"illustration_id":"013e7eda-ef8e-44cd-9832-4033d9de1c34","border_color":"black","frame":"2015","full_art":false,"textless":false,"booster":true,"story_spotlight":false,"edhrec_rank":296,"preview":{"source":"Eric
+        Portnoy","source_uri":"https://twitter.com/BarbarianSSJ/status/1538542312636153856","previewed_at":"2022-06-19"},"prices":{"usd":"0.98","usd_foil":"1.17","usd_etched":null,"eur":"1.38","eur_foil":"2.16","tix":"0.84"},"related_uris":{"gatherer":"https://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=571450","tcgplayer_infinite_articles":"https://infinite.tcgplayer.com/search?contentMode=article\u0026game=magic\u0026partner=scryfall\u0026q=Lightning+Bolt\u0026utm_campaign=affiliate\u0026utm_medium=api\u0026utm_source=scryfall","tcgplayer_infinite_decks":"https://infinite.tcgplayer.com/search?contentMode=deck\u0026game=magic\u0026partner=scryfall\u0026q=Lightning+Bolt\u0026utm_campaign=affiliate\u0026utm_medium=api\u0026utm_source=scryfall","edhrec":"https://edhrec.com/route/?cc=Lightning+Bolt"},"purchase_uris":{"tcgplayer":"https://www.tcgplayer.com/product/276484?page=1\u0026utm_campaign=affiliate\u0026utm_medium=api\u0026utm_source=scryfall","cardmarket":"https://www.cardmarket.com/en/Magic/Products/Search?referrer=scryfall\u0026searchString=Lightning+Bolt\u0026utm_campaign=card_prices\u0026utm_medium=text\u0026utm_source=scryfall","cardhoarder":"https://www.cardhoarder.com/cards/101718?affiliate_id=scryfall\u0026ref=card-profile\u0026utm_campaign=affiliate\u0026utm_medium=card\u0026utm_source=scryfall"}}'
     headers:
       Access-Control-Allow-Headers:
       - Accept, Accept-Charset, Accept-Language, Authorization, Cache-Control, Content-Language,
@@ -26,12 +26,10 @@ interactions:
       - '*'
       Access-Control-Max-Age:
       - '300'
-      Age:
-      - '634'
       CF-Cache-Status:
-      - HIT
+      - MISS
       CF-RAY:
-      - 75f97c232dba3775-MEL
+      - 766747f75ff05aac-MEL
       Cache-Control:
       - public, max-age=28800
       Connection:
@@ -45,15 +43,15 @@ interactions:
       Content-Type:
       - application/json; charset=utf-8
       Date:
-      - Tue, 25 Oct 2022 08:12:02 GMT
+      - Mon, 07 Nov 2022 16:00:19 GMT
       Etag:
-      - W/"60332796c2c587e53eca226e920b55fc"
+      - W/"fd601d76e35602e91e1822beabd4d4aa"
       NEL:
       - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
       Referrer-Policy:
       - strict-origin-when-cross-origin
       Report-To:
-      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=rz9DN%2FZOFNzm0BuPoYEJcrYG3Tv8YQWiR7MzQj9fh3Z%2BP7RrvWarR%2BZNa99LtA1n3exmIvELVnZDoZVNdYgkTY7RIsm0pTUDS4jOLfF6J3os1Mm5KOxz12SBbU33i%2F0Tu4s%3D"}],"group":"cf-nel","max_age":604800}'
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=C3zGbmTecYIaxSQiutqOJKlpTQEuVBMolNH0j6fT5%2FuWnuai%2FYzPcsdIxabgh1mf%2BA%2BGNwAYWJ5vw7Oo1ux9XEfqZTJCm5sYgQtpV%2FlLtLKs9q9GSwZ5uj37y8btwjoMwhs%3D"}],"group":"cf-nel","max_age":604800}'
       Server:
       - cloudflare
       Strict-Transport-Security:
@@ -99,7 +97,7 @@ interactions:
         deals 2 damage to any target.\",\"colors\":[\"R\"],\"color_identity\":[\"R\"],\"keywords\":[],\"legalities\":{\"standard\":\"not_legal\",\"future\":\"not_legal\",\"historic\":\"legal\",\"gladiator\":\"legal\",\"pioneer\":\"legal\",\"explorer\":\"legal\",\"modern\":\"legal\",\"legacy\":\"legal\",\"pauper\":\"legal\",\"vintage\":\"legal\",\"penny\":\"legal\",\"commander\":\"legal\",\"brawl\":\"not_legal\",\"historicbrawl\":\"legal\",\"alchemy\":\"not_legal\",\"paupercommander\":\"legal\",\"duel\":\"legal\",\"oldschool\":\"not_legal\",\"premodern\":\"legal\"},\"games\":[\"arena\",\"paper\",\"mtgo\"],\"reserved\":false,\"foil\":true,\"nonfoil\":true,\"finishes\":[\"nonfoil\",\"foil\"],\"oversized\":false,\"promo\":false,\"reprint\":true,\"variation\":false,\"set_id\":\"bc94aba1-7376-4e02-a12d-3a2efb66ab0f\",\"set\":\"m21\",\"set_name\":\"Core
         Set 2021\",\"set_type\":\"core\",\"set_uri\":\"https://api.scryfall.com/sets/bc94aba1-7376-4e02-a12d-3a2efb66ab0f\",\"set_search_uri\":\"https://api.scryfall.com/cards/search?order=set\\u0026q=e%3Am21\\u0026unique=prints\",\"scryfall_set_uri\":\"https://scryfall.com/sets/m21?utm_source=api\",\"rulings_uri\":\"https://api.scryfall.com/cards/59fa8e8d-bcb8-47bf-b71a-df11c8d0f2c9/rulings\",\"prints_search_uri\":\"https://api.scryfall.com/cards/search?order=released\\u0026q=oracleid%3Aa9d288b8-cdc1-4e55-a0c9-d6edfc95e65d\\u0026unique=prints\",\"collector_number\":\"159\",\"digital\":false,\"rarity\":\"common\",\"flavor_text\":\"\\\"The
         beauty of it is they never see it coming. Ever.\\\"\\n\u2014Razzix, sparkmage\",\"card_back_id\":\"0aeebaf5-8c7d-4636-9e82-8c27447861f7\",\"artist\":\"Jon
-        Foster\",\"artist_ids\":[\"be1fa767-c905-49b1-afcf-77a8e9ebbd31\"],\"illustration_id\":\"1ee7e628-0a58-480f-ba50-9d49852f6df4\",\"border_color\":\"black\",\"frame\":\"2015\",\"full_art\":false,\"textless\":false,\"booster\":true,\"story_spotlight\":false,\"edhrec_rank\":2963,\"penny_rank\":1083,\"prices\":{\"usd\":\"0.05\",\"usd_foil\":\"0.16\",\"usd_etched\":null,\"eur\":\"0.05\",\"eur_foil\":\"0.29\",\"tix\":\"0.03\"},\"related_uris\":{\"gatherer\":\"https://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=485482\",\"tcgplayer_infinite_articles\":\"https://infinite.tcgplayer.com/search?contentMode=article\\u0026game=magic\\u0026partner=scryfall\\u0026q=Shock\\u0026utm_campaign=affiliate\\u0026utm_medium=api\\u0026utm_source=scryfall\",\"tcgplayer_infinite_decks\":\"https://infinite.tcgplayer.com/search?contentMode=deck\\u0026game=magic\\u0026partner=scryfall\\u0026q=Shock\\u0026utm_campaign=affiliate\\u0026utm_medium=api\\u0026utm_source=scryfall\",\"edhrec\":\"https://edhrec.com/route/?cc=Shock\"},\"purchase_uris\":{\"tcgplayer\":\"https://www.tcgplayer.com/product/215884?page=1\\u0026utm_campaign=affiliate\\u0026utm_medium=api\\u0026utm_source=scryfall\",\"cardmarket\":\"https://www.cardmarket.com/en/Magic/Products/Search?referrer=scryfall\\u0026searchString=Shock\\u0026utm_campaign=card_prices\\u0026utm_medium=text\\u0026utm_source=scryfall\",\"cardhoarder\":\"https://www.cardhoarder.com/cards/81545?affiliate_id=scryfall\\u0026ref=card-profile\\u0026utm_campaign=affiliate\\u0026utm_medium=card\\u0026utm_source=scryfall\"}}"
+        Foster\",\"artist_ids\":[\"be1fa767-c905-49b1-afcf-77a8e9ebbd31\"],\"illustration_id\":\"1ee7e628-0a58-480f-ba50-9d49852f6df4\",\"border_color\":\"black\",\"frame\":\"2015\",\"full_art\":false,\"textless\":false,\"booster\":true,\"story_spotlight\":false,\"edhrec_rank\":2963,\"penny_rank\":1079,\"prices\":{\"usd\":\"0.05\",\"usd_foil\":\"0.16\",\"usd_etched\":null,\"eur\":\"0.12\",\"eur_foil\":\"0.05\",\"tix\":\"0.03\"},\"related_uris\":{\"gatherer\":\"https://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=485482\",\"tcgplayer_infinite_articles\":\"https://infinite.tcgplayer.com/search?contentMode=article\\u0026game=magic\\u0026partner=scryfall\\u0026q=Shock\\u0026utm_campaign=affiliate\\u0026utm_medium=api\\u0026utm_source=scryfall\",\"tcgplayer_infinite_decks\":\"https://infinite.tcgplayer.com/search?contentMode=deck\\u0026game=magic\\u0026partner=scryfall\\u0026q=Shock\\u0026utm_campaign=affiliate\\u0026utm_medium=api\\u0026utm_source=scryfall\",\"edhrec\":\"https://edhrec.com/route/?cc=Shock\"},\"purchase_uris\":{\"tcgplayer\":\"https://www.tcgplayer.com/product/215884?page=1\\u0026utm_campaign=affiliate\\u0026utm_medium=api\\u0026utm_source=scryfall\",\"cardmarket\":\"https://www.cardmarket.com/en/Magic/Products/Search?referrer=scryfall\\u0026searchString=Shock\\u0026utm_campaign=card_prices\\u0026utm_medium=text\\u0026utm_source=scryfall\",\"cardhoarder\":\"https://www.cardhoarder.com/cards/81545?affiliate_id=scryfall\\u0026ref=card-profile\\u0026utm_campaign=affiliate\\u0026utm_medium=card\\u0026utm_source=scryfall\"}}"
     headers:
       Access-Control-Allow-Headers:
       - Accept, Accept-Charset, Accept-Language, Authorization, Cache-Control, Content-Language,
@@ -112,11 +110,11 @@ interactions:
       Access-Control-Max-Age:
       - '300'
       Age:
-      - '626'
+      - '24841'
       CF-Cache-Status:
       - HIT
       CF-RAY:
-      - 75f97c23ce4017ce-MEL
+      - 766747fcd86d5a91-MEL
       Cache-Control:
       - public, max-age=28800
       Connection:
@@ -130,15 +128,15 @@ interactions:
       Content-Type:
       - application/json; charset=utf-8
       Date:
-      - Tue, 25 Oct 2022 08:12:02 GMT
+      - Mon, 07 Nov 2022 16:00:20 GMT
       Etag:
-      - W/"57fbfd49bbcf8a6b0b13895d61aefff8"
+      - W/"578c1bb06951d3ed06241bd850a03a09"
       NEL:
       - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
       Referrer-Policy:
       - strict-origin-when-cross-origin
       Report-To:
-      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=%2Fivm%2Bq5QE7XbqIWroOblOCiJYzr2JrrGLJR2DwE%2BWD6tBcDSdJ6Y06tRGmGmUqR3fGuuE8yyQM0q9j%2BdxN2fNnOZ9fHudek3eSuIte1mgogAO1ITah1h55k2%2Fyjyuq%2Fz4TU%3D"}],"group":"cf-nel","max_age":604800}'
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=ENJLifWITUk0ybo%2B%2BUTJPKeaPnDNp%2Fhnbok2e4CaMNTddY03ur0HjficlWxOunf41jZS1zrP%2By6NGtMdhcNhdxU3mqiqCW2WgdtYrDasLZiHJCHRTRqcIBnoUlheV9l1DRg%3D"}],"group":"cf-nel","max_age":604800}'
       Server:
       - cloudflare
       Strict-Transport-Security:
@@ -150,7 +148,7 @@ interactions:
       Via:
       - 1.1 vegur
       X-Action-Cache:
-      - MISS
+      - HIT
       X-Content-Type-Options:
       - nosniff
       X-Download-Options:
@@ -187,7 +185,7 @@ interactions:
         that player puts it into their hand.\",\"power\":\"2\",\"toughness\":\"2\",\"colors\":[\"R\"],\"color_identity\":[\"R\"],\"keywords\":[\"Haste\"],\"legalities\":{\"standard\":\"not_legal\",\"future\":\"not_legal\",\"historic\":\"not_legal\",\"gladiator\":\"not_legal\",\"pioneer\":\"not_legal\",\"explorer\":\"not_legal\",\"modern\":\"legal\",\"legacy\":\"legal\",\"pauper\":\"not_legal\",\"vintage\":\"legal\",\"penny\":\"not_legal\",\"commander\":\"legal\",\"brawl\":\"not_legal\",\"historicbrawl\":\"not_legal\",\"alchemy\":\"not_legal\",\"paupercommander\":\"not_legal\",\"duel\":\"legal\",\"oldschool\":\"not_legal\",\"premodern\":\"not_legal\"},\"games\":[\"paper\",\"mtgo\"],\"reserved\":false,\"foil\":true,\"nonfoil\":true,\"finishes\":[\"nonfoil\",\"foil\"],\"oversized\":false,\"promo\":false,\"reprint\":true,\"variation\":false,\"set_id\":\"372dafe8-b5d1-4b81-998f-3ae96b59498a\",\"set\":\"2xm\",\"set_name\":\"Double
         Masters\",\"set_type\":\"masters\",\"set_uri\":\"https://api.scryfall.com/sets/372dafe8-b5d1-4b81-998f-3ae96b59498a\",\"set_search_uri\":\"https://api.scryfall.com/cards/search?order=set\\u0026q=e%3A2xm\\u0026unique=prints\",\"scryfall_set_uri\":\"https://scryfall.com/sets/2xm?utm_source=api\",\"rulings_uri\":\"https://api.scryfall.com/cards/3c0f5411-1940-410f-96ce-6f92513f753a/rulings\",\"prints_search_uri\":\"https://api.scryfall.com/cards/search?order=released\\u0026q=oracleid%3A51d9564b-44fc-4de1-9119-09d7b4089378\\u0026unique=prints\",\"collector_number\":\"127\",\"digital\":false,\"rarity\":\"rare\",\"flavor_text\":\"\\\"I've
         been all over this world. I even remember some of those places.\\\"\",\"card_back_id\":\"0aeebaf5-8c7d-4636-9e82-8c27447861f7\",\"artist\":\"Filip
-        Burburan\",\"artist_ids\":[\"66082c3b-a623-4d34-be51-2475214b85d3\"],\"illustration_id\":\"750de145-cbd4-4d8e-b28e-0911f0cc5734\",\"border_color\":\"black\",\"frame\":\"2015\",\"security_stamp\":\"oval\",\"full_art\":false,\"textless\":false,\"booster\":true,\"story_spotlight\":false,\"edhrec_rank\":9038,\"preview\":{\"source\":\"MTGGoldfish\",\"source_uri\":\"https://www.mtggoldfish.com/articles/turning-red-exclusive-double-masters-previews\",\"previewed_at\":\"2020-07-27\"},\"prices\":{\"usd\":\"4.10\",\"usd_foil\":\"4.58\",\"usd_etched\":null,\"eur\":\"3.00\",\"eur_foil\":\"5.49\",\"tix\":\"2.02\"},\"related_uris\":{\"gatherer\":\"https://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=489800\",\"tcgplayer_infinite_articles\":\"https://infinite.tcgplayer.com/search?contentMode=article\\u0026game=magic\\u0026partner=scryfall\\u0026q=Goblin+Guide\\u0026utm_campaign=affiliate\\u0026utm_medium=api\\u0026utm_source=scryfall\",\"tcgplayer_infinite_decks\":\"https://infinite.tcgplayer.com/search?contentMode=deck\\u0026game=magic\\u0026partner=scryfall\\u0026q=Goblin+Guide\\u0026utm_campaign=affiliate\\u0026utm_medium=api\\u0026utm_source=scryfall\",\"edhrec\":\"https://edhrec.com/route/?cc=Goblin+Guide\"},\"purchase_uris\":{\"tcgplayer\":\"https://www.tcgplayer.com/product/218846?page=1\\u0026utm_campaign=affiliate\\u0026utm_medium=api\\u0026utm_source=scryfall\",\"cardmarket\":\"https://www.cardmarket.com/en/Magic/Products/Search?referrer=scryfall\\u0026searchString=Goblin+Guide\\u0026utm_campaign=card_prices\\u0026utm_medium=text\\u0026utm_source=scryfall\",\"cardhoarder\":\"https://www.cardhoarder.com/cards/82288?affiliate_id=scryfall\\u0026ref=card-profile\\u0026utm_campaign=affiliate\\u0026utm_medium=card\\u0026utm_source=scryfall\"}}"
+        Burburan\",\"artist_ids\":[\"66082c3b-a623-4d34-be51-2475214b85d3\"],\"illustration_id\":\"750de145-cbd4-4d8e-b28e-0911f0cc5734\",\"border_color\":\"black\",\"frame\":\"2015\",\"security_stamp\":\"oval\",\"full_art\":false,\"textless\":false,\"booster\":true,\"story_spotlight\":false,\"edhrec_rank\":9111,\"preview\":{\"source\":\"MTGGoldfish\",\"source_uri\":\"https://www.mtggoldfish.com/articles/turning-red-exclusive-double-masters-previews\",\"previewed_at\":\"2020-07-27\"},\"prices\":{\"usd\":\"4.07\",\"usd_foil\":\"4.39\",\"usd_etched\":null,\"eur\":\"2.90\",\"eur_foil\":\"5.49\",\"tix\":\"1.75\"},\"related_uris\":{\"gatherer\":\"https://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=489800\",\"tcgplayer_infinite_articles\":\"https://infinite.tcgplayer.com/search?contentMode=article\\u0026game=magic\\u0026partner=scryfall\\u0026q=Goblin+Guide\\u0026utm_campaign=affiliate\\u0026utm_medium=api\\u0026utm_source=scryfall\",\"tcgplayer_infinite_decks\":\"https://infinite.tcgplayer.com/search?contentMode=deck\\u0026game=magic\\u0026partner=scryfall\\u0026q=Goblin+Guide\\u0026utm_campaign=affiliate\\u0026utm_medium=api\\u0026utm_source=scryfall\",\"edhrec\":\"https://edhrec.com/route/?cc=Goblin+Guide\"},\"purchase_uris\":{\"tcgplayer\":\"https://www.tcgplayer.com/product/218846?page=1\\u0026utm_campaign=affiliate\\u0026utm_medium=api\\u0026utm_source=scryfall\",\"cardmarket\":\"https://www.cardmarket.com/en/Magic/Products/Search?referrer=scryfall\\u0026searchString=Goblin+Guide\\u0026utm_campaign=card_prices\\u0026utm_medium=text\\u0026utm_source=scryfall\",\"cardhoarder\":\"https://www.cardhoarder.com/cards/82288?affiliate_id=scryfall\\u0026ref=card-profile\\u0026utm_campaign=affiliate\\u0026utm_medium=card\\u0026utm_source=scryfall\"}}"
     headers:
       Access-Control-Allow-Headers:
       - Accept, Accept-Charset, Accept-Language, Authorization, Cache-Control, Content-Language,
@@ -199,12 +197,10 @@ interactions:
       - '*'
       Access-Control-Max-Age:
       - '300'
-      Age:
-      - '624'
       CF-Cache-Status:
-      - HIT
+      - MISS
       CF-RAY:
-      - 75f97c247fae5aa0-MEL
+      - 766747fd3efc5a85-MEL
       Cache-Control:
       - public, max-age=28800
       Connection:
@@ -218,15 +214,15 @@ interactions:
       Content-Type:
       - application/json; charset=utf-8
       Date:
-      - Tue, 25 Oct 2022 08:12:02 GMT
+      - Mon, 07 Nov 2022 16:00:20 GMT
       Etag:
-      - W/"26d0bc122fdb5d322b100d716b441f19"
+      - W/"e262f79515a631d667a41f81b453e2a8"
       NEL:
       - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
       Referrer-Policy:
       - strict-origin-when-cross-origin
       Report-To:
-      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=5TtMNEy26aNvqL3ZSfKfG1V1AzcAnaeUu4%2BRmlnB%2BgvjUyRjRKSK2hJBT7ZFBQ6h0RuEuka9SPrmfOhETV%2BX7wl7S26BNjXouAueSL%2BqAiYSmYCZBuOBqb6UWd9JWSHsrto%3D"}],"group":"cf-nel","max_age":604800}'
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=gipDFw6TMMavigvDv2HWo3rn0mKsSfuDY00CIBrGVITdWt%2FMiP8CPRWzAG19zMoMpMFTh91297WfDrZVmuO%2B1NZGG2WEN5uIhjTgs3oLnsvxpZfhi16W4PmRN517D%2Bi9a60%3D"}],"group":"cf-nel","max_age":604800}'
       Server:
       - cloudflare
       Strict-Transport-Security:
@@ -273,7 +269,7 @@ interactions:
         may shuffle.\nDraw a card.","colors":["U"],"color_identity":["U"],"keywords":[],"legalities":{"standard":"not_legal","future":"not_legal","historic":"not_legal","gladiator":"not_legal","pioneer":"not_legal","explorer":"not_legal","modern":"banned","legacy":"legal","pauper":"legal","vintage":"restricted","penny":"legal","commander":"legal","brawl":"not_legal","historicbrawl":"not_legal","alchemy":"not_legal","paupercommander":"legal","duel":"legal","oldschool":"not_legal","premodern":"not_legal"},"games":["paper"],"reserved":false,"foil":false,"nonfoil":true,"finishes":["nonfoil"],"oversized":false,"promo":false,"reprint":true,"variation":false,"set_id":"c51de34b-d4d6-4179-a432-573744ded119","set":"ncc","set_name":"New
         Capenna Commander","set_type":"commander","set_uri":"https://api.scryfall.com/sets/c51de34b-d4d6-4179-a432-573744ded119","set_search_uri":"https://api.scryfall.com/cards/search?order=set\u0026q=e%3Ancc\u0026unique=prints","scryfall_set_uri":"https://scryfall.com/sets/ncc?utm_source=api","rulings_uri":"https://api.scryfall.com/cards/44dcfc0c-b23d-48be-bf3a-a6fc6806c5e1/rulings","prints_search_uri":"https://api.scryfall.com/cards/search?order=released\u0026q=oracleid%3A02090581-61aa-4348-ad57-451be8ee91c2\u0026unique=prints","collector_number":"229","digital":false,"rarity":"common","flavor_text":"Tomorrow
         belongs to those who prepare for it today.","card_back_id":"0aeebaf5-8c7d-4636-9e82-8c27447861f7","artist":"Dan
-        Scott","artist_ids":["f852fa13-137e-40f2-bbc1-0f01df09c0e0"],"illustration_id":"87a12c94-7641-4990-8798-c1f261b8ed5c","border_color":"black","frame":"2015","full_art":false,"textless":false,"booster":false,"story_spotlight":false,"edhrec_rank":90,"penny_rank":6,"prices":{"usd":"2.76","usd_foil":null,"usd_etched":null,"eur":"2.13","eur_foil":null,"tix":null},"related_uris":{"gatherer":"https://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=559801","tcgplayer_infinite_articles":"https://infinite.tcgplayer.com/search?contentMode=article\u0026game=magic\u0026partner=scryfall\u0026q=Ponder\u0026utm_campaign=affiliate\u0026utm_medium=api\u0026utm_source=scryfall","tcgplayer_infinite_decks":"https://infinite.tcgplayer.com/search?contentMode=deck\u0026game=magic\u0026partner=scryfall\u0026q=Ponder\u0026utm_campaign=affiliate\u0026utm_medium=api\u0026utm_source=scryfall","edhrec":"https://edhrec.com/route/?cc=Ponder"},"purchase_uris":{"tcgplayer":"https://www.tcgplayer.com/product/269358?page=1\u0026utm_campaign=affiliate\u0026utm_medium=api\u0026utm_source=scryfall","cardmarket":"https://www.cardmarket.com/en/Magic/Products/Search?referrer=scryfall\u0026searchString=Ponder\u0026utm_campaign=card_prices\u0026utm_medium=text\u0026utm_source=scryfall","cardhoarder":"https://www.cardhoarder.com/cards?affiliate_id=scryfall\u0026data%5Bsearch%5D=Ponder\u0026ref=card-profile\u0026utm_campaign=affiliate\u0026utm_medium=card\u0026utm_source=scryfall"}}'
+        Scott","artist_ids":["f852fa13-137e-40f2-bbc1-0f01df09c0e0"],"illustration_id":"87a12c94-7641-4990-8798-c1f261b8ed5c","border_color":"black","frame":"2015","full_art":false,"textless":false,"booster":false,"story_spotlight":false,"edhrec_rank":90,"penny_rank":6,"prices":{"usd":"2.55","usd_foil":null,"usd_etched":null,"eur":"1.99","eur_foil":null,"tix":null},"related_uris":{"gatherer":"https://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=559801","tcgplayer_infinite_articles":"https://infinite.tcgplayer.com/search?contentMode=article\u0026game=magic\u0026partner=scryfall\u0026q=Ponder\u0026utm_campaign=affiliate\u0026utm_medium=api\u0026utm_source=scryfall","tcgplayer_infinite_decks":"https://infinite.tcgplayer.com/search?contentMode=deck\u0026game=magic\u0026partner=scryfall\u0026q=Ponder\u0026utm_campaign=affiliate\u0026utm_medium=api\u0026utm_source=scryfall","edhrec":"https://edhrec.com/route/?cc=Ponder"},"purchase_uris":{"tcgplayer":"https://www.tcgplayer.com/product/269358?page=1\u0026utm_campaign=affiliate\u0026utm_medium=api\u0026utm_source=scryfall","cardmarket":"https://www.cardmarket.com/en/Magic/Products/Search?referrer=scryfall\u0026searchString=Ponder\u0026utm_campaign=card_prices\u0026utm_medium=text\u0026utm_source=scryfall","cardhoarder":"https://www.cardhoarder.com/cards?affiliate_id=scryfall\u0026data%5Bsearch%5D=Ponder\u0026ref=card-profile\u0026utm_campaign=affiliate\u0026utm_medium=card\u0026utm_source=scryfall"}}'
     headers:
       Access-Control-Allow-Headers:
       - Accept, Accept-Charset, Accept-Language, Authorization, Cache-Control, Content-Language,
@@ -285,12 +281,10 @@ interactions:
       - '*'
       Access-Control-Max-Age:
       - '300'
-      Age:
-      - '621'
       CF-Cache-Status:
-      - HIT
+      - MISS
       CF-RAY:
-      - 75f97c25491b5aa0-MEL
+      - 766748020db25ac0-MEL
       Cache-Control:
       - public, max-age=28800
       Connection:
@@ -304,15 +298,15 @@ interactions:
       Content-Type:
       - application/json; charset=utf-8
       Date:
-      - Tue, 25 Oct 2022 08:12:02 GMT
+      - Mon, 07 Nov 2022 16:00:21 GMT
       Etag:
-      - W/"fbd4831e4590e3659b363f7749b073ab"
+      - W/"fefb3056a4782ab32a649c0f6bbad954"
       NEL:
       - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
       Referrer-Policy:
       - strict-origin-when-cross-origin
       Report-To:
-      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=yvXWXjgpLaUAjXhww9CShWqrdZUyiSBqF2uNWuxUfj4utbAdrm6vX1MQiZ7V5S8x8nPso8%2BaX9SZuLNBjD68vAqajYje38sn0p5mWBs52zxM9wlpBBjI78FLIshbH7fB26E%3D"}],"group":"cf-nel","max_age":604800}'
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=oTR2HIXugQmloOIwVc0rLOPh526pWiZyZcLad1xLMOHlAAXvlRzubB%2BLS8QdUko83R8%2BdLk%2F4Ay1mWjEM66hPS54PjowlIASn%2FaZKCIrBUjl5IkmyQ7RRR4BAYYmWc8MmTE%3D"}],"group":"cf-nel","max_age":604800}'
       Server:
       - cloudflare
       Strict-Transport-Security:
@@ -324,7 +318,7 @@ interactions:
       Via:
       - 1.1 vegur
       X-Action-Cache:
-      - HIT
+      - MISS
       X-Content-Type-Options:
       - nosniff
       X-Download-Options:
@@ -360,8 +354,8 @@ interactions:
         turn, you may pay {0} rather than pay the mana cost for a spell you cast with
         mana value X or less, where X is the number of time counters on As Foretold.","colors":["U"],"color_identity":["U"],"keywords":[],"legalities":{"standard":"not_legal","future":"not_legal","historic":"legal","gladiator":"legal","pioneer":"legal","explorer":"legal","modern":"legal","legacy":"legal","pauper":"not_legal","vintage":"legal","penny":"not_legal","commander":"legal","brawl":"not_legal","historicbrawl":"legal","alchemy":"not_legal","paupercommander":"not_legal","duel":"legal","oldschool":"not_legal","premodern":"not_legal"},"games":["paper","mtgo"],"reserved":false,"foil":true,"nonfoil":true,"finishes":["nonfoil","foil"],"oversized":false,"promo":false,"reprint":true,"variation":false,"set_id":"5a645837-b050-449f-ac90-1e7ccbf45031","set":"2x2","set_name":"Double
         Masters 2022","set_type":"masters","set_uri":"https://api.scryfall.com/sets/5a645837-b050-449f-ac90-1e7ccbf45031","set_search_uri":"https://api.scryfall.com/cards/search?order=set\u0026q=e%3A2x2\u0026unique=prints","scryfall_set_uri":"https://scryfall.com/sets/2x2?utm_source=api","rulings_uri":"https://api.scryfall.com/cards/c468b523-84fc-4657-adef-acc1eec6ef2e/rulings","prints_search_uri":"https://api.scryfall.com/cards/search?order=released\u0026q=oracleid%3Ae4b3e0af-5caa-47c1-b5be-c56a875cbb15\u0026unique=prints","collector_number":"38","digital":false,"rarity":"mythic","card_back_id":"0aeebaf5-8c7d-4636-9e82-8c27447861f7","artist":"Tommy
-        Arnold","artist_ids":["1130bcd0-c8b1-48be-85d7-3ddb2abc6b1a"],"illustration_id":"cb164a55-23c6-4438-8a7b-df582612356f","border_color":"black","frame":"2015","security_stamp":"oval","full_art":false,"textless":false,"booster":true,"story_spotlight":false,"edhrec_rank":3121,"preview":{"source":"Dot
-        Esports","source_uri":"https://dotesports.com/mtg/news/everything-about-double-masters-2022-release-date-draft-and-booster-fun-variations","previewed_at":"2022-06-20"},"prices":{"usd":"3.54","usd_foil":"5.19","usd_etched":null,"eur":"2.79","eur_foil":"3.89","tix":"0.29"},"related_uris":{"gatherer":"https://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=571371","tcgplayer_infinite_articles":"https://infinite.tcgplayer.com/search?contentMode=article\u0026game=magic\u0026partner=scryfall\u0026q=As+Foretold\u0026utm_campaign=affiliate\u0026utm_medium=api\u0026utm_source=scryfall","tcgplayer_infinite_decks":"https://infinite.tcgplayer.com/search?contentMode=deck\u0026game=magic\u0026partner=scryfall\u0026q=As+Foretold\u0026utm_campaign=affiliate\u0026utm_medium=api\u0026utm_source=scryfall","edhrec":"https://edhrec.com/route/?cc=As+Foretold"},"purchase_uris":{"tcgplayer":"https://www.tcgplayer.com/product/276541?page=1\u0026utm_campaign=affiliate\u0026utm_medium=api\u0026utm_source=scryfall","cardmarket":"https://www.cardmarket.com/en/Magic/Products/Search?referrer=scryfall\u0026searchString=As+Foretold\u0026utm_campaign=card_prices\u0026utm_medium=text\u0026utm_source=scryfall","cardhoarder":"https://www.cardhoarder.com/cards/101560?affiliate_id=scryfall\u0026ref=card-profile\u0026utm_campaign=affiliate\u0026utm_medium=card\u0026utm_source=scryfall"}}'
+        Arnold","artist_ids":["1130bcd0-c8b1-48be-85d7-3ddb2abc6b1a"],"illustration_id":"cb164a55-23c6-4438-8a7b-df582612356f","border_color":"black","frame":"2015","security_stamp":"oval","full_art":false,"textless":false,"booster":true,"story_spotlight":false,"edhrec_rank":3125,"preview":{"source":"Dot
+        Esports","source_uri":"https://dotesports.com/mtg/news/everything-about-double-masters-2022-release-date-draft-and-booster-fun-variations","previewed_at":"2022-06-20"},"prices":{"usd":"3.23","usd_foil":"5.11","usd_etched":null,"eur":"3.00","eur_foil":"6.68","tix":"0.21"},"related_uris":{"gatherer":"https://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=571371","tcgplayer_infinite_articles":"https://infinite.tcgplayer.com/search?contentMode=article\u0026game=magic\u0026partner=scryfall\u0026q=As+Foretold\u0026utm_campaign=affiliate\u0026utm_medium=api\u0026utm_source=scryfall","tcgplayer_infinite_decks":"https://infinite.tcgplayer.com/search?contentMode=deck\u0026game=magic\u0026partner=scryfall\u0026q=As+Foretold\u0026utm_campaign=affiliate\u0026utm_medium=api\u0026utm_source=scryfall","edhrec":"https://edhrec.com/route/?cc=As+Foretold"},"purchase_uris":{"tcgplayer":"https://www.tcgplayer.com/product/276541?page=1\u0026utm_campaign=affiliate\u0026utm_medium=api\u0026utm_source=scryfall","cardmarket":"https://www.cardmarket.com/en/Magic/Products/Search?referrer=scryfall\u0026searchString=As+Foretold\u0026utm_campaign=card_prices\u0026utm_medium=text\u0026utm_source=scryfall","cardhoarder":"https://www.cardhoarder.com/cards/101560?affiliate_id=scryfall\u0026ref=card-profile\u0026utm_campaign=affiliate\u0026utm_medium=card\u0026utm_source=scryfall"}}'
     headers:
       Access-Control-Allow-Headers:
       - Accept, Accept-Charset, Accept-Language, Authorization, Cache-Control, Content-Language,
@@ -373,12 +367,10 @@ interactions:
       - '*'
       Access-Control-Max-Age:
       - '300'
-      Age:
-      - '46'
       CF-Cache-Status:
-      - HIT
+      - MISS
       CF-RAY:
-      - 75f97c265b883775-MEL
+      - 76674806cea017cf-MEL
       Cache-Control:
       - public, max-age=28800
       Connection:
@@ -392,15 +384,15 @@ interactions:
       Content-Type:
       - application/json; charset=utf-8
       Date:
-      - Tue, 25 Oct 2022 08:12:02 GMT
+      - Mon, 07 Nov 2022 16:00:22 GMT
       Etag:
-      - W/"49b943889a39fae3a073610244f686f8"
+      - W/"ef95f3bf431ef77b58f9ac84827230e8"
       NEL:
       - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
       Referrer-Policy:
       - strict-origin-when-cross-origin
       Report-To:
-      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=0n6%2F4doG4hisqQ9HXyPK8yqoXxozksCn7QKVEfJDBL833dhkOR0uv%2FpVAbIX4pCWN7p7N80AGMGnKLy1zVD5h7WpRhLirA3RIUBBxm5cjT4i2Yr%2Fq26iURVhNmBTZiHzOmg%3D"}],"group":"cf-nel","max_age":604800}'
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=0FeVFx%2FNNnQG9X7SXW9v6LmzKZQLmuhPjvUbdulfrDQeT9bHf4OMCQCepTo9y0sh5OoHr9YmSaNUx7wh58ewYpWCFS4ZHxuV76taXqSl42Kf%2FYOo1D3yMJFS%2Bk6vxNmwbMY%3D"}],"group":"cf-nel","max_age":604800}'
       Server:
       - cloudflare
       Strict-Transport-Security:
@@ -447,7 +439,7 @@ interactions:
         lands are Mountains.","colors":["R"],"color_identity":["R"],"keywords":[],"legalities":{"standard":"not_legal","future":"not_legal","historic":"not_legal","gladiator":"not_legal","pioneer":"not_legal","explorer":"not_legal","modern":"legal","legacy":"legal","pauper":"not_legal","vintage":"legal","penny":"not_legal","commander":"legal","brawl":"not_legal","historicbrawl":"not_legal","alchemy":"not_legal","paupercommander":"not_legal","duel":"legal","oldschool":"not_legal","premodern":"legal"},"games":["paper","mtgo"],"reserved":false,"foil":true,"nonfoil":true,"finishes":["nonfoil","foil"],"oversized":false,"promo":false,"reprint":true,"variation":false,"set_id":"372dafe8-b5d1-4b81-998f-3ae96b59498a","set":"2xm","set_name":"Double
         Masters","set_type":"masters","set_uri":"https://api.scryfall.com/sets/372dafe8-b5d1-4b81-998f-3ae96b59498a","set_search_uri":"https://api.scryfall.com/cards/search?order=set\u0026q=e%3A2xm\u0026unique=prints","scryfall_set_uri":"https://scryfall.com/sets/2xm?utm_source=api","rulings_uri":"https://api.scryfall.com/cards/d072e9ca-aae7-45dc-8025-3ce590bae63f/rulings","prints_search_uri":"https://api.scryfall.com/cards/search?order=released\u0026q=oracleid%3A94fac5fe-97d5-4c12-a80c-8efff9d853ae\u0026unique=prints","collector_number":"118","digital":false,"rarity":"rare","flavor_text":"Heavy
         light flooded across the landscape, cloaking everything in deep crimson.","card_back_id":"0aeebaf5-8c7d-4636-9e82-8c27447861f7","artist":"Franz
-        Vohwinkel","artist_ids":["3a243c17-3baa-4b53-9599-645311cd7d3d"],"illustration_id":"4dbd1828-6c6b-45ac-a32a-534a44ee0a28","border_color":"black","frame":"2015","security_stamp":"oval","full_art":false,"textless":false,"booster":true,"story_spotlight":false,"edhrec_rank":840,"preview":{"source":"MTGGoldfish","source_uri":"https://www.mtggoldfish.com/articles/turning-red-exclusive-double-masters-previews","previewed_at":"2020-07-27"},"prices":{"usd":"9.10","usd_foil":"10.17","usd_etched":null,"eur":"9.97","eur_foil":"18.44","tix":"5.68"},"related_uris":{"gatherer":"https://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=489791","tcgplayer_infinite_articles":"https://infinite.tcgplayer.com/search?contentMode=article\u0026game=magic\u0026partner=scryfall\u0026q=Blood+Moon\u0026utm_campaign=affiliate\u0026utm_medium=api\u0026utm_source=scryfall","tcgplayer_infinite_decks":"https://infinite.tcgplayer.com/search?contentMode=deck\u0026game=magic\u0026partner=scryfall\u0026q=Blood+Moon\u0026utm_campaign=affiliate\u0026utm_medium=api\u0026utm_source=scryfall","edhrec":"https://edhrec.com/route/?cc=Blood+Moon"},"purchase_uris":{"tcgplayer":"https://www.tcgplayer.com/product/218848?page=1\u0026utm_campaign=affiliate\u0026utm_medium=api\u0026utm_source=scryfall","cardmarket":"https://www.cardmarket.com/en/Magic/Products/Search?referrer=scryfall\u0026searchString=Blood+Moon\u0026utm_campaign=card_prices\u0026utm_medium=text\u0026utm_source=scryfall","cardhoarder":"https://www.cardhoarder.com/cards/82270?affiliate_id=scryfall\u0026ref=card-profile\u0026utm_campaign=affiliate\u0026utm_medium=card\u0026utm_source=scryfall"}}'
+        Vohwinkel","artist_ids":["3a243c17-3baa-4b53-9599-645311cd7d3d"],"illustration_id":"4dbd1828-6c6b-45ac-a32a-534a44ee0a28","border_color":"black","frame":"2015","security_stamp":"oval","full_art":false,"textless":false,"booster":true,"story_spotlight":false,"edhrec_rank":843,"preview":{"source":"MTGGoldfish","source_uri":"https://www.mtggoldfish.com/articles/turning-red-exclusive-double-masters-previews","previewed_at":"2020-07-27"},"prices":{"usd":"8.85","usd_foil":"10.17","usd_etched":null,"eur":"10.99","eur_foil":"17.50","tix":"5.05"},"related_uris":{"gatherer":"https://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=489791","tcgplayer_infinite_articles":"https://infinite.tcgplayer.com/search?contentMode=article\u0026game=magic\u0026partner=scryfall\u0026q=Blood+Moon\u0026utm_campaign=affiliate\u0026utm_medium=api\u0026utm_source=scryfall","tcgplayer_infinite_decks":"https://infinite.tcgplayer.com/search?contentMode=deck\u0026game=magic\u0026partner=scryfall\u0026q=Blood+Moon\u0026utm_campaign=affiliate\u0026utm_medium=api\u0026utm_source=scryfall","edhrec":"https://edhrec.com/route/?cc=Blood+Moon"},"purchase_uris":{"tcgplayer":"https://www.tcgplayer.com/product/218848?page=1\u0026utm_campaign=affiliate\u0026utm_medium=api\u0026utm_source=scryfall","cardmarket":"https://www.cardmarket.com/en/Magic/Products/Search?referrer=scryfall\u0026searchString=Blood+Moon\u0026utm_campaign=card_prices\u0026utm_medium=text\u0026utm_source=scryfall","cardhoarder":"https://www.cardhoarder.com/cards/82270?affiliate_id=scryfall\u0026ref=card-profile\u0026utm_campaign=affiliate\u0026utm_medium=card\u0026utm_source=scryfall"}}'
     headers:
       Access-Control-Allow-Headers:
       - Accept, Accept-Charset, Accept-Language, Authorization, Cache-Control, Content-Language,
@@ -459,12 +451,10 @@ interactions:
       - '*'
       Access-Control-Max-Age:
       - '300'
-      Age:
-      - '90'
       CF-Cache-Status:
-      - HIT
+      - MISS
       CF-RAY:
-      - 75f97c270de15ab4-MEL
+      - 7667480b8eca3771-MEL
       Cache-Control:
       - public, max-age=28800
       Connection:
@@ -478,15 +468,15 @@ interactions:
       Content-Type:
       - application/json; charset=utf-8
       Date:
-      - Tue, 25 Oct 2022 08:12:03 GMT
+      - Mon, 07 Nov 2022 16:00:23 GMT
       Etag:
-      - W/"4c654ca9da50d7407f52169f88a36b5f"
+      - W/"2907e6003cae9dce64786ffb82baab9e"
       NEL:
       - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
       Referrer-Policy:
       - strict-origin-when-cross-origin
       Report-To:
-      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=EDwZV5Klw4ZGhGcKUEnQyQzvCnysFPSvp3ytAzbbL6j15r03JsJM%2FRtUOODFWeg2Ikfd4S3s4pyJFrUkirJllBW3cNeKzhxfMzdjNWTrBTod59OAu5bqHY1%2BMuiQMwabcro%3D"}],"group":"cf-nel","max_age":604800}'
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=ga8vqrIfxYdRI3mJE5uL9aT4ltnDHCS94JX%2F5ovWXHOIG6QjHBFcrso36DsRsZsUHKHQG1nXWwb4Ls9t3WnJwdoDVFURKZ6PW2I7tL5huhfASYa%2BWpWt5AMHznIaonoweo0%3D"}],"group":"cf-nel","max_age":604800}'
       Server:
       - cloudflare
       Strict-Transport-Security:
@@ -532,7 +522,7 @@ interactions:
         don't untap during their controllers' untap steps.\",\"colors\":[\"G\"],\"color_identity\":[\"G\"],\"keywords\":[],\"legalities\":{\"standard\":\"not_legal\",\"future\":\"not_legal\",\"historic\":\"not_legal\",\"gladiator\":\"not_legal\",\"pioneer\":\"not_legal\",\"explorer\":\"not_legal\",\"modern\":\"legal\",\"legacy\":\"legal\",\"pauper\":\"not_legal\",\"vintage\":\"legal\",\"penny\":\"not_legal\",\"commander\":\"legal\",\"brawl\":\"not_legal\",\"historicbrawl\":\"not_legal\",\"alchemy\":\"not_legal\",\"paupercommander\":\"not_legal\",\"duel\":\"legal\",\"oldschool\":\"not_legal\",\"premodern\":\"legal\"},\"games\":[\"paper\",\"mtgo\"],\"reserved\":false,\"foil\":true,\"nonfoil\":true,\"finishes\":[\"nonfoil\",\"foil\"],\"oversized\":false,\"promo\":false,\"reprint\":true,\"variation\":false,\"set_id\":\"cae8d29d-5979-4d8f-884d-7f3183bcc886\",\"set\":\"8ed\",\"set_name\":\"Eighth
         Edition\",\"set_type\":\"core\",\"set_uri\":\"https://api.scryfall.com/sets/cae8d29d-5979-4d8f-884d-7f3183bcc886\",\"set_search_uri\":\"https://api.scryfall.com/cards/search?order=set\\u0026q=e%3A8ed\\u0026unique=prints\",\"scryfall_set_uri\":\"https://scryfall.com/sets/8ed?utm_source=api\",\"rulings_uri\":\"https://api.scryfall.com/cards/e1ce4bab-6eb1-421f-b425-7bb0076defc7/rulings\",\"prints_search_uri\":\"https://api.scryfall.com/cards/search?order=released\\u0026q=oracleid%3A057fa60b-10b0-4612-be0d-157076c82241\\u0026unique=prints\",\"collector_number\":\"237\",\"digital\":false,\"rarity\":\"uncommon\",\"flavor_text\":\"\\\"One
         day we shall walk where once was water.\\\"\\n\u2014Eladamri, Lord of Leaves\",\"card_back_id\":\"0aeebaf5-8c7d-4636-9e82-8c27447861f7\",\"artist\":\"Terese
-        Nielsen\",\"artist_ids\":[\"eb55171c-2342-45f4-a503-2d5a75baf752\"],\"illustration_id\":\"c9a00403-9b97-40d3-89c9-f144c31e9a7e\",\"border_color\":\"white\",\"frame\":\"2003\",\"full_art\":false,\"textless\":false,\"booster\":true,\"story_spotlight\":false,\"edhrec_rank\":11197,\"prices\":{\"usd\":\"1.69\",\"usd_foil\":\"56.80\",\"usd_etched\":null,\"eur\":\"1.23\",\"eur_foil\":\"22.00\",\"tix\":\"0.76\"},\"related_uris\":{\"gatherer\":\"https://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=45431\",\"tcgplayer_infinite_articles\":\"https://infinite.tcgplayer.com/search?contentMode=article\\u0026game=magic\\u0026partner=scryfall\\u0026q=Choke\\u0026utm_campaign=affiliate\\u0026utm_medium=api\\u0026utm_source=scryfall\",\"tcgplayer_infinite_decks\":\"https://infinite.tcgplayer.com/search?contentMode=deck\\u0026game=magic\\u0026partner=scryfall\\u0026q=Choke\\u0026utm_campaign=affiliate\\u0026utm_medium=api\\u0026utm_source=scryfall\",\"edhrec\":\"https://edhrec.com/route/?cc=Choke\"},\"purchase_uris\":{\"tcgplayer\":\"https://www.tcgplayer.com/product/11197?page=1\\u0026utm_campaign=affiliate\\u0026utm_medium=api\\u0026utm_source=scryfall\",\"cardmarket\":\"https://www.cardmarket.com/en/Magic/Products/Search?referrer=scryfall\\u0026searchString=Choke\\u0026utm_campaign=card_prices\\u0026utm_medium=text\\u0026utm_source=scryfall\",\"cardhoarder\":\"https://www.cardhoarder.com/cards/19021?affiliate_id=scryfall\\u0026ref=card-profile\\u0026utm_campaign=affiliate\\u0026utm_medium=card\\u0026utm_source=scryfall\"}}"
+        Nielsen\",\"artist_ids\":[\"eb55171c-2342-45f4-a503-2d5a75baf752\"],\"illustration_id\":\"c9a00403-9b97-40d3-89c9-f144c31e9a7e\",\"border_color\":\"white\",\"frame\":\"2003\",\"full_art\":false,\"textless\":false,\"booster\":true,\"story_spotlight\":false,\"edhrec_rank\":11252,\"prices\":{\"usd\":\"1.48\",\"usd_foil\":\"56.80\",\"usd_etched\":null,\"eur\":\"0.80\",\"eur_foil\":\"22.00\",\"tix\":\"0.47\"},\"related_uris\":{\"gatherer\":\"https://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=45431\",\"tcgplayer_infinite_articles\":\"https://infinite.tcgplayer.com/search?contentMode=article\\u0026game=magic\\u0026partner=scryfall\\u0026q=Choke\\u0026utm_campaign=affiliate\\u0026utm_medium=api\\u0026utm_source=scryfall\",\"tcgplayer_infinite_decks\":\"https://infinite.tcgplayer.com/search?contentMode=deck\\u0026game=magic\\u0026partner=scryfall\\u0026q=Choke\\u0026utm_campaign=affiliate\\u0026utm_medium=api\\u0026utm_source=scryfall\",\"edhrec\":\"https://edhrec.com/route/?cc=Choke\"},\"purchase_uris\":{\"tcgplayer\":\"https://www.tcgplayer.com/product/11197?page=1\\u0026utm_campaign=affiliate\\u0026utm_medium=api\\u0026utm_source=scryfall\",\"cardmarket\":\"https://www.cardmarket.com/en/Magic/Products/Search?referrer=scryfall\\u0026searchString=Choke\\u0026utm_campaign=card_prices\\u0026utm_medium=text\\u0026utm_source=scryfall\",\"cardhoarder\":\"https://www.cardhoarder.com/cards/19021?affiliate_id=scryfall\\u0026ref=card-profile\\u0026utm_campaign=affiliate\\u0026utm_medium=card\\u0026utm_source=scryfall\"}}"
     headers:
       Access-Control-Allow-Headers:
       - Accept, Accept-Charset, Accept-Language, Authorization, Cache-Control, Content-Language,
@@ -544,12 +534,10 @@ interactions:
       - '*'
       Access-Control-Max-Age:
       - '300'
-      Age:
-      - '89'
       CF-Cache-Status:
-      - HIT
+      - MISS
       CF-RAY:
-      - 75f97c27bf8c5a98-MEL
+      - 7667481199785aa4-MEL
       Cache-Control:
       - public, max-age=28800
       Connection:
@@ -563,15 +551,15 @@ interactions:
       Content-Type:
       - application/json; charset=utf-8
       Date:
-      - Tue, 25 Oct 2022 08:12:03 GMT
+      - Mon, 07 Nov 2022 16:00:24 GMT
       Etag:
-      - W/"c8dbdbdb6f9ee64b4173460dce3ef7a2"
+      - W/"7a17197125351cdef778239f3bb098d6"
       NEL:
       - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
       Referrer-Policy:
       - strict-origin-when-cross-origin
       Report-To:
-      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=H5zACR0iiRCiOIEfU%2B3Ys1y3rYmD%2B4QAB6FNgii9XHKnGE4w1SIaF6Wbn5uuFVVKNGAWDLXZaHWpiLzAtephRXB9qXO4SZo31F%2FDpZpddAxVxT4L7gtL8IOBQxCL6RDbYh4%3D"}],"group":"cf-nel","max_age":604800}'
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=mwmVotyUggp3ybSXaMlikQUtKqmuzUDFnMkDuYpxeFgaFGS6KLjKgwDHGmKThrUiwMnMASJLBItUP90nh%2Fn0yDRilm5U3OlQv2Z85mKxSb2mj4xT5hb3n1CVbMXdKhs5Yt0%3D"}],"group":"cf-nel","max_age":604800}'
       Server:
       - cloudflare
       Strict-Transport-Security:
