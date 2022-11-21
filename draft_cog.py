@@ -178,7 +178,7 @@ class CubeDrafter(Extension):
                 await guild.save_state()
 
     @naff.prefixed_command(name='pending')
-    async def pending(self, ctx):
+    async def pending(self, ctx: SendableContext) -> None:
         """
         Show players who still haven't picked
         """

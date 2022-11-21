@@ -41,6 +41,7 @@ class Cube(object):
     description: str
     cards: List[Card]
     urlAlias: Optional[str] = None
+    decks: Optional[list[str]] = None
 
     async def ensure_data(self) -> None:
         for ids in chunks(list({c.cardID for c in self.cards}), 75):
@@ -48,8 +49,11 @@ class Cube(object):
         for c in self.cards:
             await c.ensure_data()
 
+    async def download_decks(self) -> None:
+        pass
 
-async def fetch(session, url) -> str:
+
+async def fetch(session, url: str) -> str:
     async with session.get(url) as response:
         if response.status >= 400:
             raise UserFeedbackException(f"Unable to load {url}")

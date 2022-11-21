@@ -3,6 +3,7 @@ from typing import Any
 
 import dotenv
 from naff import Intents
+from naff.api.events import CommandError
 from naff.client.client import Client
 from naff.client.errors import CommandCheckFailure, CommandException
 from naff.ext.prefixed_help import PrefixedHelpCommand
@@ -20,7 +21,10 @@ if not os.path.exists('drafts'):
 PREFIX = os.getenv('BOT_PREFIX', default='>')
 
 class Bot(Client):
-    async def on_command_error(self, ctx: SendableContext, error: Exception, *args: Any, **kwargs: Any) -> None:
+    @listen(disable_default_listeners=True)
+    async def on_command_error(self, event: CommandError) -> None:
+        ctx = event.ctx
+        error = event.error
         if isinstance(ctx, SendableContext):
             if isinstance(error, UserFeedbackException):
                 await ctx.send(f"{ctx.author.mention}: {error}")
@@ -39,7 +43,7 @@ class Bot(Client):
                 return
             else:
                 await ctx.send("There was an error processing your command")
-        await super().on_command_error(ctx, error, *args, **kwargs)
+        await super().on_command_error(self, event=event)
 
 
 bot = Bot(default_prefix=PREFIX, fetch_members=True, intents=Intents.DEFAULT | Intents.GUILD_MEMBERS | Intents.GUILD_MESSAGE_CONTENT)
@@ -48,8 +52,9 @@ bot = Bot(default_prefix=PREFIX, fetch_members=True, intents=Intents.DEFAULT | I
 async def on_ready() -> None:
     print(f'{bot.user} has connected to Discord!')
 
-bot.load_extension('naff.ext.debug_extension')
 bot.load_extension('naff.ext.sentry', token='https://0a929451f9db4b00ac7bfbee77c3fd4e@sentry.redpoint.games/11')
+bot.load_extension('naff.ext.debug_extension')
+bot.load_extension('naff.ext.jurigged')
 bot.load_extension('draft_cog')
 bot.load_extension('dis_taipan.updater')
 bot.load_extension('botguild')
