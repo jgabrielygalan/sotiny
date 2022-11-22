@@ -1,6 +1,6 @@
 import pytest
 
-import cube
+import core_draft.cube as cube
 
 
 @pytest.mark.vcr(record_mode='new_episodes')

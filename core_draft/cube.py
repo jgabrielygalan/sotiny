@@ -8,7 +8,7 @@ import attr
 import cattr
 from cattr.errors import ClassValidationError
 
-from cog_exceptions import UserFeedbackException
+from core_draft.cog_exceptions import UserFeedbackException
 
 SF_NAMES: dict[str, str] = {}
 SF_DATA: dict[str, dict] = {}

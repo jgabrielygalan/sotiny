@@ -8,9 +8,9 @@ import naff
 from naff import (ActionRow, Button, ButtonStyles, ComponentContext,
                   SendableContext)
 
-import cube
-from cog_exceptions import DMsClosedException
-from discord_draft import DEFAULT_CUBE_CUBECOBRA_ID, GuildDraft
+import core_draft.cube as cube
+from core_draft.cog_exceptions import DMsClosedException
+from discord_wrapper.discord_draft import DEFAULT_CUBE_CUBECOBRA_ID, GuildDraft
 
 
 @attr.s(auto_attribs=True)
@@ -105,6 +105,7 @@ class GuildData:
     async def start(self, ctx: SendableContext) -> None:
         players = copy(self.players)
         draft = GuildDraft(self, players)
+        draft.fill_bots(self.pending_conf.max_players)
         try:
             await draft.start(ctx.channel, self.pending_conf.number_of_packs, self.pending_conf.cards_per_booster, self.pending_conf.cube_id)
         except DMsClosedException as e:

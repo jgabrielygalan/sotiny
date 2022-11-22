@@ -1,8 +1,11 @@
 import unittest
-from booster import Booster
-from draft_player import DraftPlayer
-from draftbot import DraftBot
+
 import pytest
+
+from core_draft.booster import Booster
+from core_draft.draft_player import DraftPlayer
+from core_draft.draftbot import DraftBot
+
 
 @pytest.fixture()
 def player() -> DraftPlayer:

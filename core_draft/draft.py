@@ -4,9 +4,9 @@ from typing import Any, Dict, List, Optional, Tuple
 
 import attr
 
-from booster import Booster
-from cog_exceptions import UserFeedbackException
-from draft_player import DraftPlayer
+from core_draft.booster import Booster
+from core_draft.cog_exceptions import UserFeedbackException
+from core_draft.draft_player import DraftPlayer
 
 DraftEffect = Enum('DraftEffect', 'no_immediate_effect add_booster_to_draft')
 Stage = Enum('Stage', 'draft_registration draft_in_progress draft_complete')

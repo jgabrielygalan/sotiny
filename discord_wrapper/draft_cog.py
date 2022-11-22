@@ -3,18 +3,19 @@ from typing import Dict, List, Optional, cast
 
 import aioredis
 import naff
-from naff import (ActionRow, Button, ButtonStyles, Client, Context, Extension,
-                  InteractionContext, Member, Modal, ModalContext,
-                  SendableContext, ShortText, Timestamp, slash_command)
+from naff import (ButtonStyles, Client, Context, Extension, InteractionContext,
+                  Member, Modal, ModalContext, SendableContext, Timestamp,
+                  slash_command)
 from naff.client.errors import CommandException
-from naff.models import (IntervalTrigger, MessageFlags, PrefixedContext, Task,
+from naff.models import (ActionRow, Button, IntervalTrigger, MessageFlags,
+                         PrefixedContext, ShortText, StringSelectMenu, Task,
                          check, listen)
 from naff.models.naff.checks import TYPE_CHECK_FUNCTION
 
-from cog_exceptions import NoPrivateMessage, PrivateMessageOnly
-from discord_draft import GuildDraft
-from draftbot import DraftBot
-from guild import GuildData
+from core_draft.cog_exceptions import NoPrivateMessage, PrivateMessageOnly
+from core_draft.draftbot import DraftBot
+from discord_wrapper.discord_draft import GuildDraft
+from discord_wrapper.guild import GuildData
 
 DEFAULT_PACK_NUMBER = 3
 DEFAULT_CARD_NUMBER = 15
@@ -89,8 +90,8 @@ class CubeDrafter(Extension):
         guild = event.guild
         if guild:
             print("Removed from {n}".format(n=guild.name))
-        if event.guild_id in self.guilds_by_id:
-            del self.guilds_by_id[int(event.guild_id)]
+            if event.guild.id in self.guilds_by_id:
+                del self.guilds_by_id[int(event.guild.id)]
 
     @naff.prefixed_command()  # type: ignore
     @check(guild_only())
@@ -109,13 +110,16 @@ class CubeDrafter(Extension):
             else:
                 flags = MessageFlags.NONE
             await ctx.send(f'You are already registered, waiting for {guild.pending_conf.max_players - len(guild.players)} more players.', flags=flags)
+            return
         print(f"Registering {player.display_name} for the next draft")
         await guild.add_player(player)
         num_players = len(guild.players)
+        components = []
         if num_players == 1:
             msg = f"{player.mention}, I have registered you for a draft of "
             if embed:
                 msg += f"https://cubecobra.com/cube/overview/{guild.pending_conf.cube_id}"
+                components = [Button(ButtonStyles.GREEN, "JOIN", custom_id='join_draft')]
             else:
                 msg += f"<https://cubecobra.com/cube/overview/{guild.pending_conf.cube_id}>"
         else:
@@ -123,7 +127,7 @@ class CubeDrafter(Extension):
             msg = f"{player.mention}, I have registered you for the next draft of {cubeinfo.name}"
         if guild.pending_conf.max_players:
             msg = msg + f'\nYou are player {num_players} of {guild.pending_conf.max_players}'
-        await ctx.send(msg)
+        await ctx.send(msg, components=components)
         if guild.pending_conf.max_players == num_players:
             await guild.start(ctx)
         await guild.save_state()
@@ -167,7 +171,7 @@ class CubeDrafter(Extension):
 
     @naff.listen()
     async def on_component(self, event: naff.events.Component) -> None:
-        ctx: naff.ComponentContext = event.context
+        ctx = event.ctx
         if ctx.custom_id == 'join_draft':
             await self.register_player(ctx, False)
             return
@@ -276,6 +280,9 @@ class CubeDrafter(Extension):
                     value=str(guild.pending_conf.cards_per_booster),
                     required=True,
                 ),
+                # StringSelectMenu(
+                #     options=['Allow Draft Bots', 'No Draft Bots'],
+                # ),
             ]
         )
         print('sending modal')

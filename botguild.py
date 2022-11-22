@@ -3,7 +3,7 @@ import os
 from dis_taipan.botguild import SelfGuild
 from naff.client.client import Client
 
-import image_fetcher
+import core_draft.image_fetcher as image_fetcher
 
 
 class EmojiGuild(SelfGuild):

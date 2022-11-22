@@ -2,7 +2,7 @@ from typing import List, Optional
 
 import attr
 
-from booster import Booster
+from core_draft.booster import Booster
 
 
 @attr.s(auto_attribs=True, hash=False)

@@ -10,8 +10,8 @@ from naff.ext.prefixed_help import PrefixedHelpCommand
 from naff.models import SendableContext, listen
 from traceback_with_variables import activate_by_import  # noqa
 
-from cog_exceptions import (NoPrivateMessage, PrivateMessageOnly,
-                            UserFeedbackException)
+from core_draft.cog_exceptions import (NoPrivateMessage, PrivateMessageOnly,
+                                       UserFeedbackException)
 
 dotenv.load_dotenv()
 
@@ -55,7 +55,7 @@ async def on_ready() -> None:
 bot.load_extension('naff.ext.sentry', token='https://0a929451f9db4b00ac7bfbee77c3fd4e@sentry.redpoint.games/11')
 bot.load_extension('naff.ext.debug_extension')
 bot.load_extension('naff.ext.jurigged')
-bot.load_extension('draft_cog')
+bot.load_extension('discord_wrapper.draft_cog')
 bot.load_extension('dis_taipan.updater')
 bot.load_extension('botguild')
 

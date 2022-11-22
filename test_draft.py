@@ -1,7 +1,7 @@
 import unittest
 
-from booster import Booster
-from draft_player import DraftPlayer
+from core_draft.booster import Booster
+from core_draft.draft_player import DraftPlayer
 
 
 class TestDraft(unittest.TestCase):

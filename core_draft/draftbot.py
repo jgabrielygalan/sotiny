@@ -1,8 +1,13 @@
-from typing import Optional
+from typing import Iterable, Optional, Union
+
 import attrs
-from draft_player import DraftPlayer
-from cube import CARD_INFO, Card, fetch_card
 import numpy
+from naff.models import BaseComponent
+from naff.models.discord.base import DiscordObject
+from naff.models.naff.tasks import IntervalTrigger, Task
+
+from core_draft.cube import Card, fetch_card
+from core_draft.draft_player import DraftPlayer
 
 
 @attrs.define()
@@ -19,6 +24,8 @@ class DraftBot:
         wubrg = numpy.array([0, 0, 0, 0, 0])
         deck: list[Card] = [await fetch_card(c) for c in self.player.deck]
         for card in deck:
+            if not card.colors:
+                card.colors = []
             wubrg += numpy.array(
                 [
                     "W" in card.colors,
@@ -31,6 +38,8 @@ class DraftBot:
 
         def weight(card: Card) -> int:
             w = 0
+            if not card.colors:
+                card.colors = []
             if "W" in card.colors:
                 w += wubrg[0]
             if "U" in card.colors:

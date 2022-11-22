@@ -21,14 +21,14 @@ from naff.models import (ActionRow, Button, ButtonStyles, File, Member,
 from naff.models.discord.channel import (TYPE_MESSAGEABLE_CHANNEL, GuildText,
                                          ThreadChannel)
 
-import image_fetcher
-from cog_exceptions import DMsClosedException, UserFeedbackException
-from draft import (CARDS_WITH_FUNCTION, Draft, DraftEffect, Stage,
-                   player_card_drafteffect)
-from draft_player import DraftPlayer
+import core_draft.image_fetcher as image_fetcher
+from core_draft.cog_exceptions import DMsClosedException, UserFeedbackException
+from core_draft.draft import (CARDS_WITH_FUNCTION, Draft, DraftEffect, Stage,
+                              player_card_drafteffect)
+from core_draft.draft_player import DraftPlayer
 
 if TYPE_CHECKING:
-    from guild import GuildData
+    from discord_wrapper.guild import GuildData
 
 EMOJIS_BY_NUMBER = {1: '1⃣', 2: '2⃣', 3: '3⃣', 4: '4⃣', 5: '5⃣'}
 NUMBERS_BY_EMOJI = {
@@ -103,6 +103,10 @@ class GuildDraft:
         if self.draft is None:
             return None
         return await self.guild.guild.fetch_thread(self.draft.metadata['thread_id'])
+
+    def fill_bots(self, expected_players: int) -> None:
+        num_bots = expected_players - len(self.players)
+        print(f'Filling with {num_bots} bots')
 
     async def start(self, channel: TYPE_MESSAGEABLE_CHANNEL, packs: int, cards: int, cube: str) -> None:
         if not self.uuid:

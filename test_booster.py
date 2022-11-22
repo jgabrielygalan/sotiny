@@ -1,6 +1,6 @@
 import unittest
 
-from booster import Booster
+from core_draft.booster import Booster
 
 
 class TestBooster(unittest.TestCase):
