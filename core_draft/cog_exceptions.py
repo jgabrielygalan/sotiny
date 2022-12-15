@@ -1,3 +1,4 @@
+import aiohttp
 from typing import Union
 
 from naff.client.errors import CommandException, Forbidden
@@ -10,7 +11,7 @@ class UserFeedbackException(CommandException):
 class DMsClosedException(Forbidden):
     user: Union[Member, User]
 
-    def __init__(self, user: Union[Member, User], response, message):
+    def __init__(self, user: Union[Member, User], response: aiohttp.ClientResponse, message: str) -> None:
         self.user = user
         super().__init__(response, message)
 

@@ -18,6 +18,9 @@ dotenv.load_dotenv()
 if not os.path.exists('drafts'):
     os.mkdir('drafts')
 
+if not os.path.exists('decks'):
+    os.mkdir('decks')
+
 PREFIX = os.getenv('BOT_PREFIX', default='>')
 
 class Bot(Client):

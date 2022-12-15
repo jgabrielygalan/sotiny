@@ -1,10 +1,7 @@
-from typing import Iterable, Optional, Union
+from typing import Optional
 
 import attrs
 import numpy
-from naff.models import BaseComponent
-from naff.models.discord.base import DiscordObject
-from naff.models.naff.tasks import IntervalTrigger, Task
 
 from core_draft.cube import Card, fetch_card
 from core_draft.draft_player import DraftPlayer

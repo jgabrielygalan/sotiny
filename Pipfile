@@ -13,8 +13,8 @@ python-dotenv = "*"
 traceback-with-variables = "*"
 orjson = "*"
 dis-taipan = "*"
-naff = {extras = ["sentry"], version = "*"}
 typing-extensions = "*"
+naff = {extras = ["jurigged", "sentry"], version = "*"}
 
 [dev-packages]
 flake8 = "*"

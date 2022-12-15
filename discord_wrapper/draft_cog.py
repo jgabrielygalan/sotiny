@@ -3,9 +3,10 @@ from typing import Dict, List, Optional, cast
 
 import aioredis
 import naff
-from naff import (ButtonStyles, Client, Context, Extension, InteractionContext,
+from naff import (ButtonStyles, Context, Extension, InteractionContext,
                   Member, Modal, ModalContext, SendableContext, Timestamp,
                   slash_command)
+from naff.client.client import Client
 from naff.client.errors import CommandException
 from naff.models import (ActionRow, Button, IntervalTrigger, MessageFlags,
                          PrefixedContext, ShortText, StringSelectMenu, Task,
@@ -206,7 +207,7 @@ class CubeDrafter(Extension):
             await draft.picks(ctx, ctx.author.id)
 
     @naff.prefixed_command()
-    async def abandon(self, ctx: PrefixedContext, draft_id = None):
+    async def abandon(self, ctx: PrefixedContext, draft_id: Optional[str] = None) -> None:
         """Vote to cancel an in-progress draft"""
         draft = await self.find_draft_or_send_error(ctx, draft_id)
         if draft is not None:
@@ -235,7 +236,7 @@ class CubeDrafter(Extension):
         await draft.send_current_pack_to_player("Your pack:", ctx.author.id)
 
     @naff.prefixed_command(name='drafts', help="Show your in progress drafts")
-    async def my_drafts(self, ctx):
+    async def my_drafts(self, ctx: PrefixedContext) -> None:
         drafts = await self.find_drafts_by_player(ctx)
         if len(drafts) == 0:
             await ctx.send("You are not playing any draft")
@@ -336,7 +337,7 @@ class CubeDrafter(Extension):
             drafts.extend(guild.get_drafts_for_player(player))
         return drafts
 
-    def find_draft_by_id(self, draft_id):
+    def find_draft_by_id(self, draft_id: str) -> Optional[GuildDraft]:
         for guild in self.guilds_by_id.values():
             draft = guild.get_draft_by_id(draft_id)
             if draft is not None:

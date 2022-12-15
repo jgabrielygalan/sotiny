@@ -26,6 +26,7 @@ from core_draft.cog_exceptions import DMsClosedException, UserFeedbackException
 from core_draft.draft import (CARDS_WITH_FUNCTION, Draft, DraftEffect, Stage,
                               player_card_drafteffect)
 from core_draft.draft_player import DraftPlayer
+from discord_wrapper.discord_draftbot import BotMember
 
 if TYPE_CHECKING:
     from discord_wrapper.guild import GuildData
@@ -51,7 +52,7 @@ class GuildDraft:
     Discord-aware wrapper for a Draft.
     """
     guild: 'GuildData' = attr.ib(repr=False)
-    players: Dict[int, Member] = attr.ib(factory=dict)
+    players: Dict[int, Member | BotMember] = attr.ib(factory=dict)
     uuid: str = ''
     messages_by_player: Dict[int, Dict[int, MessageData]] = attr.ib(factory=dict, repr=False)  # messages_by_player[player_id][message_id] = MessageData
     draft: Optional[Draft] = None
@@ -76,7 +77,7 @@ class GuildDraft:
     def id_with_guild(self) -> str:
         return f"{self.guild.name}: {self.uuid}"
 
-    def get_players(self) -> Iterable[Member]:
+    def get_players(self) -> Iterable[Member | BotMember]:
         return self.players.values()
 
     def has_player(self, player: User | Member) -> bool:
@@ -88,7 +89,7 @@ class GuildDraft:
                 return True
         return False
 
-    def get_pending_players(self) -> List[Member]:
+    def get_pending_players(self) -> List[Member | BotMember]:
         if not self.draft:
             return []
         pending = self.draft.get_pending_players()
@@ -138,7 +139,7 @@ class GuildDraft:
 
         await self.handle_pick_response(info.updates, player_id, info.draft_effect)
 
-    async def picks(self, messageable, player_id: int) -> None:
+    async def picks(self, messageable: User | Member | BotMember, player_id: int) -> None:
         if not self.draft:
             await messageable.send("The draft hasn't started yet.")
             return
@@ -367,7 +368,7 @@ class GuildDraft:
         await self.send_current_pack_to_player("Thanks for joining the draft!\n", new_player)
         return True
 
-async def send_image_with_retry(user: SendMixin, image_file: str, text: str = '', **kwargs: Any) -> Message:
+async def send_image_with_retry(user: User | Member | BotMember, image_file: str, text: str = '', **kwargs: Any) -> Message:
     text = escape_underscores(text)
     message = await user.send(file=image_file, content=text, **kwargs)
     if message and message.attachments and message.attachments[0].size == 0:
@@ -399,11 +400,11 @@ def escape_underscores(s: str) -> str:
 def generate_file_content(cards: Sequence[str]) -> str:
     return "\n".join(["1 {c}".format(c=card) for card in cards])
 
-async def fetch(session, url):
+async def fetch(session, url: str) -> str:
     async with session.get(url) as response:
         if response.status >= 400:
             raise UserFeedbackException(f"Unable to load cube list from {url}")
-        return await response.text()
+        return await response.text()  # type: ignore
 
 async def get_card_list(cube_name: str) -> List[str]:
     if cube_name == '$':
