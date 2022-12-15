@@ -1,8 +1,9 @@
 from typing import TYPE_CHECKING, Any, Optional
 
+from naff.models.discord import Message
 from naff.models.discord.base import DiscordObject
 from naff.models.naff.tasks import IntervalTrigger, Task
-from naff.models.discord import Message
+
 from core_draft.draftbot import DraftBot
 
 if TYPE_CHECKING:

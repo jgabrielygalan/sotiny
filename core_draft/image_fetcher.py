@@ -27,10 +27,10 @@ async def download_image_async(cards: Iterable[str]) -> Optional[str]:
     return None
 
 
-async def download_scryfall_image(cards, filepath: str, version: str = '') -> bool:
+async def download_scryfall_image(cards: Iterable[str], filepath: str, version: str = '') -> bool:
     card_names = ', '.join(cards)
     print(f'Trying to get scryfall images for {card_names}')
-    image_filepaths = []
+    image_filepaths: list[str] = []
     for c in cards:
         card_filepath = determine_filepath([c], STANDALONE)
         if not acceptable_file(card_filepath):
@@ -71,7 +71,7 @@ async def store_async(url: str, path: str) -> aiohttp.ClientResponse:
         raise FetchException(e) from e
 
 
-def determine_filepath(cards, type, prefix: str = '') -> str:
+def determine_filepath(cards: Iterable[str], type: str, prefix: str = '') -> str:
     imagename = basename(cards)
     # Hash the filename if it's otherwise going to be too large to use.
     if len(imagename) > 240:
@@ -80,7 +80,7 @@ def determine_filepath(cards, type, prefix: str = '') -> str:
     directory = f"./images/{type}"
     return f'{directory}/{prefix}{filename}'
 
-def basename(cards) -> str:
+def basename(cards: Iterable[str]) -> str:
     return '_'.join(re.sub('[^a-z-]', '-', canonicalize(c)) for c in cards)
 
 def unaccent(s: str) -> str:
@@ -99,7 +99,7 @@ def canonicalize(name: str) -> str:
 def acceptable_file(filepath: str) -> bool:
     return os.path.isfile(filepath) and os.path.getsize(filepath) > 1000
 
-def save_composite_image(in_filepaths, out_filepath: str) -> None:
+def save_composite_image(in_filepaths: list[str], out_filepath: str) -> None:
     # Scryfall images are 480x680, so we resize them to height 445, then force an image of 5 cards wide.
     images = list(map(Image.open, in_filepaths))
     for image in images:

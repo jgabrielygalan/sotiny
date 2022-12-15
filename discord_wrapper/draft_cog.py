@@ -3,8 +3,8 @@ from typing import Dict, List, Optional, cast
 
 import aioredis
 import naff
-from naff import (ButtonStyles, Context, Extension, InteractionContext,
-                  Member, Modal, ModalContext, SendableContext, Timestamp,
+from naff import (ButtonStyles, Context, Extension, InteractionContext, Member,
+                  Modal, ModalContext, SendableContext, Timestamp,
                   slash_command)
 from naff.client.client import Client
 from naff.client.errors import CommandException
@@ -171,7 +171,7 @@ class CubeDrafter(Extension):
         await guild.save_state()
 
     @naff.listen()
-    async def on_component(self, event: naff.events.Component) -> None:
+    async def on_component(self, event: naff.events.internal.Component) -> None:
         ctx = event.ctx
         if ctx.custom_id == 'join_draft':
             await self.register_player(ctx, False)
@@ -242,7 +242,7 @@ class CubeDrafter(Extension):
             await ctx.send("You are not playing any draft")
         else:
             divider = "\n"
-            list = divider.join([f"[{x.guild.name}:{x.id()}] {x.draft.number_of_packs} packs ({x.draft.cards_per_booster} cards). {', '.join([p.display_name for p in x.get_players()])}" for x in drafts])
+            list = divider.join([f"[{x.guild.name}:{x.id()}] {x.draft.number_of_packs} packs ({x.draft.cards_per_booster} cards). {', '.join([p.display_name for p in x.get_players()])}" for x in drafts if x.draft is not None])
             await ctx.send(f"{list}")
 
     @naff.prefixed_command('setup')
@@ -301,7 +301,7 @@ class CubeDrafter(Extension):
         try:
             data = await guild.pending_conf.cubedata()
             await modal_ctx.send(f"Okay. I'll start a draft of {data.name} by {data.owner_name} (`{data.shortID}`) when we have {max_players} players",
-            components=[Button(ButtonStyles.GREEN, "JOIN", custom_id='join_draft')])
+                                 components=[Button(ButtonStyles.GREEN, "JOIN", custom_id='join_draft')])
         except Exception:
             await modal_ctx.send(f"Unable to load data for https://cubecobra.com/cube/overview/{cube_id}, please double-check the ID and try again.")
             raise
