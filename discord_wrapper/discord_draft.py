@@ -286,6 +286,8 @@ class GuildDraft:
             for member in self.players.values():
                 await member.send(f"[{self.id_with_guild()}] The draft has finished")
                 await self.send_deckfile_to_player(member, member.id)
+                with open(f'decks/{self.id()}_{member.id}.txt', 'w') as f:
+                    f.writelines(generate_file_content(self.draft.deck_of(player_id)))
             self.draft.stage = Stage.draft_complete
             self.messages_by_player.clear()
 

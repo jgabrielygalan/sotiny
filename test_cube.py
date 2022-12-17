@@ -10,6 +10,11 @@ async def test_long_id() -> None:
     await fun.ensure_data()
     assert "Fun with Multiples" == fun.name
 
+@pytest.mark.vcr(record_mode='new_episodes')
+@pytest.mark.asyncio
+async def test_decks() -> None:
+    pd = await cube.load_cubecobra_cube("penny_dreadful")
+    await pd.download_decks()
 
 @pytest.mark.vcr(record_mode='new_episodes')
 @pytest.mark.asyncio

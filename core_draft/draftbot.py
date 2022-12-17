@@ -6,12 +6,16 @@ import numpy
 from core_draft.cube import Card, fetch_card
 from core_draft.draft_player import DraftPlayer
 
+DECK_CACHE: dict[str, list[str]] = {}
 
 @attrs.define()
 class DraftBot:
     player: DraftPlayer
 
     async def pick(self) -> Optional[str]:
+        return await self.force()
+
+    async def force(self) -> Optional[str]:
         """
         Forces a colour.  Not the smartest, but it does the job.
         """

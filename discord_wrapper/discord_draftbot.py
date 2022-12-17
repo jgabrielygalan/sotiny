@@ -21,6 +21,10 @@ class BotMember(DiscordObject):
     def mention(self) -> str:
         return f'DraftBot #{self.id}'
 
+    @property
+    def nick(self) -> str:
+        return self.display_name
+
     @Task.create(IntervalTrigger(5))
     async def delayed_pick(self) -> None:
         if not self.draft.draft:

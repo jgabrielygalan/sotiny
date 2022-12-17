@@ -7,6 +7,7 @@ import aiohttp
 import attr
 import cattr
 from cattr.errors import ClassValidationError
+import logging
 
 from core_draft.cog_exceptions import UserFeedbackException
 
@@ -50,14 +51,22 @@ class Cube(object):
             await c.ensure_data()
 
     async def download_decks(self) -> None:
-        pass
+        if not self.decks:
+            return
+        for id in self.decks:
+            await download_deck(id, 0)
 
-
-async def fetch(session, url: str) -> str:
+async def fetch(session: aiohttp.ClientSession, url: str) -> str:
     async with session.get(url) as response:
         if response.status >= 400:
             raise UserFeedbackException(f"Unable to load {url}")
         return await response.text()
+
+async def fetch_json(session: aiohttp.ClientSession, url: str) -> str:
+    async with session.get(url) as response:
+        if response.status >= 400:
+            raise UserFeedbackException(f"Unable to load {url}")
+        return await response.json()
 
 async def load_cubecobra_cube(cubecobra_id: str) -> Cube:
     url = f'https://cubecobra.com/cube/api/cubejson/{cubecobra_id}'
@@ -73,6 +82,19 @@ async def load_cubecobra_cube(cubecobra_id: str) -> Cube:
     except ClassValidationError as e:
         raise UserFeedbackException(f"Unable to parse cube data from {url}") from e
 
+
+async def download_deck(id: str, seat: int) -> None:
+    url = f'https://cubecobra.com/cube/deck/download/txt/{id}/{seat}'
+    filename = f'decks/cc_{id}_{seat}.txt'
+    print(f'Async fetching {url}')
+    try:
+        timeout = aiohttp.ClientTimeout(total=10)
+        async with aiohttp.ClientSession(timeout=timeout) as aios:
+            response = await fetch(aios, url)
+            with open(filename, 'w') as f:
+                f.write(response)
+    except ClassValidationError as e:
+        logging.exception(e)
 
 async def fetch_data(id: str) -> dict[str, Any]:
     if id in SF_DATA:
