@@ -196,7 +196,7 @@ class GuildDraft:
                 i += 1
 
         if actions := [a for a in player.face_up if a in CARDS_WITH_FUNCTION]:
-            emoji_cog = self.guild.guild._client.get_scale('EmojiGuild')
+            emoji_cog = self.guild.guild._client.get_ext('EmojiGuild')
             text = ''.join([f'{await emoji_cog.get_emoji(a)} {a}' for a in actions])
 
             message = await messageable.send(f'Optionally activate: {text}', components=await self.conspiracy_buttons(actions))
@@ -213,7 +213,7 @@ class GuildDraft:
         )]
 
     async def conspiracy_buttons(self, cards: Iterable[str]) -> List[ActionRow]:
-        emoji_cog = self.guild.guild._client.get_scale('EmojiGuild')
+        emoji_cog = self.guild.guild._client.get_ext('EmojiGuild')
         return [ActionRow(
             *[  # type: ignore
                 Button(style=ButtonStyles.GREY,

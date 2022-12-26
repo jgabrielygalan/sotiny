@@ -9,7 +9,7 @@ from naff import (ButtonStyles, Context, Extension, InteractionContext, Member,
 from naff.client.client import Client
 from naff.client.errors import CommandException
 from naff.models import (ActionRow, Button, IntervalTrigger, MessageFlags,
-                         PrefixedContext, ShortText, StringSelectMenu, Task,
+                         PrefixedContext, ShortText, Task,
                          check, listen)
 from naff.models.naff.checks import TYPE_CHECK_FUNCTION
 
@@ -190,6 +190,14 @@ class CubeDrafter(Extension):
         """
         Show players who still haven't picked
         """
+        def display(player: Member, draft: GuildDraft) -> str:
+            if draft.draft is None:
+                return player.display_name
+            draft_player = draft.draft.player_by_id(player.id)
+            if draft_player.skips > 0:
+                return f'{player.display_name} ({draft_player.skips} skips)'
+            return player.display_name
+
         prefix = ''
         drafts = await self.find_drafts_by_player(ctx)
         for draft in drafts:
@@ -197,7 +205,7 @@ class CubeDrafter(Extension):
                 prefix = f"{draft.guild.name}: **{draft.id()}**: "
             players = draft.get_pending_players()
             if players:
-                list = ", ".join([player.display_name for player in players])
+                list = ", ".join([display(player, draft) for player in players])
                 await ctx.send(prefix + f"Pending players: {list}")
             else:
                 await ctx.send(prefix + "No pending players")
