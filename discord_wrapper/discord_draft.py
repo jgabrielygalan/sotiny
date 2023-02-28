@@ -1,5 +1,6 @@
 import asyncio
 import json
+import logging
 import os
 import time
 import traceback
@@ -20,6 +21,7 @@ from naff.models import (ActionRow, Button, ButtonStyles, File, Member,
                          Message, User)
 from naff.models.discord.channel import (TYPE_MESSAGEABLE_CHANNEL, GuildText,
                                          ThreadChannel)
+import sentry_sdk
 
 import core_draft.image_fetcher as image_fetcher
 from core_draft.cog_exceptions import DMsClosedException, UserFeedbackException
@@ -321,24 +323,25 @@ class GuildDraft:
         except Exception as e:
             print(f'{self.uuid} failed to reload\n{e}')
             traceback.print_exc()
+            sentry_sdk.capture_exception(e)
             return
 
         if self.draft is None:
-            print(f'{self.uuid} failed to reload?')
+            logging.error(f'{self.uuid} failed to reload?')
             return
         # await self.guild.guild.query_members(user_ids=self.draft.players)
         for player in self.draft.players:
             try:
                 member = await self.guild.guild.fetch_member(player)
                 if not member:
-                    print(f'{self.uuid} failed to reload, {player} not found')
+                    logging.error(f'{self.uuid} failed to reload, {player} not found')
                     return
                 self.players[player] = member
                 self.messages_by_player[player] = dict()
                 if self.draft.player_by_id(player).current_pack is not None:
                     await self.send_current_pack_to_player("Bump: ", player)
             except NotFound:
-                print(f'{self.uuid} failed to reload, {player} not found')
+                logging.error(f'{self.uuid} failed to reload, {player} not found')
                 return
 
     async def abandon(self, player_id: int) -> bool:
