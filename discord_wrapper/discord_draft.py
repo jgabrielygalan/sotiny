@@ -327,21 +327,24 @@ class GuildDraft:
             return
 
         if self.draft is None:
-            logging.error(f'{self.uuid} failed to reload?')
+            logging.error(f'{self.uuid} failed to reload?', stacklevel=3)
             return
         # await self.guild.guild.query_members(user_ids=self.draft.players)
         for player in self.draft.players:
             try:
                 member = await self.guild.guild.fetch_member(player)
                 if not member:
-                    logging.error(f'{self.uuid} failed to reload, {player} not found')
+                    logging.error(f'{self.uuid} failed to reload, {player} not found', stacklevel=3)
                     return
                 self.players[player] = member
                 self.messages_by_player[player] = dict()
                 if self.draft.player_by_id(player).current_pack is not None:
                     await self.send_current_pack_to_player("Bump: ", player)
             except NotFound:
-                logging.error(f'{self.uuid} failed to reload, {player} not found')
+                logging.error(f'{self.uuid} failed to reload, {player} not found', stacklevel=3)
+                return
+            except DMsClosedException:
+                logging.error(f'{self.uuid} failed to reload, {player} closed their DMs', stacklevel=3)
                 return
 
     async def abandon(self, player_id: int) -> bool:
