@@ -22,6 +22,7 @@ from naff.models import (ActionRow, Button, ButtonStyles, File, Member,
 from naff.models.discord.channel import (TYPE_MESSAGEABLE_CHANNEL, GuildText,
                                          ThreadChannel)
 import sentry_sdk
+from core_draft import cube
 
 import core_draft.image_fetcher as image_fetcher
 from core_draft.cog_exceptions import DMsClosedException, UserFeedbackException
@@ -428,6 +429,13 @@ async def get_card_list(cube_name: str) -> List[str]:
 
 
 async def load_cubecobra_cube(cubecobra_id: str) -> List[str]:
+    try:
+        c = await cube.load_cubecobra_cube(cubecobra_id)
+        return await c.cardlist()
+    except:
+        return await load_cubecobra_cubelist(cubecobra_id)
+
+async def load_cubecobra_cubelist(cubecobra_id: str) -> List[str]:
     url = f'https://cubecobra.com/cube/api/cubelist/{cubecobra_id}'
     print(f'Async fetching {url}')
     try:

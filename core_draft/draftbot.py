@@ -1,3 +1,4 @@
+import os
 from typing import Optional
 
 import attrs
@@ -13,7 +14,25 @@ class DraftBot:
     player: DraftPlayer
 
     async def pick(self) -> Optional[str]:
+        card = await self.score()
+        if card:
+            return card
         return await self.force()
+
+    async def score(self) -> Optional[str]:
+        pack = self.player.current_pack
+        if pack is None:
+            return None
+
+        if not DECK_CACHE:
+            load_decks()
+
+        decks = list(DECK_CACHE.values())
+        scores = {c: 0.0 for c in pack.cards}
+        for card in pack.cards:
+            for deck in decks:
+                if card in deck:
+                    scores[card] += similarity_score(deck, self.player.deck)
 
     async def force(self) -> Optional[str]:
         """
@@ -25,8 +44,8 @@ class DraftBot:
         wubrg = numpy.array([0, 0, 0, 0, 0])
         deck: list[Card] = [await fetch_card(c) for c in self.player.deck]
         for card in deck:
-            if not card.colors:
-                card.colors = []
+            if card.details.colors is None:
+                card.details.colors = []
             wubrg += numpy.array(
                 [
                     "W" in card.colors,
@@ -39,8 +58,8 @@ class DraftBot:
 
         def weight(card: Card) -> int:
             w = 0
-            if not card.colors:
-                card.colors = []
+            if card.details.colors is None:
+                card.details.colors = []
             if "W" in card.colors:
                 w += wubrg[0]
             if "U" in card.colors:
@@ -56,3 +75,17 @@ class DraftBot:
         cards = [await fetch_card(c) for c in pack.cards]
         cards.sort(key=weight, reverse=True)
         return cards[0].name
+
+
+def similarity_score(a: list[str], b: list[str]) -> float:
+    score = 0
+    for c in a:
+        if c in b:
+            score += 1
+    return float(score) / float(max(len(a), len(b)))
+
+def load_decks() -> None:
+    for d in os.listdir('decks'):
+        with open(f'decks/{d}') as f:
+            cards = [line.strip() for line in f.readlines() if line and not line.isspace()]
+            DECK_CACHE[d] = cards

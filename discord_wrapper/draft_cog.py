@@ -16,6 +16,7 @@ from naff.models.naff.checks import TYPE_CHECK_FUNCTION
 from core_draft.cog_exceptions import NoPrivateMessage, PrivateMessageOnly
 from core_draft.draftbot import DraftBot
 from discord_wrapper.discord_draft import GuildDraft
+from discord_wrapper.discord_draftbot import BotMember
 from discord_wrapper.guild import GuildData
 
 DEFAULT_PACK_NUMBER = 3
@@ -190,7 +191,7 @@ class CubeDrafter(Extension):
         """
         Show players who still haven't picked
         """
-        def display(player: Member, draft: GuildDraft) -> str:
+        def display(player: Member | BotMember, draft: GuildDraft) -> str:
             if draft.draft is None:
                 return player.display_name
             draft_player = draft.draft.player_by_id(player.id)

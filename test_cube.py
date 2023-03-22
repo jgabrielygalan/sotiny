@@ -7,7 +7,6 @@ import core_draft.cube as cube
 @pytest.mark.asyncio
 async def test_long_id() -> None:
     fun = await cube.load_cubecobra_cube("5d7488c28d85b07c66d22162")
-    await fun.ensure_data()
     assert "Fun with Multiples" == fun.name
 
 @pytest.mark.vcr(record_mode='new_episodes')

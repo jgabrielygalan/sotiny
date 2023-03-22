@@ -16,23 +16,24 @@ SF_DATA: dict[str, dict] = {}
 CARD_INFO: dict[str, Card] = {}
 
 @attr.s(auto_attribs=True)
+class CardDetails:
+    name: str
+    colors: list[str] = []
+
+@attr.s(auto_attribs=True)
 class Card(object):
     cardID: str
+    details: CardDetails
     imgUrl: Optional[str] = None
-    name: Optional[str] = ''
-    colors: Optional[list[str]] = []
 
-    async def ensure_data(self) -> Card:
-        if not self.name:
-            _name = SF_NAMES.get(self.cardID)
-            if _name:
-                self.name = _name
-            else:
-                await fetch_name(self.cardID)
-        if self.colors is None:
-            self.colors = []
-        CARD_INFO[self.name] = self
-        return self
+    @property
+    def name(self) -> str:
+        return self.details.name
+
+    @property
+    def colors(self) -> list[str]:
+        return self.details.colors
+
 
 @attr.s(auto_attribs=True)
 class CardList:
@@ -55,17 +56,14 @@ class Cube(object):
     urlAlias: Optional[str] = None
     decks: Optional[list[str]] = None
 
-    async def ensure_data(self) -> None:
-        for ids in chunks(list({c.cardID for c in self.cards.mainboard}), 75):
-            await fetch_names(ids)
-        for c in self.cards.mainboard:
-            await c.ensure_data()
-
     async def download_decks(self) -> None:
         if not self.decks:
             return
         for id in self.decks:
             await download_deck(id, 0)
+
+    async def cardlist(self) -> list[str]:
+        return [c.name for c in self.cards.mainboard]
 
 async def fetch(session: aiohttp.ClientSession, url: str) -> str:
     async with session.get(url) as response:
@@ -158,7 +156,7 @@ async def fetch_card(name: str) -> Card:
                     print(await response.text())
                     raise UserFeedbackException(f"Unable to load card name: {name}")
                 data: dict[str, Any] = json.loads(await response.text())
-                card = Card(data['id'], name=data['name'], colors=data.get('colors', []))
+                card = Card(data['id'], details=CardDetails(name=data['name'], colors=data.get('colors', [])))
                 CARD_INFO[card.name] = card
                 return card
     except aiohttp.ClientError as e:
