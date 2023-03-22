@@ -17,9 +17,9 @@ interactions:
         Ruins enters the battlefield tapped.\\n{T}: Add {U}.\",\"colors\":[],\"flavor_text\":\"\\\"The
         Ondu Skyclave was a center for rebellion against the capital in Makindi. Of
         course they built in deadly traps.\\\"\\n\u2014Nys Dal, Sea Gate trapfinder\",\"artist\":\"Cliff
-        Childs\",\"artist_id\":\"ed6f7e03-20ba-4c73-bdda-4a4928480721\",\"illustration_id\":\"af2c8d11-3179-48c7-aed3-8957c04220c2\",\"image_uris\":{\"small\":\"https://cards.scryfall.io/small/back/3/0/301750a7-d1fd-435e-bfa8-9d2fb22ad627.jpg?1604250757\",\"normal\":\"https://cards.scryfall.io/normal/back/3/0/301750a7-d1fd-435e-bfa8-9d2fb22ad627.jpg?1604250757\",\"large\":\"https://cards.scryfall.io/large/back/3/0/301750a7-d1fd-435e-bfa8-9d2fb22ad627.jpg?1604250757\",\"png\":\"https://cards.scryfall.io/png/back/3/0/301750a7-d1fd-435e-bfa8-9d2fb22ad627.png?1604250757\",\"art_crop\":\"https://cards.scryfall.io/art_crop/back/3/0/301750a7-d1fd-435e-bfa8-9d2fb22ad627.jpg?1604250757\",\"border_crop\":\"https://cards.scryfall.io/border_crop/back/3/0/301750a7-d1fd-435e-bfa8-9d2fb22ad627.jpg?1604250757\"}}],\"legalities\":{\"standard\":\"not_legal\",\"future\":\"not_legal\",\"historic\":\"legal\",\"gladiator\":\"legal\",\"pioneer\":\"legal\",\"explorer\":\"legal\",\"modern\":\"legal\",\"legacy\":\"legal\",\"pauper\":\"not_legal\",\"vintage\":\"legal\",\"penny\":\"legal\",\"commander\":\"legal\",\"brawl\":\"not_legal\",\"historicbrawl\":\"legal\",\"alchemy\":\"not_legal\",\"paupercommander\":\"not_legal\",\"duel\":\"legal\",\"oldschool\":\"not_legal\",\"premodern\":\"not_legal\"},\"games\":[\"arena\",\"paper\",\"mtgo\"],\"reserved\":false,\"foil\":true,\"nonfoil\":true,\"finishes\":[\"nonfoil\",\"foil\"],\"oversized\":false,\"promo\":false,\"reprint\":false,\"variation\":false,\"set_id\":\"f4e01fa7-b254-42dd-849f-69b58027a8c4\",\"set\":\"znr\",\"set_name\":\"Zendikar
+        Childs\",\"artist_id\":\"ed6f7e03-20ba-4c73-bdda-4a4928480721\",\"illustration_id\":\"af2c8d11-3179-48c7-aed3-8957c04220c2\",\"image_uris\":{\"small\":\"https://cards.scryfall.io/small/back/3/0/301750a7-d1fd-435e-bfa8-9d2fb22ad627.jpg?1604250757\",\"normal\":\"https://cards.scryfall.io/normal/back/3/0/301750a7-d1fd-435e-bfa8-9d2fb22ad627.jpg?1604250757\",\"large\":\"https://cards.scryfall.io/large/back/3/0/301750a7-d1fd-435e-bfa8-9d2fb22ad627.jpg?1604250757\",\"png\":\"https://cards.scryfall.io/png/back/3/0/301750a7-d1fd-435e-bfa8-9d2fb22ad627.png?1604250757\",\"art_crop\":\"https://cards.scryfall.io/art_crop/back/3/0/301750a7-d1fd-435e-bfa8-9d2fb22ad627.jpg?1604250757\",\"border_crop\":\"https://cards.scryfall.io/border_crop/back/3/0/301750a7-d1fd-435e-bfa8-9d2fb22ad627.jpg?1604250757\"}}],\"legalities\":{\"standard\":\"not_legal\",\"future\":\"not_legal\",\"historic\":\"legal\",\"gladiator\":\"legal\",\"pioneer\":\"legal\",\"explorer\":\"legal\",\"modern\":\"legal\",\"legacy\":\"legal\",\"pauper\":\"not_legal\",\"vintage\":\"legal\",\"penny\":\"legal\",\"commander\":\"legal\",\"oathbreaker\":\"legal\",\"brawl\":\"not_legal\",\"historicbrawl\":\"legal\",\"alchemy\":\"not_legal\",\"paupercommander\":\"not_legal\",\"duel\":\"legal\",\"oldschool\":\"not_legal\",\"premodern\":\"not_legal\",\"predh\":\"not_legal\"},\"games\":[\"arena\",\"paper\",\"mtgo\"],\"reserved\":false,\"foil\":true,\"nonfoil\":true,\"finishes\":[\"nonfoil\",\"foil\"],\"oversized\":false,\"promo\":false,\"reprint\":false,\"variation\":false,\"set_id\":\"f4e01fa7-b254-42dd-849f-69b58027a8c4\",\"set\":\"znr\",\"set_name\":\"Zendikar
         Rising\",\"set_type\":\"expansion\",\"set_uri\":\"https://api.scryfall.com/sets/f4e01fa7-b254-42dd-849f-69b58027a8c4\",\"set_search_uri\":\"https://api.scryfall.com/cards/search?order=set\\u0026q=e%3Aznr\\u0026unique=prints\",\"scryfall_set_uri\":\"https://scryfall.com/sets/znr?utm_source=api\",\"rulings_uri\":\"https://api.scryfall.com/cards/301750a7-d1fd-435e-bfa8-9d2fb22ad627/rulings\",\"prints_search_uri\":\"https://api.scryfall.com/cards/search?order=released\\u0026q=oracleid%3A941a4b14-ea2a-4bd0-8cc2-d609f80df32c\\u0026unique=prints\",\"collector_number\":\"64\",\"digital\":false,\"rarity\":\"uncommon\",\"artist\":\"Cliff
-        Childs\",\"artist_ids\":[\"ed6f7e03-20ba-4c73-bdda-4a4928480721\"],\"border_color\":\"black\",\"frame\":\"2015\",\"full_art\":false,\"textless\":false,\"booster\":true,\"story_spotlight\":false,\"edhrec_rank\":24043,\"penny_rank\":511,\"prices\":{\"usd\":\"0.29\",\"usd_foil\":\"1.82\",\"usd_etched\":null,\"eur\":\"0.22\",\"eur_foil\":\"1.02\",\"tix\":\"0.02\"},\"related_uris\":{\"gatherer\":\"https://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=491693\",\"tcgplayer_infinite_articles\":\"https://infinite.tcgplayer.com/search?contentMode=article\\u0026game=magic\\u0026partner=scryfall\\u0026q=Jwari+Disruption+%2F%2F+Jwari+Ruins\\u0026utm_campaign=affiliate\\u0026utm_medium=api\\u0026utm_source=scryfall\",\"tcgplayer_infinite_decks\":\"https://infinite.tcgplayer.com/search?contentMode=deck\\u0026game=magic\\u0026partner=scryfall\\u0026q=Jwari+Disruption+%2F%2F+Jwari+Ruins\\u0026utm_campaign=affiliate\\u0026utm_medium=api\\u0026utm_source=scryfall\",\"edhrec\":\"https://edhrec.com/route/?cc=Jwari+Disruption\"},\"purchase_uris\":{\"tcgplayer\":\"https://www.tcgplayer.com/product/222101?page=1\\u0026utm_campaign=affiliate\\u0026utm_medium=api\\u0026utm_source=scryfall\",\"cardmarket\":\"https://www.cardmarket.com/en/Magic/Products/Search?referrer=scryfall\\u0026searchString=Jwari+Disruption\\u0026utm_campaign=card_prices\\u0026utm_medium=text\\u0026utm_source=scryfall\",\"cardhoarder\":\"https://www.cardhoarder.com/cards/83079?affiliate_id=scryfall\\u0026ref=card-profile\\u0026utm_campaign=affiliate\\u0026utm_medium=card\\u0026utm_source=scryfall\"}}"
+        Childs\",\"artist_ids\":[\"ed6f7e03-20ba-4c73-bdda-4a4928480721\"],\"border_color\":\"black\",\"frame\":\"2015\",\"full_art\":false,\"textless\":false,\"booster\":true,\"story_spotlight\":false,\"edhrec_rank\":2344,\"penny_rank\":528,\"prices\":{\"usd\":\"0.18\",\"usd_foil\":\"2.45\",\"usd_etched\":null,\"eur\":\"0.29\",\"eur_foil\":\"0.66\",\"tix\":\"0.02\"},\"related_uris\":{\"gatherer\":\"https://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=491693\",\"tcgplayer_infinite_articles\":\"https://infinite.tcgplayer.com/search?contentMode=article\\u0026game=magic\\u0026partner=scryfall\\u0026q=Jwari+Disruption+%2F%2F+Jwari+Ruins\\u0026utm_campaign=affiliate\\u0026utm_medium=api\\u0026utm_source=scryfall\",\"tcgplayer_infinite_decks\":\"https://infinite.tcgplayer.com/search?contentMode=deck\\u0026game=magic\\u0026partner=scryfall\\u0026q=Jwari+Disruption+%2F%2F+Jwari+Ruins\\u0026utm_campaign=affiliate\\u0026utm_medium=api\\u0026utm_source=scryfall\",\"edhrec\":\"https://edhrec.com/route/?cc=Jwari+Disruption\"},\"purchase_uris\":{\"tcgplayer\":\"https://www.tcgplayer.com/product/222101?page=1\\u0026utm_campaign=affiliate\\u0026utm_medium=api\\u0026utm_source=scryfall\",\"cardmarket\":\"https://www.cardmarket.com/en/Magic/Products/Search?referrer=scryfall\\u0026searchString=Jwari+Disruption\\u0026utm_campaign=card_prices\\u0026utm_medium=text\\u0026utm_source=scryfall\",\"cardhoarder\":\"https://www.cardhoarder.com/cards/83079?affiliate_id=scryfall\\u0026ref=card-profile\\u0026utm_campaign=affiliate\\u0026utm_medium=card\\u0026utm_source=scryfall\"}}"
     headers:
       Access-Control-Allow-Headers:
       - Accept, Accept-Charset, Accept-Language, Authorization, Cache-Control, Content-Language,
@@ -34,7 +34,7 @@ interactions:
       CF-Cache-Status:
       - MISS
       CF-RAY:
-      - 766747f22b3d17c9-MEL
+      - 7aba411b4d6d5aac-MEL
       Cache-Control:
       - public, max-age=28800
       Connection:
@@ -48,15 +48,15 @@ interactions:
       Content-Type:
       - application/json; charset=utf-8
       Date:
-      - Mon, 07 Nov 2022 16:00:18 GMT
+      - Wed, 22 Mar 2023 00:17:54 GMT
       Etag:
-      - W/"35ed0c09fe25f70288f9363662f71d14"
+      - W/"3296bbb5d5d7caeae0b3193215f16bf5"
       NEL:
       - '{"success_fraction":0,"report_to":"cf-nel","max_age":604800}'
       Referrer-Policy:
       - strict-origin-when-cross-origin
       Report-To:
-      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=S%2FWPgN8D3TWvtM6zD9HmspfzrNkAm%2FhjGec2Q6aEn4AxUO52ocImb3IBDo4HTiGOkQzxNHKcOvS6WA2Fidpi6ehM9lv4fY%2FLRffixFWa9KchdljefOQ5aB%2F32ftOoWxyiN4%3D"}],"group":"cf-nel","max_age":604800}'
+      - '{"endpoints":[{"url":"https:\/\/a.nel.cloudflare.com\/report\/v3?s=zGTp8w8Ze6wWLv1%2B1ohvNS0Ip2SHMjaGlH79PRVE%2BMUltiW1E%2BsX6bQuNBZL9jsZyTFJaP%2Bn85GvOCTrTcGKVFXc6UDHh7WLiBevpyZ0JYNW%2F81yDY%2BJlBdiXt10Y2vruSE%3D"}],"group":"cf-nel","max_age":604800}'
       Server:
       - cloudflare
       Strict-Transport-Security:
@@ -85,8 +85,6 @@ interactions:
       - https://cards.scryfall.io/large/front/3/0/301750a7-d1fd-435e-bfa8-9d2fb22ad627.jpg?1604250757
       X-Xss-Protection:
       - 1; mode=block
-      alt-svc:
-      - h3=":443"; ma=86400, h3-29=":443"; ma=86400
     status:
       code: 200
       message: OK

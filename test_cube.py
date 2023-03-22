@@ -21,6 +21,7 @@ async def test_decks() -> None:
 async def test_penny_dreadful() -> None:
     pd = await cube.load_cubecobra_cube("penny_dreadful")
     assert pd.cards
+    assert pd.cards.mainboard
 
 @pytest.mark.vcr(record_mode='new_episodes')
 @pytest.mark.asyncio
@@ -32,3 +33,8 @@ async def test_a93() -> None:
 @pytest.mark.asyncio
 async def test_mdfc_colors() -> None:
     await cube.fetch_card('Jwari Disruption // Jwari Ruins')
+
+@pytest.mark.vcr(record_mode='new_episodes')
+@pytest.mark.asyncio
+async def test_ancienttimes() -> None:
+    await cube.load_cubecobra_cube('ancienttimes')

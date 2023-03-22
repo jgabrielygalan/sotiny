@@ -19,7 +19,7 @@ CARD_INFO: dict[str, Card] = {}
 class Card(object):
     cardID: str
     imgUrl: Optional[str] = None
-    name: str = ''
+    name: Optional[str] = ''
     colors: Optional[list[str]] = []
 
     async def ensure_data(self) -> Card:
@@ -35,19 +35,25 @@ class Card(object):
         return self
 
 @attr.s(auto_attribs=True)
+class CardList:
+    id: str
+    mainboard: List[Card]
+    maybeboard: List[Card]
+
+@attr.s(auto_attribs=True)
 class Cube(object):
-    shortID: str
+    shortId: Optional[str]
     name: str
-    owner_name: str
+    # owner_name: str
     description: str
-    cards: List[Card]
+    cards: CardList
     urlAlias: Optional[str] = None
     decks: Optional[list[str]] = None
 
     async def ensure_data(self) -> None:
-        for ids in chunks(list({c.cardID for c in self.cards}), 75):
+        for ids in chunks(list({c.cardID for c in self.cards.mainboard}), 75):
             await fetch_names(ids)
-        for c in self.cards:
+        for c in self.cards.mainboard:
             await c.ensure_data()
 
     async def download_decks(self) -> None:
@@ -80,7 +86,7 @@ async def load_cubecobra_cube(cubecobra_id: str) -> Cube:
     except (aiohttp.ClientError, json.JSONDecodeError) as e:
         raise UserFeedbackException(f"Unable to load cube list from {url}") from e
     except ClassValidationError as e:
-        raise UserFeedbackException(f"Unable to parse cube data from {url}") from e
+        raise UserFeedbackException(f"Unable to parse cube data from {url}:  {e}") from e
 
 
 async def download_deck(id: str, seat: int) -> None:
