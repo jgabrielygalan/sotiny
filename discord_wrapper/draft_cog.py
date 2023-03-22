@@ -311,7 +311,7 @@ class CubeDrafter(Extension):
         guild.setup(number_of_packs, cards_per_booster, cube_id, max_players)
         try:
             data = await guild.pending_conf.cubedata()
-            await modal_ctx.send(f"Okay. I'll start a draft of {data.name} by {data.owner_name} (`{data.shortID}`) when we have {max_players} players",
+            await modal_ctx.send(f"Okay. I'll start a draft of {data.name} by {data.owner.username} (`{data.shortId}`) when we have {max_players} players",
                                  components=[JOIN_BUTTON])
         except Exception:
             await modal_ctx.send(f"Unable to load data for https://cubecobra.com/cube/overview/{cube_id}, please double-check the ID and try again.")

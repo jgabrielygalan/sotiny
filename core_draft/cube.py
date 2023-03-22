@@ -41,10 +41,15 @@ class CardList:
     maybeboard: List[Card]
 
 @attr.s(auto_attribs=True)
+class Owner:
+    username: str
+
+
+@attr.s(auto_attribs=True)
 class Cube(object):
     shortId: Optional[str]
     name: str
-    # owner_name: str
+    owner: Owner
     description: str
     cards: CardList
     urlAlias: Optional[str] = None
