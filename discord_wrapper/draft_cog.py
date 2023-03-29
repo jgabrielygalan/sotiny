@@ -1,3 +1,4 @@
+import logging
 import os
 from typing import Dict, List, Optional, cast
 
@@ -77,7 +78,7 @@ class CubeDrafter(Extension):
         self.timeout.start()
 
     async def setup_guild(self, guild: naff.Guild) -> GuildData:
-        if not guild.id in self.guilds_by_id:
+        if guild.id not in self.guilds_by_id:
             self.guilds_by_id[guild.id] = GuildData(guild, self.redis)
             await self.guilds_by_id[guild.id].load_state()
         return self.guilds_by_id[guild.id]
@@ -86,7 +87,7 @@ class CubeDrafter(Extension):
     async def on_guild_join(self, event: naff.events.GuildJoin) -> None:
         guild = event.guild
         print("Joined {n}".format(n=guild.name))
-        if not guild.id in self.guilds_by_id:
+        if guild.id not in self.guilds_by_id:
             await self.setup_guild(guild)
 
     @listen()
@@ -161,11 +162,13 @@ class CubeDrafter(Extension):
             await ctx.send("No players registered for the next draft")
         else:
             p = ", ".join([p.nick or p.user.username for p in guild.get_registered_players()])
-            await ctx.send(f"The following players are registered for the next draft: {p}\nWaiting for {guild.pending_conf.max_players - len(guild.players)} more players.", components=[JOIN_BUTTON])
+            msg = f"The following players are registered for the next draft: {p}\nWaiting for {guild.pending_conf.max_players - len(guild.players)} more players."
+            await ctx.send(msg, components=[JOIN_BUTTON])
 
-    @naff.prefixed_command(name='start', help="Start the draft with the registered players. Packs is the number of packs to open per player (default 3). cards is the number of cards per booster (default 15). cube is the CubeCobra id of a Cube (default Penny Dreadful Eternal Cube).")  # type: ignore
+    @naff.prefixed_command(name='start')  # type: ignore
     @check(guild_only())
     async def start(self, ctx: PrefixedContext) -> None:
+        """"Start the draft with the registered players."""
         guild = await self.get_guild(ctx)
         if guild.no_registered_players():
             await ctx.send("Can't start the draft, there are no registered players")
@@ -377,9 +380,9 @@ class CubeDrafter(Extension):
                 if not draft.draft:
                     continue  # Typeguard
                 for player in draft.get_pending_players():
-                    mpp = draft.messages_by_player[player.id]
+                    mpp = draft.messages_by_player.get(player.id)
                     if not mpp:
-                        print(f'WARNING: unable to time out {player} in {draft.uuid}, no messages.')
+                        logging.warning(f'WARNING: unable to time out {player} in {draft.uuid}, no messages.')
                         continue
 
                     draft_player = draft.draft.player_by_id(player.id)

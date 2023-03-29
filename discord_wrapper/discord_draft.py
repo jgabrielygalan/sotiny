@@ -120,7 +120,8 @@ class GuildDraft:
         self.start_channel_id = channel.id
         for p in self.players.values():
             self.messages_by_player[p.id] = {}
-        msg = await channel.send("Starting the draft of https://cubecobra.com/cube/overview/{cube_id} with {p}".format(p=", ".join([p.display_name for p in self.get_players()]), cube_id=cube))
+        names = ", ".join([p.display_name for p in self.get_players()])
+        msg = await channel.send("Starting the draft of https://cubecobra.com/cube/overview/{cube_id} with {p}".format(p=names, cube_id=cube))
         players_to_update = self.draft.start(packs, cards)
         intro = "The draft has started. Pack 1, Pick 1:"
         await asyncio.gather(*[self.send_pack_to_player(intro, p) for p in players_to_update])
@@ -432,7 +433,8 @@ async def load_cubecobra_cube(cubecobra_id: str) -> List[str]:
     try:
         c = await cube.load_cubecobra_cube(cubecobra_id)
         return await c.cardlist()
-    except:
+    except Exception as e:
+        sentry_sdk.capture_exception(e)
         return await load_cubecobra_cubelist(cubecobra_id)
 
 async def load_cubecobra_cubelist(cubecobra_id: str) -> List[str]:
