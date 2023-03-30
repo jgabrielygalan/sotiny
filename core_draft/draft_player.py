@@ -14,6 +14,7 @@ class DraftPlayer:
     face_up: List[str] = attr.ib(factory=list)
     current_pack: Optional[Booster] = None
     skips: int = 0
+    draftbot: bool = False
 
     def __init__(self, id: int, seat: int) -> None:
         self.id = id

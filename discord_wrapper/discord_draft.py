@@ -290,12 +290,13 @@ class GuildDraft:
             for member in self.players.values():
                 await member.send(f"[{self.id_with_guild()}] The draft has finished")
                 await self.send_deckfile_to_player(member, member.id)
-                with open(f'decks/{self.id()}_{member.id}.txt', 'w') as f:
-                    f.writelines(generate_file_content(self.draft.deck_of(player_id)))
+                if not isinstance(member, BotMember):
+                    with open(f'decks/{self.id()}_{member.id}.txt', 'w') as f:
+                        f.writelines(generate_file_content(self.draft.deck_of(player_id)))
             self.draft.stage = Stage.draft_complete
             self.messages_by_player.clear()
 
-    async def send_deckfile_to_player(self, messagable: SendMixin, player_id: int) -> None:
+    async def send_deckfile_to_player(self, messagable: Member | BotMember, player_id: int) -> None:
         if self.draft is None:
             return
         content = generate_file_content(self.draft.deck_of(player_id))
@@ -334,13 +335,16 @@ class GuildDraft:
         # await self.guild.guild.query_members(user_ids=self.draft.players)
         for player in self.draft.players:
             try:
-                member = await self.guild.guild.fetch_member(player)
-                if not member:
-                    logging.error(f'{self.uuid} failed to reload, {player} not found', stacklevel=3)
-                    return
+                drafter = self.draft.player_by_id(player)
+                member: Member | BotMember | None = await self.guild.guild.fetch_member(player)
+                if drafter.draftbot or not member:
+                    if not drafter.draftbot:
+                        logging.error(f'{self.uuid} failed to reload, {player} not found', stacklevel=3)
+                    member = BotMember(self.guild.guild._client, player)
+                    drafter.draftbot = True
                 self.players[player] = member
                 self.messages_by_player[player] = dict()
-                if self.draft.player_by_id(player).current_pack is not None:
+                if drafter.current_pack is not None:
                     await self.send_current_pack_to_player("Bump: ", player)
             except NotFound:
                 logging.error(f'{self.uuid} failed to reload, {player} not found', stacklevel=3)
