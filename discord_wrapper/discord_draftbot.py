@@ -19,7 +19,7 @@ async def delayed_pick() -> None:
         return
 
     db = RUNNING_BOTS[0]
-    db.delayed_pick()
+    await db.delayed_pick()
 
 
 @attrs.define()
@@ -65,4 +65,4 @@ class BotMember(DiscordObject):
         if card is None:
             card = ""
         i = self.bot.player.current_pack.cards.index(card) + 1  # picks are one-indexed
-        self.draft.draft.pick(self.bot.player.id, i)
+        await self.draft.pick_by_index(self.bot.player.id, i)
