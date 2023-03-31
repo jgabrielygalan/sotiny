@@ -15,6 +15,7 @@ from naff.models import (ActionRow, Button, IntervalTrigger, MessageFlags,
 from naff.models.naff.checks import TYPE_CHECK_FUNCTION
 
 from core_draft.cog_exceptions import NoPrivateMessage, PrivateMessageOnly
+from core_draft.draft_player import DraftPlayer
 from core_draft.draftbot import DraftBot
 from discord_wrapper.discord_draft import GuildDraft
 from discord_wrapper.discord_draftbot import BotMember
@@ -380,12 +381,17 @@ class CubeDrafter(Extension):
                 if not draft.draft:
                     continue  # Typeguard
                 for player in draft.get_pending_players():
+                    draft_player = draft.draft.player_by_id(player.id)
+                    if draft_player.draftbot:
+                        i = await self.draftbot_choice(draft_player)
+                        await draft.pick_by_index(player.id, i)
+                        continue
+
                     mpp = draft.messages_by_player.get(player.id)
                     if not mpp:
                         logging.warning(f'WARNING: unable to time out {player} in {draft.uuid}, no messages.')
                         continue
 
-                    draft_player = draft.draft.player_by_id(player.id)
                     msg = list(mpp.values())[0]
                     age = (Timestamp.utcnow() - msg['message'].timestamp).total_seconds()
                     if draft_player.current_pack is None:
@@ -403,14 +409,7 @@ class CubeDrafter(Extension):
                         await player.send(f'You have been idle for {timeout / 2 / 60 / 60} hours. After another {timeout / 2 / 60 / 60} hours, a card will be picked automatically.', reply_to=msg['message'])
                     elif age > timeout:
                         print(f"{player.display_name} has been holding a pack for {age / 60} minutes")
-                        bot = DraftBot(draft_player)
-                        c = await bot.pick()
-                        if c is None:
-                            c = ""
-                        try:
-                            i = str(draft_player.current_pack.cards.index(c) + 1)
-                        except ValueError:
-                            i = "1"
+                        i = str(await self.draftbot_choice(draft_player))
                         await guild.try_pick(msg['message'].id, player.id, i, None)
 
                         draft_player.skips += 1
@@ -423,6 +422,19 @@ class CubeDrafter(Extension):
 
                         if draft_player.skips > 3:
                             draft.abandon_votes.add(player.id)
+
+    async def draftbot_choice(self, draft_player: DraftPlayer) -> int:
+        if draft_player.current_pack is None:
+            raise Exception("No pack to pick from")
+        bot = DraftBot(draft_player)
+        c = await bot.pick()
+        if c is None:
+            c = ""
+        try:
+            i = draft_player.current_pack.cards.index(c) + 1
+        except ValueError:
+            i = 1
+        return i
 
 def swap_seats_button(draft: GuildDraft, old_player: Member) -> ActionRow:
     button = Button(

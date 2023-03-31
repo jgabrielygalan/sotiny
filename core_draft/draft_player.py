@@ -16,9 +16,6 @@ class DraftPlayer:
     skips: int = 0
     draftbot: bool = False
 
-    def __init__(self, id: int, seat: int) -> None:
-        self.id = id
-        self.seat = seat
 
     def __hash__(self) -> int:
         return id.__hash__()

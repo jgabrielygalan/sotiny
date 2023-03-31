@@ -58,7 +58,10 @@ class Draft:
         random.shuffle(self.players)
         random.shuffle(self.cards)
         for i, player in enumerate(self.players):
-            self._state.append(DraftPlayer(player, i))
+            db = DraftPlayer(player, i)
+            if player < 100:
+                db.draftbot = True
+            self._state.append(db)
         self.open_boosters_for_all_players()
         return self._state  # return all players to update
 

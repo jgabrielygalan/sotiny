@@ -111,6 +111,8 @@ class GuildDraft:
     def fill_bots(self, expected_players: int) -> None:
         num_bots = expected_players - len(self.players)
         print(f'Filling with {num_bots} bots')
+        for i in range(num_bots):
+            self.players[i] = BotMember(self.guild.guild._client, i, self)
 
     async def start(self, channel: TYPE_MESSAGEABLE_CHANNEL, packs: int, cards: int, cube: str) -> None:
         if not self.uuid:
@@ -136,12 +138,18 @@ class GuildDraft:
             if item_number is None:
                 item_number = int(emoji)
             print("Player {u} reacted with {n} for row {i}".format(u=player_id, n=item_number, i=page_number))
-            info = self.draft.pick(player_id, item_number + (5 * (page_number - 1)))
+            index = item_number + (5 * (page_number - 1))
+            await self.pick_by_index(player_id, index)
         else:
             print(f"Missing message_id({message_id} + emoji({emoji})")
             return
 
+    async def pick_by_index(self, player_id: int, index: int) -> None:
+        if self.draft is None:
+            raise RuntimeError("Can't pick without a draft")
+        info = self.draft.pick(player_id, index)
         await self.handle_pick_response(info.updates, player_id, info.draft_effect)
+
 
     async def picks(self, messageable: User | Member | BotMember, player_id: int) -> None:
         if not self.draft:
@@ -173,6 +181,9 @@ class GuildDraft:
 
     async def send_pack_to_player(self, intro: str, player: DraftPlayer) -> None:
         if self.draft is None:
+            return
+        if player.draftbot:
+            # todo: send pack to bot
             return
         player_id = player.id
         messageable: Member = self.players[player_id]
@@ -339,9 +350,9 @@ class GuildDraft:
                 member: Member | BotMember | None = await self.guild.guild.fetch_member(player)
                 if drafter.draftbot or not member:
                     if not drafter.draftbot:
-                        logging.error(f'{self.uuid} failed to reload, {player} not found', stacklevel=3)
-                    member = BotMember(self.guild.guild._client, player)
-                    drafter.draftbot = True
+                        logging.warning(f'{self.uuid} failed to reload, {player} not found', stacklevel=3)
+                        drafter.draftbot = True
+                    member = BotMember(self.guild.guild._client, player, self)
                 self.players[player] = member
                 self.messages_by_player[player] = dict()
                 if drafter.current_pack is not None:
