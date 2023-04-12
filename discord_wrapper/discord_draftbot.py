@@ -25,7 +25,7 @@ async def delayed_pick() -> None:
 @attrs.define()
 class BotMember(DiscordObject):
     draft: "GuildDraft"
-    bot: DraftBot | None = attrs.field(init=False)
+    bot: DraftBot | None = attrs.field(default=None)
 
     @property
     def display_name(self) -> str:
