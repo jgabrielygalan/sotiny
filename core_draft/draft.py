@@ -34,6 +34,7 @@ class Draft:
     cards_per_booster: int = 15
     metadata: dict[str, Any] = attr.ib(factory=dict)
     stage: Stage = Stage.draft_registration
+    spare_cards: int = 0  # number of cards left in the cube after allocating boosters
 
     def player_by_id(self, player_id: int) -> DraftPlayer:
         state = self._state[self.players.index(player_id)]
@@ -51,7 +52,9 @@ class Draft:
         return self.player_by_id(player_id).deck
 
     def start(self, number_of_packs: int, cards_per_booster: int) -> List[DraftPlayer]:
-        if number_of_packs * cards_per_booster * len(self.players) > len(self.cards):
+        used_cards = number_of_packs * cards_per_booster * len(self.players)
+        self.spare_cards = len(self.cards) - used_cards
+        if self.spare_cards < 0:
             raise UserFeedbackException(f"Not enough cards {len(self.cards)} for {len(self.players)} with {number_of_packs} of {cards_per_booster}")
         self.number_of_packs = number_of_packs
         self.cards_per_booster = cards_per_booster
@@ -135,6 +138,11 @@ class Draft:
     def check_if_draft_matters(self, player: DraftPlayer, pack: Booster) -> Optional[player_card_drafteffect]:
         pick = player.last_pick()
         if pick == 'Lore Seeker':  # Reveal Lore Seeker as you draft it. After you draft Lore Seeker, you may add a booster pack to the draft
+            if self.spare_cards < self.cards_per_booster:
+                # Don't add a booster if we don't have enough cards
+                # revisit this when we have support for generating magic boosters
+                return None
+            self.spare_cards -= self.cards_per_booster
             self.open_booster(player, pack.number)
             return (player, pick, DraftEffect.add_booster_to_draft)
         if pick in ['Cogwork Librarian', "Leovold's Operative"]:  # Swap me into a later booster!
