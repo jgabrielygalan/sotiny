@@ -4,15 +4,16 @@ from typing import Dict, List, Optional
 import aioredis
 import attr
 import attrs
-import naff
-from naff import (ActionRow, Button, ButtonStyles, ComponentContext,
-                  SendableContext)
+import interactions
+from interactions import (ActionRow, Button, ButtonStyle, ComponentContext, InteractionContext)
+from interactions.ext.prefixed_commands import PrefixedContext
 
 import core_draft.cube as cube
 from core_draft.cog_exceptions import DMsClosedException
 from discord_wrapper.discord_draft import DEFAULT_CUBE_CUBECOBRA_ID, GuildDraft
 from discord_wrapper.discord_draftbot import BotMember
 
+SendableContext = InteractionContext | PrefixedContext
 
 @attr.s(auto_attribs=True)
 class DraftSettings:
@@ -34,48 +35,48 @@ class GuildData:
     """
     Maintains state about a Guild, and handles draft registration
     """
-    guild: naff.Guild
+    guild: interactions.Guild
     redis: aioredis.Redis
 
     id: int
     name: str
     drafts_in_progress: List[GuildDraft] = attr.ib(default=attr.Factory(list), repr=lambda drafts: '[' + ', '.join(f'Draft({d.uuid},...)' for d in drafts) + ']')
-    players: Dict[int, naff.Member | BotMember] = attr.ib(default=attr.Factory(dict))
+    players: Dict[int, interactions.Member | BotMember] = attr.ib(default=attr.Factory(dict))
     pending_conf: DraftSettings = attr.ib(default=attr.Factory(DraftSettings))  # type: ignore
 
-    def __init__(self, guild: naff.Guild, redis_client: aioredis.Redis) -> None:
+    def __init__(self, guild: interactions.Guild, redis_client: aioredis.Redis) -> None:
         self.redis = redis_client
         self.guild = guild
         self.id = guild.id
         self.name = guild.name
         self.drafts_in_progress: List[GuildDraft] = []
-        self.players: Dict[int, naff.Member | BotMember] = {}  # players registered for the next draft
+        self.players: Dict[int, interactions.Member | BotMember] = {}  # players registered for the next draft
         self.pending_conf: DraftSettings = DraftSettings(3, 15, 8, DEFAULT_CUBE_CUBECOBRA_ID)
 
-    async def add_player(self, player: naff.Member) -> None:
+    async def add_player(self, player: interactions.Member) -> None:
         self.players[player.id] = player
 
-    async def remove_player(self, player: naff.Member | naff.User) -> None:
+    async def remove_player(self, player: interactions.Member | interactions.User | BotMember) -> None:
         if player.id in self.players:
             del self.players[player.id]
 
-    def is_player_registered(self, player: naff.Member) -> bool:
+    def is_player_registered(self, player: interactions.Member) -> bool:
         return player.id in self.players
 
-    def is_player_playing(self, player: naff.Member) -> bool:
+    def is_player_playing(self, player: interactions.Member) -> bool:
         draft = next((x for x in self.drafts_in_progress if x.has_player(player)), None)
         return draft is not None
 
     def no_registered_players(self) -> bool:
         return len(self.players) == 0
 
-    def get_registered_players(self) -> List[naff.Member | BotMember]:
+    def get_registered_players(self) -> List[interactions.Member | BotMember]:
         return list(self.players.values())
 
-    def player_exists(self, player: naff.Member) -> bool:
+    def player_exists(self, player: interactions.Member) -> bool:
         return self.is_player_playing(player) or self.is_player_registered(player)
 
-    def get_drafts_for_player(self, player: naff.Member | naff.User) -> List[GuildDraft]:
+    def get_drafts_for_player(self, player: interactions.Member | interactions.User) -> List[GuildDraft]:
         return [x for x in self.drafts_in_progress if x.has_player(player)]
 
     def get_draft_by_id(self, draft_id: str) -> Optional[GuildDraft]:
@@ -200,7 +201,7 @@ def recolour_buttons(components: Optional[List[ActionRow]], green_name: Optional
     for c in components[0].components:
         if isinstance(c, Button):
             if c.label == green_name:
-                buttons.append(Button(ButtonStyles.GREEN, c.label, c.emoji, disabled=True))
+                buttons.append(Button(style=ButtonStyle.GREEN, label=c.label, emoji=c.emoji, disabled=True))
             else:
-                buttons.append(Button(ButtonStyles.GREY, c.label, c.emoji, disabled=True))
-    return ActionRow(*buttons)  # type: ignore
+                buttons.append(Button(style=ButtonStyle.GREY, label=c.label, emoji=c.emoji, disabled=True))
+    return ActionRow(*buttons)

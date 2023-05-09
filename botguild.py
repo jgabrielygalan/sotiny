@@ -1,7 +1,7 @@
 import os
 
 from dis_taipan.botguild import SelfGuild
-from naff.client.client import Client
+from interactions.client.client import Client
 
 import core_draft.image_fetcher as image_fetcher
 

@@ -34,6 +34,9 @@ class DraftBot:
                 if card in deck:
                     scores[card] += similarity_score(deck, self.player.deck)
 
+        # todo: finish this
+        return None
+
     async def force(self) -> Optional[str]:
         """
         Forces a colour.  Not the smartest, but it does the job.

@@ -3,16 +3,13 @@ import os
 from typing import Dict, List, Optional, cast
 
 import aioredis
-import naff
-from naff import (ButtonStyles, Context, Extension, InteractionContext, Member,
-                  Modal, ModalContext, SendableContext, Timestamp,
-                  slash_command)
-from naff.client.client import Client
-from naff.client.errors import CommandException
-from naff.models import (ActionRow, Button, IntervalTrigger, MessageFlags,
-                         PrefixedContext, ShortText, Task,
-                         check, listen)
-from naff.models.naff.checks import TYPE_CHECK_FUNCTION
+import interactions
+from interactions import (BaseContext, ButtonStyle, Extension, InteractionContext, SlashContext, Member, Modal, ModalContext, Timestamp, slash_command)
+from interactions.client.client import Client
+from interactions.client.errors import CommandException
+from interactions.models import (ActionRow, Button, IntervalTrigger, MessageFlags, ShortText, Task, check, listen)
+from interactions.models.internal.checks import TYPE_CHECK_FUNCTION
+from interactions.ext.prefixed_commands import PrefixedContext, prefixed_command
 
 from core_draft.cog_exceptions import NoPrivateMessage, PrivateMessageOnly
 from core_draft.draft_player import DraftPlayer
@@ -21,15 +18,17 @@ from discord_wrapper.discord_draft import GuildDraft
 from discord_wrapper.discord_draftbot import BotMember
 from discord_wrapper.guild import GuildData
 
+SendableContext = InteractionContext | PrefixedContext
+
 DEFAULT_PACK_NUMBER = 3
 DEFAULT_CARD_NUMBER = 15
 
-JOIN_BUTTON = Button(ButtonStyles.GREEN, "JOIN", custom_id='join_draft')
+JOIN_BUTTON = Button(style=ButtonStyle.GREEN, label="JOIN", custom_id='join_draft')
 
 def dm_only() -> TYPE_CHECK_FUNCTION:
     """This command may only be ran in a DM."""
 
-    async def check(ctx: Context) -> bool:
+    async def check(ctx: BaseContext) -> bool:
         if ctx.guild:
             raise PrivateMessageOnly("This command may only be ran in a DM.")
         return True
@@ -39,7 +38,7 @@ def dm_only() -> TYPE_CHECK_FUNCTION:
 def guild_only() -> TYPE_CHECK_FUNCTION:
     """This command may only be ran in a guild."""
 
-    async def check(ctx: Context) -> bool:
+    async def check(ctx: BaseContext) -> bool:
         if not ctx.guild:
             raise NoPrivateMessage("This command may only be ran in a guild.")
         return True
@@ -52,12 +51,12 @@ class CubeDrafter(Extension):
         self.guilds_by_id: Dict[int, GuildData] = {}
         self.readied = False
         try:
-            self.redis = aioredis.from_url(os.getenv('REDIS_URL', default='redis://localhost'), password=os.getenv('REDIS_PASSWORD'))
+            self.redis = aioredis.from_url(os.getenv('REDIS_URL', default='redis://localhost'), password=os.getenv('REDIS_PASSWORD'))  # type: ignore
         except ConnectionRefusedError:
             self.redis = None
             print('Could not connect to redis')
 
-    async def get_guild(self, ctx: Context | SendableContext) -> GuildData:
+    async def get_guild(self, ctx: SendableContext) -> GuildData:
         if not ctx.guild:
             raise NoPrivateMessage
         guild = self.guilds_by_id.get(ctx.guild.id)
@@ -78,28 +77,28 @@ class CubeDrafter(Extension):
         self.status.start()
         self.timeout.start()
 
-    async def setup_guild(self, guild: naff.Guild) -> GuildData:
+    async def setup_guild(self, guild: interactions.Guild) -> GuildData:
         if guild.id not in self.guilds_by_id:
             self.guilds_by_id[guild.id] = GuildData(guild, self.redis)
             await self.guilds_by_id[guild.id].load_state()
         return self.guilds_by_id[guild.id]
 
     @listen()
-    async def on_guild_join(self, event: naff.events.GuildJoin) -> None:
+    async def on_guild_join(self, event: interactions.events.GuildJoin) -> None:
         guild = event.guild
         print("Joined {n}".format(n=guild.name))
         if guild.id not in self.guilds_by_id:
             await self.setup_guild(guild)
 
     @listen()
-    async def on_guild_left(self, event: naff.events.GuildLeft) -> None:
+    async def on_guild_left(self, event: interactions.events.GuildLeft) -> None:
         guild = event.guild
         if guild:
             print("Removed from {n}".format(n=guild.name))
             if event.guild.id in self.guilds_by_id:
                 del self.guilds_by_id[int(event.guild.id)]
 
-    @naff.prefixed_command()  # type: ignore
+    @prefixed_command()  # type: ignore
     @check(guild_only())
     async def play(self, ctx: PrefixedContext) -> None:
         """
@@ -108,7 +107,7 @@ class CubeDrafter(Extension):
         await self.register_player(ctx, True)
 
     async def register_player(self, ctx: SendableContext, embed: bool) -> None:
-        player = cast(naff.Member, ctx.author)  # Guild-only, so it will be a member
+        player = cast(interactions.Member, ctx.author)  # Guild-only, so it will be a member
         guild = await self.get_guild(ctx)
         if player.id in guild.players:
             if isinstance(ctx, InteractionContext):
@@ -138,9 +137,9 @@ class CubeDrafter(Extension):
             await guild.start(ctx)
         await guild.save_state()
 
-    join = naff.prefixed_command(name='join')(play.callback)
+    join = prefixed_command(name='join')(play.callback)
 
-    @naff.prefixed_command(name='leave')  # type: ignore
+    @prefixed_command(name='leave')  # type: ignore
     @check(guild_only())
     async def cancel(self, ctx):
         """Cancel your registration for an upcoming draft."""
@@ -154,7 +153,7 @@ class CubeDrafter(Extension):
             print(f"{player.display_name} is not registered, can't cancel")
             await ctx.send("{mention}, you are not registered for the draft, I can't cancel".format(mention=ctx.author.mention))
 
-    @naff.prefixed_command(name='players', help='List registered players for the next draft')   # type: ignore
+    @prefixed_command(name='players', help='List registered players for the next draft')   # type: ignore
     @check(guild_only())
     async def players(self, ctx: PrefixedContext):
         guild = await self.get_guild(ctx)
@@ -166,7 +165,7 @@ class CubeDrafter(Extension):
             msg = f"The following players are registered for the next draft: {p}\nWaiting for {guild.pending_conf.max_players - len(guild.players)} more players."
             await ctx.send(msg, components=[JOIN_BUTTON])
 
-    @naff.prefixed_command(name='start')  # type: ignore
+    @prefixed_command(name='start')  # type: ignore
     @check(guild_only())
     async def start(self, ctx: PrefixedContext) -> None:
         """"Start the draft with the registered players."""
@@ -178,19 +177,19 @@ class CubeDrafter(Extension):
         await guild.start(ctx)
         await guild.save_state()
 
-    @naff.listen()
-    async def on_component(self, event: naff.events.internal.Component) -> None:
+    @interactions.listen()
+    async def on_component(self, event: interactions.events.internal.Component) -> None:
         ctx = event.ctx
         if ctx.custom_id == 'join_draft':
             await self.register_player(ctx, False)
             return
         await ctx.defer(edit_origin=True)
         for guild in self.guilds_by_id.values():
-            handled = await guild.try_pick(ctx.message.id, ctx.author.id, ctx.custom_id, ctx)
+            handled = await guild.try_pick(ctx.message_id, ctx.author.id, ctx.custom_id, ctx)
             if handled:
                 await guild.save_state()
 
-    @naff.prefixed_command(name='pending')
+    @prefixed_command(name='pending')
     async def pending(self, ctx: SendableContext) -> None:
         """
         Show players who still haven't picked
@@ -215,14 +214,14 @@ class CubeDrafter(Extension):
             else:
                 await ctx.send(prefix + "No pending players")
 
-    @naff.prefixed_command(name='deck', help="Show your current deck as images")  # type: ignore
+    @prefixed_command(name='deck', help="Show your current deck as images")  # type: ignore
     @check(dm_only())
     async def my_deck(self, ctx, draft_id = None):
         draft = await self.find_draft_or_send_error(ctx, draft_id)
         if draft is not None:
             await draft.picks(ctx, ctx.author.id)
 
-    @naff.prefixed_command()
+    @prefixed_command()
     async def abandon(self, ctx: PrefixedContext, draft_id: Optional[str] = None) -> None:
         """Vote to cancel an in-progress draft"""
         draft = await self.find_draft_or_send_error(ctx, draft_id)
@@ -239,7 +238,7 @@ class CubeDrafter(Extension):
                 await chan.send(f'{draft.id()} needs {needed - len(draft.abandon_votes)} more votes to abandon.')
                 # Alternatively, someone can take over your seat:', components=swap_seats_button(draft, ctx.author)
 
-    @naff.prefixed_command(name='pack', help="Resend your current pack")
+    @prefixed_command(name='pack', help="Resend your current pack")
     async def my_pack(self, ctx: PrefixedContext, draft_id: Optional[str] = None) -> None:
         draft = await self.find_draft_or_send_error(ctx, draft_id, True)
         if draft is None or draft.draft is None:
@@ -251,7 +250,7 @@ class CubeDrafter(Extension):
 
         await draft.send_current_pack_to_player("Your pack:", ctx.author.id)
 
-    @naff.prefixed_command(name='drafts', help="Show your in progress drafts")
+    @prefixed_command(name='drafts', help="Show your in progress drafts")
     async def my_drafts(self, ctx: PrefixedContext) -> None:
         drafts = await self.find_drafts_by_player(ctx)
         if len(drafts) == 0:
@@ -261,46 +260,44 @@ class CubeDrafter(Extension):
             list = divider.join([f"[{x.guild.name}:{x.id()}] {x.draft.number_of_packs} packs ({x.draft.cards_per_booster} cards). {', '.join([p.display_name for p in x.get_players()])}" for x in drafts if x.draft is not None])
             await ctx.send(f"{list}")
 
-    @naff.prefixed_command('setup')
+    @prefixed_command('setup')
     async def m_setup(self, ctx: PrefixedContext) -> None:
         await ctx.send('This command has been replace by `/setup-cube`')
 
     @slash_command('setup-cube')
-    async def setup(self, ctx: InteractionContext) -> None:
+    async def setup(self, ctx: SlashContext) -> None:
         """Set up an upcoming draft"""
         guild = await self.get_guild(ctx)
         config = Modal(
+            ShortText(
+                label="Cube ID",
+                custom_id="cube_id",
+                value=guild.pending_conf.cube_id,
+                required=True,
+            ),
+            ShortText(
+                label="Number of players",
+                custom_id="max_players",
+                value=str(guild.pending_conf.max_players),
+                required=True,
+            ),
+            ShortText(
+                label="Number of Packs",
+                custom_id="number_of_packs",
+                value=str(guild.pending_conf.number_of_packs),
+                required=True,
+            ),
+            ShortText(
+                label="Cards per booster",
+                custom_id="cards_per_booster",
+                value=str(guild.pending_conf.cards_per_booster),
+                required=True,
+            ),
+            # StringSelectMenu(
+            #     options=['Allow Draft Bots', 'No Draft Bots'],
+            # ),
             title="Setup Draft",
             custom_id='setup-cube',
-            components=[
-                ShortText(
-                    label="Cube ID",
-                    custom_id="cube_id",
-                    value=guild.pending_conf.cube_id,
-                    required=True,
-                ),
-                ShortText(
-                    label="Number of players",
-                    custom_id="max_players",
-                    value=str(guild.pending_conf.max_players),
-                    required=True,
-                ),
-                ShortText(
-                    label="Number of Packs",
-                    custom_id="number_of_packs",
-                    value=str(guild.pending_conf.number_of_packs),
-                    required=True,
-                ),
-                ShortText(
-                    label="Cards per booster",
-                    custom_id="cards_per_booster",
-                    value=str(guild.pending_conf.cards_per_booster),
-                    required=True,
-                ),
-                # StringSelectMenu(
-                #     options=['Allow Draft Bots', 'No Draft Bots'],
-                # ),
-            ]
         )
         print('sending modal')
         await ctx.send_modal(config)
@@ -323,7 +320,7 @@ class CubeDrafter(Extension):
             raise
         await guild.save_state()
 
-    async def find_draft_or_send_error(self, ctx, draft_id=None, only_active=False) -> GuildDraft:
+    async def find_draft_or_send_error(self, ctx: SendableContext, draft_id: Optional[str] = None, only_active: bool = False) -> GuildDraft:
         drafts = None
         if draft_id is None:
             drafts = await self.find_drafts_by_player(ctx)
@@ -409,8 +406,8 @@ class CubeDrafter(Extension):
                         await player.send(f'You have been idle for {timeout / 2 / 60 / 60} hours. After another {timeout / 2 / 60 / 60} hours, a card will be picked automatically.', reply_to=msg['message'])
                     elif age > timeout:
                         print(f"{player.display_name} has been holding a pack for {age / 60} minutes")
-                        i = str(await self.draftbot_choice(draft_player))
-                        await guild.try_pick(msg['message'].id, player.id, i, None)
+                        pick = str(await self.draftbot_choice(draft_player))
+                        await guild.try_pick(msg['message'].id, player.id, pick, None)
 
                         draft_player.skips += 1
                         if draft.draft.metadata.get('total_skips') is None:
@@ -438,11 +435,11 @@ class CubeDrafter(Extension):
 
 def swap_seats_button(draft: GuildDraft, old_player: Member) -> ActionRow:
     button = Button(
-        style=ButtonStyles.PRIMARY,
+        style=ButtonStyle.PRIMARY,
         label=f"Take {old_player.display_name}'s seat",
         custom_id=f"swap:{draft.id()[0:7]}:{old_player.id}",
     )
-    return ActionRow(button)  # type: ignore
+    return ActionRow(button)
 
 def setup(bot: Client) -> None:
     CubeDrafter(bot)

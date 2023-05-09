@@ -14,7 +14,8 @@ traceback-with-variables = "*"
 orjson = "*"
 dis-taipan = "*"
 typing-extensions = "*"
-naff = {extras = ["jurigged", "sentry"], version = "*"}
+"interactions.py" = {extras = ["jurigged", "sentry"], version = "*"}
+aiomonitor = "*"
 
 [dev-packages]
 flake8 = "*"

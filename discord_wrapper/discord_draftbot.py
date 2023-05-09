@@ -1,9 +1,9 @@
 from typing import TYPE_CHECKING, Any, Optional
 import attrs
 
-from naff.models.discord import Message
-from naff.models.discord.base import DiscordObject
-from naff.models.naff.tasks import IntervalTrigger, Task
+from interactions.models.discord import Message
+from interactions.models.discord.base import DiscordObject
+from interactions.models.internal.tasks import IntervalTrigger, Task
 
 from core_draft.draftbot import DraftBot
 
@@ -32,6 +32,10 @@ class BotMember(DiscordObject):
         return f'DraftBot #{self.id}'
 
     @property
+    def username(self) -> str:
+        return f'DraftBot #{self.id}'
+
+    @property
     def mention(self) -> str:
         return f'DraftBot #{self.id}'
 
@@ -39,11 +43,15 @@ class BotMember(DiscordObject):
     def nick(self) -> str:
         return self.display_name
 
+    @property
+    def user(self) -> "BotMember":
+        return self
+
     async def send(
         self,
         content: Optional[str] = None,
         **kwargs: Any,
-    ) -> Message:
+    ) -> Message | None:
         RUNNING_BOTS.append(self)
         if not delayed_pick.running:
             delayed_pick.start()

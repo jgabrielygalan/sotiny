@@ -1,18 +1,21 @@
-from typing import Union
+from typing import TYPE_CHECKING, Union
 
 import aiohttp
-from naff import Absent
-from naff.client.errors import CommandException, Forbidden
-from naff.models import Member, User
+from interactions import Absent
+from interactions.client.errors import CommandException, Forbidden
+from interactions.models import Member, User
+
+if TYPE_CHECKING:
+    from discord_wrapper.discord_draftbot import BotMember
 
 
 class UserFeedbackException(CommandException):
     pass
 
 class DMsClosedException(Forbidden):
-    user: Union[Member, User]
+    user: "BotMember | Member | User"
 
-    def __init__(self, user: Union[Member, User], response: aiohttp.ClientResponse, message: Absent[str]) -> None:
+    def __init__(self, user: Union["BotMember", Member, User], response: aiohttp.ClientResponse, message: Absent[str]) -> None:
         self.user = user
         super().__init__(response, message)
 

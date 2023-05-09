@@ -15,11 +15,11 @@ import attr
 import cattr
 import numpy
 from aioredis import Redis
-from naff.client.errors import Forbidden, NotFound
-from naff.client.mixins.send import SendMixin
-from naff.models import (ActionRow, Button, ButtonStyles, File, Member,
+from interactions.client.errors import Forbidden, NotFound
+from interactions.client.mixins.send import SendMixin
+from interactions.models import (ActionRow, Button, ButtonStyle, File, Member,
                          Message, User)
-from naff.models.discord.channel import (TYPE_MESSAGEABLE_CHANNEL, GuildText,
+from interactions.models.discord.channel import (TYPE_MESSAGEABLE_CHANNEL, GuildText,
                                          ThreadChannel)
 import sentry_sdk
 from core_draft import cube
@@ -186,7 +186,7 @@ class GuildDraft:
             # todo: send pack to bot
             return
         player_id = player.id
-        messageable: Member = self.players[player_id]
+        messageable: Member | BotMember = self.players[player_id]
         self.messages_by_player[player_id].clear()
         try:
             await messageable.send(f"[{self.id_with_guild()}] {intro}")
@@ -207,19 +207,20 @@ class GuildDraft:
                 cardrow: list[str] = list(row)
                 components: list[ActionRow] = self.buttons(cardrow)
                 message = await send_image_with_retry(messageable, image_file, components=components)
-                self.messages_by_player[player_id][message.id] = {"row": i, "message": message, "len": len(row)}
+                if message:
+                    self.messages_by_player[player_id][message.id] = {"row": i, "message": message, "len": len(row)}
                 i += 1
 
         if actions := [a for a in player.face_up if a in CARDS_WITH_FUNCTION]:
             emoji_cog = self.guild.guild._client.get_ext('EmojiGuild')
             text = ''.join([f'{await emoji_cog.get_emoji(a)} {a}' for a in actions])
 
-            message = await messageable.send(f'Optionally activate: {text}', components=await self.conspiracy_buttons(actions))
+            await messageable.send(f'Optionally activate: {text}', components=await self.conspiracy_buttons(actions))
 
     def buttons(self, cards: Iterable[str]) -> List[ActionRow]:
         return [ActionRow(
             *[  # type: ignore
-                Button(style=ButtonStyles.BLUE,
+                Button(style=ButtonStyle.BLUE,
                        label=c,
                        custom_id=f'{i + 1}',
                        )
@@ -231,7 +232,7 @@ class GuildDraft:
         emoji_cog = self.guild.guild._client.get_ext('EmojiGuild')
         return [ActionRow(
             *[  # type: ignore
-                Button(style=ButtonStyles.GREY,
+                Button(style=ButtonStyle.GREY,
                        label=c,
                        custom_id=f'{i + 1}',
                        emoji=await emoji_cog.get_emoji(c),
@@ -266,7 +267,7 @@ class GuildDraft:
             deck = ''
             current_pack = ''
 
-            messageable: SendMixin = self.players[player.id]
+            messageable = self.players[player.id]
             if autopicks:
                 autopick_str = ', '.join(autopicks)
                 image = await image_fetcher.download_image_async(autopicks)
@@ -307,7 +308,7 @@ class GuildDraft:
             self.draft.stage = Stage.draft_complete
             self.messages_by_player.clear()
 
-    async def send_deckfile_to_player(self, messagable: Member | BotMember, player_id: int) -> None:
+    async def send_deckfile_to_player(self, messagable: User | Member | BotMember, player_id: int) -> None:
         if self.draft is None:
             return
         content = generate_file_content(self.draft.deck_of(player_id))
@@ -393,7 +394,7 @@ class GuildDraft:
         await self.send_current_pack_to_player("Thanks for joining the draft!\n", new_player)
         return True
 
-async def send_image_with_retry(user: User | Member | BotMember, image_file: str, text: str = '', **kwargs: Any) -> Message:
+async def send_image_with_retry(user: User | Member | BotMember, image_file: str, text: str = '', **kwargs: Any) -> Message | None:
     text = escape_underscores(text)
     message = await user.send(file=image_file, content=text, **kwargs)
     if message and message.attachments and message.attachments[0].size == 0:
