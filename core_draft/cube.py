@@ -37,7 +37,6 @@ class Card(object):
 
 @attr.s(auto_attribs=True)
 class CardList:
-    id: str
     mainboard: List[Card]
     maybeboard: List[Card]
 
