@@ -14,7 +14,7 @@ import aiohttp
 import attr
 import cattr
 import numpy
-from aioredis import Redis
+from redis.asyncio import Redis
 from interactions.client.errors import Forbidden, NotFound
 from interactions.client.mixins.send import SendMixin
 from interactions.models import (ActionRow, Button, ButtonStyle, File, Member,

@@ -2,7 +2,7 @@ import logging
 import os
 from typing import Dict, List, Optional, cast
 
-import aioredis
+import redis.asyncio as aioredis
 import interactions
 from interactions import (BaseContext, ButtonStyle, Extension, InteractionContext, SlashContext, Member, Modal, ModalContext, Timestamp, slash_command)
 from interactions.client.client import Client

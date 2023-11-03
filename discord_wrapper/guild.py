@@ -1,7 +1,7 @@
 from copy import copy
 from typing import Dict, List, Optional
 
-import aioredis
+import redis.asyncio as aioredis
 import attr
 import attrs
 import interactions

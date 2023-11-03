@@ -52,7 +52,7 @@ class Bot(Client):
 
 
 bot = Bot(default_prefix=PREFIX, fetch_members=True, intents=Intents.DEFAULT | Intents.GUILD_MEMBERS | Intents.MESSAGE_CONTENT)
-setup_prefixed_commands(bot)
+setup_prefixed_commands(bot, default_prefix=PREFIX)
 
 @listen()
 async def on_ready() -> None:
@@ -61,11 +61,10 @@ async def on_ready() -> None:
 bot.load_extension('interactions.ext.sentry', token='https://0a929451f9db4b00ac7bfbee77c3fd4e@sentry.redpoint.games/11')
 bot.load_extension('interactions.ext.debug_extension')
 bot.load_extension('interactions.ext.jurigged')
-bot.load_extension('interactions.ext.console')
+# bot.load_extension('interactions.ext.console')
 bot.load_extension('discord_wrapper.draft_cog')
-bot.load_extension('dis_taipan.updater')
-bot.load_extension('botguild')
-
+# bot.load_extension('dis_taipan.updater')
+# bot.load_extension('botguild')
 help_cmd = PrefixedHelpCommand(bot)
 help_cmd.register()
 
