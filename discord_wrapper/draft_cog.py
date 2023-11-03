@@ -184,7 +184,8 @@ class CubeDrafter(Extension):
         if ctx.custom_id == 'join_draft':
             await self.register_player(ctx, False)
             return
-        await ctx.defer(edit_origin=True)
+        if isinstance(ctx, InteractionContext):
+            await ctx.defer(edit_origin=True)
         for guild in self.guilds_by_id.values():
             handled = await guild.try_pick(ctx.message_id, ctx.author.id, ctx.custom_id, ctx)
             if handled:
