@@ -128,7 +128,8 @@ class CubeDrafter(Extension):
             else:
                 msg += f"<https://cubecobra.com/cube/overview/{guild.pending_conf.cube_id}>"
         else:
-            await ctx.defer()
+            if isinstance(ctx, PrefixedContext):
+                await ctx.defer()
             cubeinfo = await guild.pending_conf.cubedata()
             msg = f"{player.mention}, I have registered you for the next draft of {cubeinfo.name}"
         if guild.pending_conf.max_players:
@@ -184,8 +185,7 @@ class CubeDrafter(Extension):
         if ctx.custom_id == 'join_draft':
             await self.register_player(ctx, False)
             return
-        if isinstance(ctx, InteractionContext):
-            await ctx.defer(edit_origin=True)
+        await ctx.defer(edit_origin=True)
         for guild in self.guilds_by_id.values():
             handled = await guild.try_pick(ctx.message_id, ctx.author.id, ctx.custom_id, ctx)
             if handled:
