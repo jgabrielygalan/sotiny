@@ -128,7 +128,7 @@ class CubeDrafter(Extension):
             else:
                 msg += f"<https://cubecobra.com/cube/overview/{guild.pending_conf.cube_id}>"
         else:
-            if isinstance(ctx, PrefixedContext):
+            if isinstance(ctx, InteractionContext):
                 await ctx.defer()
             cubeinfo = await guild.pending_conf.cubedata()
             msg = f"{player.mention}, I have registered you for the next draft of {cubeinfo.name}"
