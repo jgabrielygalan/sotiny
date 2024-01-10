@@ -65,7 +65,10 @@ bot.load_extension('interactions.ext.debug_extension')
 bot.load_extension('interactions.ext.jurigged')
 if os.name != 'nt':
     #Doesn't work on Windows
-    bot.load_extension('interactions.ext.console')
+    try:
+        bot.load_extension('interactions.ext.console')
+    except:
+        pass
 
 bot.load_extension('discord_wrapper.draft_cog')
 # bot.load_extension('dis_taipan.updater')
