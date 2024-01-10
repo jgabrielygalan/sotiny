@@ -6,13 +6,13 @@ import redis.asyncio as aioredis
 import interactions
 from interactions import (BaseContext, ButtonStyle, Extension, InteractionContext, SlashContext, Member, Modal, ModalContext, Timestamp, slash_command)
 from interactions.client.client import Client
-from interactions.client.errors import CommandException
+from interactions.client.errors import CommandException, Forbidden
 from interactions.models import (ActionRow, Button, IntervalTrigger, MessageFlags, ShortText, Task, check, listen)
 from interactions.models.internal.checks import TYPE_CHECK_FUNCTION
 from interactions.ext.prefixed_commands import PrefixedContext, prefixed_command
 from interactions.ext.hybrid_commands import hybrid_slash_command
 
-from core_draft.cog_exceptions import NoPrivateMessage, PrivateMessageOnly
+from core_draft.cog_exceptions import DMsClosedException, NoPrivateMessage, PrivateMessageOnly
 from core_draft.draft_player import DraftPlayer
 from core_draft.draftbot import DraftBot
 from discord_wrapper import export
@@ -111,14 +111,20 @@ class CubeDrafter(Extension):
     async def register_player(self, ctx: SendableContext, embed: bool) -> None:
         player = cast(interactions.Member, ctx.author)  # Guild-only, so it will be a member
         guild = await self.get_guild(ctx)
+        if isinstance(ctx, InteractionContext):
+            flags = MessageFlags.EPHEMERAL
+        else:
+            flags = MessageFlags.NONE
         if player.id in guild.players:
-            if isinstance(ctx, InteractionContext):
-                flags = MessageFlags.EPHEMERAL
-            else:
-                flags = MessageFlags.NONE
             await ctx.send(f'You are already registered, waiting for {guild.pending_conf.max_players - len(guild.players)} more players.', flags=flags)
             return
+
         print(f"Registering {player.display_name} for the next draft")
+        try:
+            await player.fetch_dm()  # Make sure we can send DMs to this player
+        except Forbidden:
+            ctx.send("I can't send you DMs, please enable them so I can send you your packs.", flags=flags)
+
         await guild.add_player(player)
         num_players = len(guild.players)
         components = []

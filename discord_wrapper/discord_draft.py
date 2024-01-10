@@ -425,7 +425,14 @@ class GuildDraft:
 
 async def send_image_with_retry(user: User | Member | BotMember, image_file: str, text: str = '', **kwargs: Any) -> Message | None:
     text = escape_underscores(text)
-    message = await user.send(file=image_file, content=text, **kwargs)
+    try:
+        message = await user.send(file=image_file, content=text, **kwargs)
+    except RuntimeError as e:
+        if 'lock a bucket' in e.args[0]:
+            print('Message failed to send, retrying')
+            await asyncio.sleep(1)
+            return await send_image_with_retry(user, image_file, text, **kwargs)
+
     if message and message.attachments and message.attachments[0].size == 0:
         print('Message size is zero so resending')
         await message.delete()

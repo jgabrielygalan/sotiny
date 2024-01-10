@@ -63,7 +63,10 @@ async def on_ready() -> None:
 bot.load_extension('interactions.ext.sentry', token='https://ade432a5a1474198b8e1955544429250@o233010.ingest.sentry.io/6272266')
 bot.load_extension('interactions.ext.debug_extension')
 bot.load_extension('interactions.ext.jurigged')
-# bot.load_extension('interactions.ext.console')
+if os.name != 'nt':
+    #Doesn't work on Windows
+    bot.load_extension('interactions.ext.console')
+
 bot.load_extension('discord_wrapper.draft_cog')
 # bot.load_extension('dis_taipan.updater')
 # bot.load_extension('botguild')
