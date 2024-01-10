@@ -16,7 +16,6 @@ import cattr
 import numpy
 from redis.asyncio import Redis
 from interactions.client.errors import Forbidden, NotFound
-from interactions.client.mixins.send import SendMixin
 from interactions.models import (ActionRow, Button, ButtonStyle, File, Member,
                          Message, User)
 from interactions.models.discord.channel import (TYPE_MESSAGEABLE_CHANNEL, GuildText,
@@ -40,6 +39,8 @@ NUMBERS_BY_EMOJI = {
     '1': 1, '2': 2, '3': 3, '4': 4, '5': 5,
 }
 DEFAULT_CUBE_CUBECOBRA_ID = "penny_dreadful"
+
+PAIR_BUTTON = Button(style=ButtonStyle.GREEN, label="CREATE PAIRINGS", custom_id='pair')
 
 class FetchException(Exception):
     pass
@@ -73,6 +74,34 @@ class GuildDraft:
             self.draft.metadata['start_channel_id'] = value
         else:
             raise RuntimeError("Can't set start_channel_id before draft is initialized")
+
+    # @property
+    # def challonge_id(self) -> Optional[str]:
+    #     return self.draft.metadata.get('challonge_id', None)
+
+    # @challonge_id.setter
+    # def challonge_id(self, value: str) -> None:
+    #     if self.draft:
+    #         self.draft.metadata['challonge_id'] = value
+    #     else:
+    #         raise RuntimeError("Can't set challonge_id before draft is initialized")
+
+    @property
+    def gatherling_id(self) -> Optional[str]:
+        return self.draft.metadata.get('gatherling_id', None)
+
+    @gatherling_id.setter
+    def gatherling_id(self, value: str) -> None:
+        if self.draft:
+            self.draft.metadata['gatherling_id'] = value
+        else:
+            raise RuntimeError("Can't set gatherling_id before draft is initialized")
+
+    @property
+    def name(self) -> str:
+        if self.draft.name:
+            return self.draft.name
+        return self.uuid
 
     def id(self) -> str:
         return self.uuid
@@ -297,7 +326,7 @@ class GuildDraft:
 
             thread = await self.get_thread()
             if thread is not None:
-                await thread.send("Draft finished")
+                await thread.send("Draft finished", components=[PAIR_BUTTON])
 
             for member in self.players.values():
                 await member.send(f"[{self.id_with_guild()}] The draft has finished")

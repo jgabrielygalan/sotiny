@@ -35,6 +35,7 @@ class Draft:
     metadata: dict[str, Any] = attr.ib(factory=dict)
     stage: Stage = Stage.draft_registration
     spare_cards: int = 0  # number of cards left in the cube after allocating boosters
+    name: str = ''
 
     def player_by_id(self, player_id: int) -> DraftPlayer:
         state = self._state[self.players.index(player_id)]

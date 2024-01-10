@@ -10,6 +10,7 @@ from cattr.errors import ClassValidationError
 import logging
 
 from core_draft.cog_exceptions import UserFeedbackException
+from core_draft.fetch import fetch
 
 SF_NAMES: dict[str, str] = {}
 SF_DATA: dict[str, dict] = {}
@@ -63,18 +64,6 @@ class Cube(object):
 
     async def cardlist(self) -> list[str]:
         return [c.name for c in self.cards.mainboard]
-
-async def fetch(session: aiohttp.ClientSession, url: str) -> str:
-    async with session.get(url) as response:
-        if response.status >= 400:
-            raise UserFeedbackException(f"Unable to load {url}")
-        return await response.text()
-
-async def fetch_json(session: aiohttp.ClientSession, url: str) -> str:
-    async with session.get(url) as response:
-        if response.status >= 400:
-            raise UserFeedbackException(f"Unable to load {url}")
-        return await response.json()
 
 async def load_cubecobra_cube(cubecobra_id: str) -> Cube:
     url = f'https://cubecobra.com/cube/api/cubejson/{cubecobra_id}'

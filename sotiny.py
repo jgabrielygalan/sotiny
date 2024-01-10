@@ -6,6 +6,7 @@ from interactions.api.events import CommandError
 from interactions.client.client import Client
 from interactions.client.errors import CommandCheckFailure, CommandException
 from interactions.ext.prefixed_commands import PrefixedHelpCommand, PrefixedContext, setup as setup_prefixed_commands
+from interactions.ext.hybrid_commands import setup as setup_hybrid_commands
 from interactions.models import listen
 from interactions.client.mixins.send import SendMixin
 from traceback_with_variables import activate_by_import  # noqa
@@ -53,6 +54,7 @@ class Bot(Client):
 
 bot = Bot(default_prefix=PREFIX, fetch_members=True, intents=Intents.DEFAULT | Intents.GUILD_MEMBERS | Intents.MESSAGE_CONTENT)
 setup_prefixed_commands(bot, default_prefix=PREFIX)
+setup_hybrid_commands(bot)
 
 @listen()
 async def on_ready() -> None:

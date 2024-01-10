@@ -10,10 +10,12 @@ from interactions.client.errors import CommandException
 from interactions.models import (ActionRow, Button, IntervalTrigger, MessageFlags, ShortText, Task, check, listen)
 from interactions.models.internal.checks import TYPE_CHECK_FUNCTION
 from interactions.ext.prefixed_commands import PrefixedContext, prefixed_command
+from interactions.ext.hybrid_commands import hybrid_slash_command
 
 from core_draft.cog_exceptions import NoPrivateMessage, PrivateMessageOnly
 from core_draft.draft_player import DraftPlayer
 from core_draft.draftbot import DraftBot
+from discord_wrapper import export
 from discord_wrapper.discord_draft import GuildDraft
 from discord_wrapper.discord_draftbot import BotMember
 from discord_wrapper.guild import GuildData
@@ -185,13 +187,16 @@ class CubeDrafter(Extension):
         if ctx.custom_id == 'join_draft':
             await self.register_player(ctx, False)
             return
+        if ctx.custom_id == "pair":
+            await export.create_gatherling_pairings(ctx, await self.find_draft_by_thread(ctx), self.redis)
+            return
         await ctx.defer(edit_origin=True)
         for guild in self.guilds_by_id.values():
             handled = await guild.try_pick(ctx.message_id, ctx.author.id, ctx.custom_id, ctx)
             if handled:
                 await guild.save_state()
 
-    @prefixed_command(name='pending')
+    @hybrid_slash_command(name='pending')
     async def pending(self, ctx: SendableContext) -> None:
         """
         Show players who still haven't picked
@@ -357,6 +362,13 @@ class CubeDrafter(Extension):
             draft = guild.get_draft_by_id(draft_id)
             if draft is not None:
                 return draft
+        return None
+
+    async def find_draft_by_thread(self, ctx: SendableContext) -> Optional[GuildDraft]:
+        for guild in self.guilds_by_id.values():
+            for draft in guild.drafts_in_progress:
+                if (await draft.get_thread()) == ctx.channel:
+                    return draft
         return None
 
     @Task.create(IntervalTrigger(minutes=1))
