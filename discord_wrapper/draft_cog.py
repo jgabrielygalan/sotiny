@@ -100,7 +100,7 @@ class CubeDrafter(Extension):
             if event.guild.id in self.guilds_by_id:
                 del self.guilds_by_id[int(event.guild.id)]
 
-    @prefixed_command()  # type: ignore
+    @hybrid_slash_command()  # type: ignore
     @check(guild_only())
     async def play(self, ctx: PrefixedContext) -> None:
         """
@@ -227,14 +227,14 @@ class CubeDrafter(Extension):
             else:
                 await ctx.send(prefix + "No pending players")
 
-    @prefixed_command(name='deck', help="Show your current deck as images")  # type: ignore
+    @hybrid_slash_command(name='deck', help="Show your current deck as images")  # type: ignore
     @check(dm_only())
     async def my_deck(self, ctx, draft_id = None):
         draft = await self.find_draft_or_send_error(ctx, draft_id)
         if draft is not None:
             await draft.picks(ctx, ctx.author.id)
 
-    @prefixed_command()
+    @hybrid_slash_command()
     async def abandon(self, ctx: PrefixedContext, draft_id: Optional[str] = None) -> None:
         """Vote to cancel an in-progress draft"""
         draft = await self.find_draft_or_send_error(ctx, draft_id)
@@ -251,7 +251,7 @@ class CubeDrafter(Extension):
                 await chan.send(f'{draft.id()} needs {needed - len(draft.abandon_votes)} more votes to abandon.')
                 # Alternatively, someone can take over your seat:', components=swap_seats_button(draft, ctx.author)
 
-    @prefixed_command(name='pack', help="Resend your current pack")
+    @hybrid_slash_command(name='pack', help="Resend your current pack")
     async def my_pack(self, ctx: PrefixedContext, draft_id: Optional[str] = None) -> None:
         draft = await self.find_draft_or_send_error(ctx, draft_id, True)
         if draft is None or draft.draft is None:
@@ -263,7 +263,7 @@ class CubeDrafter(Extension):
 
         await draft.send_current_pack_to_player("Your pack:", ctx.author.id)
 
-    @prefixed_command(name='drafts', help="Show your in progress drafts")
+    @hybrid_slash_command(name='drafts', help="Show your in progress drafts")
     async def my_drafts(self, ctx: PrefixedContext) -> None:
         drafts = await self.find_drafts_by_player(ctx)
         if len(drafts) == 0:
@@ -272,10 +272,6 @@ class CubeDrafter(Extension):
             divider = "\n"
             list = divider.join([f"[{x.guild.name}:{x.id()}] {x.draft.number_of_packs} packs ({x.draft.cards_per_booster} cards). {', '.join([p.display_name for p in x.get_players()])}" for x in drafts if x.draft is not None])
             await ctx.send(f"{list}")
-
-    @prefixed_command('setup')
-    async def m_setup(self, ctx: PrefixedContext) -> None:
-        await ctx.send('This command has been replace by `/setup-cube`')
 
     @slash_command('setup-cube')
     async def setup(self, ctx: SlashContext) -> None:
