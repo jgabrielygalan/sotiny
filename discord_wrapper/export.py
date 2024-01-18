@@ -64,6 +64,14 @@ async def create_gatherling_pairings(ctx: ComponentContext, draft: GuildDraft, r
         await ctx.send("Wait for the draft to finish.", ephemeral=True)
         return
 
+    event = await create_event(draft)
+    draft.gatherling_id = event['event']
+    await draft.save_state(redis)
+    for p in users:
+        await addplayer(draft.gatherling_id, p['name'], draft.draft.deck_of(int(p['discord_id'])))
+    await start_event(draft.gatherling_id)
+    await ctx.send("http://gatherling.com/eventreport.php?event=" + draft.gatherling_id)
+
 
 async def get_gatherling_user(p: Member) -> dict:
     try:
@@ -100,8 +108,8 @@ async def create_event(draft: GuildDraft) -> None:
                 'host': 'silasary',
                 'kvalue': 'Casual',
                 'series': 'CubeBot Drafts',
-                # 'season': '',
-                # 'number': '',
+                'season': '',
+                'number': '',
                 'threadurl': '',
                 'metaurl': '',
                 'reporturl': '',
@@ -126,3 +134,50 @@ async def create_event(draft: GuildDraft) -> None:
     except aiohttp.ClientError as e:
         raise UserFeedbackException("Unable to connect to gatherling") from e
 
+async def addplayer(event: int, player: str, decklist: list[str]) -> bool:
+    try:
+        timeout = aiohttp.ClientTimeout(total=10)
+        async with aiohttp.ClientSession(timeout=timeout) as aios:
+            headers = {
+                'HTTP_X_USERNAME': os.getenv('gatherling_username'),
+                'HTTP_X_APIKEY': os.getenv('gatherling_apikey'),
+            }
+
+            data = {
+                'event': event,
+                'addplayer': player,
+                'decklist': '|'.join(decklist),
+            }
+
+            response = await post(aios, 'https://gatherling.com/api.php?action=addplayer', data=data, headers=headers)
+            result = json.loads(response)
+            if result.get('error'):
+                logging.log(result['error'])
+                return False
+
+            return True
+    except aiohttp.ClientError as e:
+        raise UserFeedbackException("Unable to connect to gatherling") from e
+
+async def start_event(event: int) -> bool:
+    try:
+        timeout = aiohttp.ClientTimeout(total=10)
+        async with aiohttp.ClientSession(timeout=timeout) as aios:
+            headers = {
+                'HTTP_X_USERNAME': os.getenv('gatherling_username'),
+                'HTTP_X_APIKEY': os.getenv('gatherling_apikey'),
+            }
+
+            data = {
+                'event': event,
+            }
+
+            response = await post(aios, 'https://gatherling.com/api.php?action=start_event', data=data, headers=headers)
+            result = json.loads(response)
+            if result.get('error'):
+                logging.log(result['error'])
+                return False
+
+            return True
+    except aiohttp.ClientError as e:
+        raise UserFeedbackException("Unable to connect to gatherling") from e
