@@ -179,7 +179,7 @@ class GuildData:
             draft_id = bdraft_id.decode()
             await self.load_draft(draft_id)
 
-    async def load_draft(self, draft_id: str) -> Optional[GuildDraft]:
+    async def load_draft(self, draft_id: str, load_finished: bool = False) -> Optional[GuildDraft]:
         """
         Loads a draft from redis.
         """
@@ -187,8 +187,10 @@ class GuildData:
         draft = GuildDraft(self)
         draft.uuid = draft_id
         await draft.load_state(self.redis)
-        if draft.draft is None or draft.draft.is_draft_finished():
+        if draft.draft is None:
             # await self.redis.srem(f'sotiny:{self.guild.id}:active_drafts', bdraft_id)
+            return None
+        if not load_finished and draft.draft.is_draft_finished():
             return None
         self.drafts_in_progress.append(draft)
         return draft

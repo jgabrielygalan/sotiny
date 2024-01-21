@@ -195,7 +195,11 @@ class CubeDrafter(Extension):
             await self.register_player(ctx, False)
             return
         if ctx.custom_id == "pair":
-            await export.create_gatherling_pairings(ctx, await self.find_draft_by_thread(ctx), self.redis)
+            draft = await self.find_draft_by_thread(ctx)
+            if draft is None:
+                guild = await self.get_guild(ctx)
+                draft = guild.load_draft(ctx.channel.name, True)
+            await export.create_gatherling_pairings(ctx, draft, self.redis)
             return
         await ctx.defer(edit_origin=True)
         for guild in self.guilds_by_id.values():
