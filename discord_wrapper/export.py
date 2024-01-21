@@ -59,7 +59,7 @@ async def create_gatherling_pairings(ctx: ComponentContext, draft: GuildDraft, r
             bad_ids.append(p)
 
     if bad_ids:
-        await ctx.send("Unable to create pairings, the following users do not have a (Gatherling)[https://gatherling.com/] account, or have not [linked](https://gatherling.com/auth.php) their discord to Gatherling:\n" + '\n'.join(p.mention for p in bad_ids))
+        await ctx.send("Unable to create pairings, the following users do not have a [Gatherling](https://gatherling.com/) account, or have not linked their discord to Gatherling:\n" + '\n'.join(p.mention for p in bad_ids))
         return
 
     if not draft.draft.is_draft_finished():
