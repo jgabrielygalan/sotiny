@@ -11,6 +11,8 @@ from core_draft.fetch import fetch, post
 
 from discord_wrapper.discord_draft import GuildDraft
 
+USER_CACHE = {}
+
 # async def create_challonge_pairings(ctx: ComponentContext, draft: GuildDraft, redis: Redis) -> None:
 #     """
 #     Create tournament and pairings on Challonge.
@@ -44,6 +46,7 @@ async def create_gatherling_pairings(ctx: ComponentContext, draft: GuildDraft, r
         await ctx.send("http://gatherling.com/eventreport.php?event=" + draft.gatherling_id, ephemeral=True)
         return
 
+    ctx.defer()
     bad_ids = []
     users = []
     for p in draft.get_players():
@@ -74,6 +77,8 @@ async def create_gatherling_pairings(ctx: ComponentContext, draft: GuildDraft, r
 
 
 async def get_gatherling_user(p: Member) -> dict:
+    if p.id in USER_CACHE:
+        return USER_CACHE[p.id]
     try:
         timeout = aiohttp.ClientTimeout(total=10)
         async with aiohttp.ClientSession(timeout=timeout) as aios:
@@ -83,7 +88,7 @@ async def get_gatherling_user(p: Member) -> dict:
             if user.get('error'):
                 logging.warning(user['error'])
                 return {}
-
+            USER_CACHE[p.id] = user
             return user
     except aiohttp.ClientError as e:
         raise UserFeedbackException("Unable to connect to gatherling") from e
