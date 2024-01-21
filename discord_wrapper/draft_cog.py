@@ -163,9 +163,10 @@ class CubeDrafter(Extension):
             print(f"{player.display_name} is not registered, can't cancel")
             await ctx.send("{mention}, you are not registered for the draft, I can't cancel".format(mention=ctx.author.mention))
 
-    @prefixed_command(name='players', help='List registered players for the next draft')   # type: ignore
+    @prefixed_command(name='players')   # type: ignore
     @check(guild_only())
     async def players(self, ctx: PrefixedContext):
+        """List registered players for the next draft"""
         guild = await self.get_guild(ctx)
 
         if guild.no_registered_players():
@@ -227,9 +228,10 @@ class CubeDrafter(Extension):
             else:
                 await ctx.send(prefix + "No pending players")
 
-    @hybrid_slash_command(name='deck', help="Show your current deck as images")  # type: ignore
+    @hybrid_slash_command(name='deck')  # type: ignore
     @check(dm_only())
     async def my_deck(self, ctx, draft_id = None):
+        """Show your current deck as images"""
         draft = await self.find_draft_or_send_error(ctx, draft_id)
         if draft is not None:
             await draft.picks(ctx, ctx.author.id)
@@ -251,8 +253,9 @@ class CubeDrafter(Extension):
                 await chan.send(f'{draft.id()} needs {needed - len(draft.abandon_votes)} more votes to abandon.')
                 # Alternatively, someone can take over your seat:', components=swap_seats_button(draft, ctx.author)
 
-    @hybrid_slash_command(name='pack', help="Resend your current pack")
+    @hybrid_slash_command(name='pack')
     async def my_pack(self, ctx: PrefixedContext, draft_id: Optional[str] = None) -> None:
+        "Resend your current pack"
         draft = await self.find_draft_or_send_error(ctx, draft_id, True)
         if draft is None or draft.draft is None:
             return
@@ -263,8 +266,9 @@ class CubeDrafter(Extension):
 
         await draft.send_current_pack_to_player("Your pack:", ctx.author.id)
 
-    @hybrid_slash_command(name='drafts', help="Show your in progress drafts")
+    @hybrid_slash_command(name='drafts')
     async def my_drafts(self, ctx: PrefixedContext) -> None:
+        "Show your in progress drafts"
         drafts = await self.find_drafts_by_player(ctx)
         if len(drafts) == 0:
             await ctx.send("You are not playing any draft")
