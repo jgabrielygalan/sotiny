@@ -81,7 +81,7 @@ async def get_gatherling_user(p: Member) -> dict:
             response = await fetch(aios, f'https://gatherling.com/api.php?action=whois&discordid={p.id}')
             user = json.loads(response)
             if user.get('error'):
-                logging.log(user['error'])
+                logging.warning(user['error'])
                 return {}
 
             return user
