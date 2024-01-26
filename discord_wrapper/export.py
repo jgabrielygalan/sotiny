@@ -7,7 +7,7 @@ import aiohttp
 from interactions import ComponentContext, Member
 from redis.asyncio import Redis
 from core_draft.cog_exceptions import UserFeedbackException
-from core_draft.fetch import fetch, post
+from core_draft.fetch import fetch, post, post_json
 
 from discord_wrapper.discord_draft import GuildDraft
 
@@ -46,7 +46,7 @@ async def create_gatherling_pairings(ctx: ComponentContext, draft: GuildDraft, r
         await ctx.send("http://gatherling.com/eventreport.php?event=" + draft.gatherling_id, ephemeral=True)
         return
 
-    ctx.defer()
+    await ctx.defer()
     bad_ids = []
     users = []
     for p in draft.get_players():
@@ -59,7 +59,7 @@ async def create_gatherling_pairings(ctx: ComponentContext, draft: GuildDraft, r
             bad_ids.append(p)
 
     if bad_ids:
-        await ctx.send("Unable to create pairings, the following users do not have a [Gatherling](https://gatherling.com/) account, or have not linked their discord to Gatherling:\n" + '\n'.join(p.mention for p in bad_ids))
+        await ctx.send("Unable to create pairings, the following users do not have a [Gatherling](https://gatherling.com/) account, or have not [linked](https://gatherling.com/auth.php) their discord to Gatherling:\n" + '\n'.join(p.mention for p in bad_ids))
         return
 
     if not draft.draft.is_draft_finished():
@@ -129,8 +129,7 @@ async def create_event(draft: GuildDraft) -> None:
                 'client': '3',
             }
 
-            response = await post(aios, 'https://gatherling.com/api.php?action=create_event', data=data, headers=headers)
-            event = json.loads(response)
+            event = await post_json(aios, 'https://gatherling.com/api.php?action=create_event', data=data, headers=headers)
             if event.get('error'):
                 logging.log(event['error'])
                 return {}
