@@ -66,9 +66,10 @@ async def create_gatherling_pairings(ctx: ComponentContext, draft: GuildDraft, r
         # How did we get here?
         await ctx.send("Wait for the draft to finish.", ephemeral=True)
         return
-
-    event = await create_event(draft)
-    draft.gatherling_id = event['event']
+    event = await find_event(draft)
+    if not event:
+        event = await create_event(draft)
+    draft.gatherling_id = event['id']
     await draft.save_state(redis)
     for p in users:
         await addplayer(draft.gatherling_id, p['name'], draft.draft.deck_of(int(p['discord_id'])))
@@ -90,6 +91,20 @@ async def get_gatherling_user(p: Member) -> dict:
                 return {}
             USER_CACHE[p.id] = user
             return user
+    except aiohttp.ClientError as e:
+        raise UserFeedbackException("Unable to connect to gatherling") from e
+
+async def find_event(draft: GuildDraft) -> dict:
+    try:
+        timeout = aiohttp.ClientTimeout(total=10)
+        async with aiohttp.ClientSession(timeout=timeout) as aios:
+
+            response = await fetch(aios, f'https://gatherling.com/api.php?action=event_info&event=Cube Draft {draft.uuid}')
+            event = json.loads(response)
+            if event.get('error'):
+                logging.info(event['error'])
+                return {}
+            return event
     except aiohttp.ClientError as e:
         raise UserFeedbackException("Unable to connect to gatherling") from e
 
