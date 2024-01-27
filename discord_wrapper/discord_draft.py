@@ -90,7 +90,9 @@ class GuildDraft:
     def gatherling_id(self) -> Optional[str]:
         val = self.draft.metadata.get('gatherling_id', None)
         if isinstance(val, dict):  # ???
-            return val.get('id', None)
+            val = val.get('id', None)
+        if isinstance(val, int):
+            val = str(val)
         return val
 
     @gatherling_id.setter
