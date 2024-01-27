@@ -7,11 +7,21 @@ import aiohttp
 from interactions import ComponentContext, Member
 from redis.asyncio import Redis
 from core_draft.cog_exceptions import UserFeedbackException
-from core_draft.fetch import fetch, post, post_json
+from core_draft.fetch import fetch, fetch_json, post, post_json
 
 from discord_wrapper.discord_draft import GuildDraft
 
 USER_CACHE = {}
+headers = {
+    'user-agent': 'sotiny/1.0',
+    'X-USERNAME': os.getenv('GATHERLING_USERNAME'),
+    'X-APIKEY': os.getenv('GATHERLING_APIKEY'),
+}
+cookie_jar = aiohttp.CookieJar(unsafe=True)
+def aios_factory() -> aiohttp.ClientSession:
+    timeout = aiohttp.ClientTimeout(total=10)
+    auth = aiohttp.BasicAuth(os.getenv('GATHERLING_USERNAME'), os.getenv('GATHERLING_APIKEY'))
+    return aiohttp.ClientSession(timeout=timeout, headers=headers, cookie_jar=cookie_jar)
 
 # async def create_challonge_pairings(ctx: ComponentContext, draft: GuildDraft, redis: Redis) -> None:
 #     """
@@ -51,6 +61,13 @@ async def create_gatherling_pairings(ctx: ComponentContext, draft: GuildDraft, r
         return
 
     await ctx.defer(ephemeral=True)
+    async with aios_factory() as aios:
+        whoami = await fetch_json(aios, 'https://gatherling.com/api.php?action=whoami')
+    if whoami.get('error'):
+        logging.error(repr(whoami))
+        await ctx.send("Gatherling has not been configured correctly", ephemeral=True)
+        return
+
     bad_ids = []
     users = []
     for p in draft.get_players():
@@ -78,7 +95,11 @@ async def create_gatherling_pairings(ctx: ComponentContext, draft: GuildDraft, r
     draft.gatherling_id = event.get('id')
     await draft.save_state(redis)
     for p in users:
-        await addplayer(draft.gatherling_id, p['name'], draft.draft.deck_of(int(p['discord_id'])))
+        success = await addplayer(draft.gatherling_id, p['name'], draft.draft.deck_of(int(p['discord_id'])))
+        if not success:
+            await ctx.send("Unable to add " + p['name'] + " to the event")
+            draft.gatherling_id = None
+            return
     await start_event(draft.gatherling_id)
     await ctx.send("http://gatherling.com/eventreport.php?event=" + draft.gatherling_id)
 
@@ -87,8 +108,7 @@ async def get_gatherling_user(p: Member) -> dict:
     if p.id in USER_CACHE:
         return USER_CACHE[p.id]
     try:
-        timeout = aiohttp.ClientTimeout(total=10)
-        async with aiohttp.ClientSession(timeout=timeout) as aios:
+        async with aios_factory() as aios:
 
             response = await fetch(aios, f'https://gatherling.com/api.php?action=whois&discordid={p.id}')
             user = json.loads(response)
@@ -102,9 +122,7 @@ async def get_gatherling_user(p: Member) -> dict:
 
 async def find_event(draft: GuildDraft) -> dict:
     try:
-        timeout = aiohttp.ClientTimeout(total=10)
-        async with aiohttp.ClientSession(timeout=timeout) as aios:
-
+        async with aios_factory() as aios:
             response = await fetch(aios, f'https://gatherling.com/api.php?action=event_info&event=Cube Draft {draft.uuid}')
             event = json.loads(response)
             if event.get('error'):
@@ -116,13 +134,7 @@ async def find_event(draft: GuildDraft) -> dict:
 
 async def create_event(draft: GuildDraft) -> dict:
     try:
-        timeout = aiohttp.ClientTimeout(total=10)
-        async with aiohttp.ClientSession(timeout=timeout) as aios:
-            headers = {
-                'HTTP_X_USERNAME': os.getenv('GATHERLING_USERNAME'),
-                'HTTP_X_APIKEY': os.getenv('GATHERLING_APIKEY'),
-            }
-
+        async with aios_factory() as aios:
             now = datetime.now()
             data = {
                 'name': 'Cube Draft ' + draft.uuid,
@@ -150,7 +162,7 @@ async def create_event(draft: GuildDraft) -> dict:
                 'client': '3',
             }
 
-            response = await post(aios, 'https://gatherling.com/api.php?action=create_event', data=data, headers=headers)
+            response = await post(aios, 'https://gatherling.com/api.php?action=create_event', data=data)
             try:
                 event = json.loads(response)
                 if event.get('error'):
@@ -166,19 +178,14 @@ async def create_event(draft: GuildDraft) -> dict:
 async def addplayer(event: int, player: str, decklist: list[str]) -> bool:
     try:
         timeout = aiohttp.ClientTimeout(total=10)
-        async with aiohttp.ClientSession(timeout=timeout) as aios:
-            headers = {
-                'HTTP_X_USERNAME': os.getenv('GATHERLING_USERNAME'),
-                'HTTP_X_APIKEY': os.getenv('GATHERLING_APIKEY'),
-            }
-
+        async with aios_factory() as aios:
             data = {
                 'event': event,
                 'addplayer': player,
                 'decklist': '|'.join(decklist),
             }
 
-            response = await post(aios, 'https://gatherling.com/api.php?action=addplayer', data=data, headers=headers)
+            response = await post(aios, 'https://gatherling.com/api.php?action=addplayer', data=data)
             result = json.loads(response)
             if result.get('error'):
                 logging.error(result['error'])
@@ -191,17 +198,12 @@ async def addplayer(event: int, player: str, decklist: list[str]) -> bool:
 async def start_event(event: int) -> bool:
     try:
         timeout = aiohttp.ClientTimeout(total=10)
-        async with aiohttp.ClientSession(timeout=timeout) as aios:
-            headers = {
-                'HTTP_X_USERNAME': os.getenv('GATHERLING_USERNAME'),
-                'HTTP_X_APIKEY': os.getenv('GATHERLING_APIKEY'),
-            }
-
+        async with aios_factory() as aios:
             data = {
                 'event': event,
             }
 
-            response = await post(aios, 'https://gatherling.com/api.php?action=start_event', data=data, headers=headers)
+            response = await post(aios, 'https://gatherling.com/api.php?action=start_event', data=data)
             result = json.loads(response)
             if result.get('error'):
                 logging.error(result['error'])
