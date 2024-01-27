@@ -88,10 +88,17 @@ class GuildDraft:
 
     @property
     def gatherling_id(self) -> Optional[str]:
-        return self.draft.metadata.get('gatherling_id', None)
+        val = self.draft.metadata.get('gatherling_id', None)
+        if isinstance(val, dict):  # ???
+            return val.get('id', None)
+        return val
 
     @gatherling_id.setter
     def gatherling_id(self, value: str) -> None:
+        if isinstance(value, int):
+            value = str(value)
+        if not isinstance(value, str):
+            raise RuntimeError(f"Can't set gatherling_id to {value}")
         if self.draft:
             self.draft.metadata['gatherling_id'] = value
         else:
