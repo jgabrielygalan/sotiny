@@ -50,7 +50,7 @@ async def create_gatherling_pairings(ctx: ComponentContext, draft: GuildDraft, r
             await draft.save_state(redis)
         return
 
-    await ctx.defer()
+    await ctx.defer(ephemeral=True)
     bad_ids = []
     users = []
     for p in draft.get_players():
@@ -168,8 +168,8 @@ async def addplayer(event: int, player: str, decklist: list[str]) -> bool:
         timeout = aiohttp.ClientTimeout(total=10)
         async with aiohttp.ClientSession(timeout=timeout) as aios:
             headers = {
-                'HTTP_X_USERNAME': os.getenv('gatherling_username'),
-                'HTTP_X_APIKEY': os.getenv('gatherling_apikey'),
+                'HTTP_X_USERNAME': os.getenv('GATHERLING_USERNAME'),
+                'HTTP_X_APIKEY': os.getenv('GATHERLING_APIKEY'),
             }
 
             data = {
@@ -193,8 +193,8 @@ async def start_event(event: int) -> bool:
         timeout = aiohttp.ClientTimeout(total=10)
         async with aiohttp.ClientSession(timeout=timeout) as aios:
             headers = {
-                'HTTP_X_USERNAME': os.getenv('gatherling_username'),
-                'HTTP_X_APIKEY': os.getenv('gatherling_apikey'),
+                'HTTP_X_USERNAME': os.getenv('GATHERLING_USERNAME'),
+                'HTTP_X_APIKEY': os.getenv('GATHERLING_APIKEY'),
             }
 
             data = {
