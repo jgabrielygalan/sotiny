@@ -182,7 +182,6 @@ async def addplayer(event: int, player: str, decklist: list[str]) -> bool:
             result = json.loads(response)
             if result.get('error'):
                 logging.error(result['error'])
-                logging.info("Logged in as: "+ response.headers.get('HTTP_X_USERNAME'))
                 return False
 
             return True
