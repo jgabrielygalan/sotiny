@@ -42,7 +42,7 @@ async def create_gatherling_pairings(ctx: ComponentContext, draft: GuildDraft, r
     """
     Create tournament and pairings on Gatherling.
     """
-    if draft.gatherling_id is not None:
+    if draft.gatherling_id is not None and draft.gatherling_id != '0':
         await ctx.send("http://gatherling.com/eventreport.php?event=" + draft.gatherling_id, ephemeral=True)
         return
 
@@ -69,7 +69,9 @@ async def create_gatherling_pairings(ctx: ComponentContext, draft: GuildDraft, r
     event = await find_event(draft)
     if not event:
         event = await create_event(draft)
-    draft.gatherling_id = event['id']
+        if not event.get('id'):
+            event = await find_event(draft)
+    draft.gatherling_id = event.get('id')
     await draft.save_state(redis)
     for p in users:
         await addplayer(draft.gatherling_id, p['name'], draft.draft.deck_of(int(p['discord_id'])))
