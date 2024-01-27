@@ -60,7 +60,7 @@ async def create_gatherling_pairings(ctx: ComponentContext, draft: GuildDraft, r
             await draft.save_state(redis)
         return
 
-    await ctx.defer(ephemeral=True)
+    await ctx.defer()
     async with aios_factory() as aios:
         whoami = await fetch_json(aios, 'https://gatherling.com/api.php?action=whoami')
     if whoami.get('error'):
