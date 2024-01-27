@@ -150,7 +150,7 @@ async def create_event(draft: GuildDraft) -> dict:
             try:
                 event = json.loads(response)
                 if event.get('error'):
-                    logging.log(event['error'])
+                    logging.error(event['error'])
                     return {}
             except json.decoder.JSONDecodeError:
                 logging.error("Invalid JSON:" + response)
@@ -177,7 +177,7 @@ async def addplayer(event: int, player: str, decklist: list[str]) -> bool:
             response = await post(aios, 'https://gatherling.com/api.php?action=addplayer', data=data, headers=headers)
             result = json.loads(response)
             if result.get('error'):
-                logging.log(result['error'])
+                logging.error(result['error'])
                 return False
 
             return True
@@ -200,7 +200,7 @@ async def start_event(event: int) -> bool:
             response = await post(aios, 'https://gatherling.com/api.php?action=start_event', data=data, headers=headers)
             result = json.loads(response)
             if result.get('error'):
-                logging.log(result['error'])
+                logging.error(result['error'])
                 return False
 
             return True
