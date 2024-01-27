@@ -44,6 +44,10 @@ async def create_gatherling_pairings(ctx: ComponentContext, draft: GuildDraft, r
     """
     if draft.gatherling_id is not None and draft.gatherling_id != '0':
         await ctx.send("http://gatherling.com/eventreport.php?event=" + draft.gatherling_id, ephemeral=True)
+        event = await find_event(draft)
+        if not event['players']:
+            draft.gatherling_id = None
+            await draft.save_state(redis)
         return
 
     await ctx.defer()
