@@ -28,6 +28,7 @@ from core_draft.cog_exceptions import DMsClosedException, UserFeedbackException
 from core_draft.draft import (CARDS_WITH_FUNCTION, Draft, DraftEffect, Stage,
                               player_card_drafteffect)
 from core_draft.draft_player import DraftPlayer
+from discord_wrapper.components import PAIR_BUTTON, card_buttons
 from discord_wrapper.discord_draftbot import BotMember
 
 if TYPE_CHECKING:
@@ -39,8 +40,6 @@ NUMBERS_BY_EMOJI = {
     '1': 1, '2': 2, '3': 3, '4': 4, '5': 5,
 }
 DEFAULT_CUBE_CUBECOBRA_ID = "penny_dreadful"
-
-PAIR_BUTTON = Button(style=ButtonStyle.GREEN, label="CREATE PAIRINGS", custom_id='pair')
 
 class FetchException(Exception):
     pass
@@ -243,7 +242,7 @@ class GuildDraft:
                 if image_file is None:
                     raise RuntimeError(f"Couldn't download images for {row}")
                 cardrow: list[str] = list(row)
-                components: list[ActionRow] = self.buttons(cardrow)
+                components: list[ActionRow] = card_buttons(cardrow)
                 message = await send_image_with_retry(messageable, image_file, components=components)
                 if message:
                     self.messages_by_player[player_id][message.id] = {"row": i, "message": message, "len": len(row)}
@@ -255,16 +254,7 @@ class GuildDraft:
 
             await messageable.send(f'Optionally activate: {text}', components=await self.conspiracy_buttons(actions))
 
-    def buttons(self, cards: Iterable[str]) -> List[ActionRow]:
-        return [ActionRow(
-            *[  # type: ignore
-                Button(style=ButtonStyle.BLUE,
-                       label=c,
-                       custom_id=f'{i + 1}',
-                       )
-                for i, c in enumerate(cards)
-            ],
-        )]
+
 
     async def conspiracy_buttons(self, cards: Iterable[str]) -> List[ActionRow]:
         emoji_cog = self.guild.guild._client.get_ext('EmojiGuild')

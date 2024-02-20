@@ -8,6 +8,7 @@ from interactions import ComponentContext, Member
 from redis.asyncio import Redis
 from core_draft.cog_exceptions import UserFeedbackException
 from core_draft.fetch import fetch, fetch_json, post, post_json
+from discord_wrapper.components import PAIR_FORCE_BUTTON
 
 from discord_wrapper.discord_draft import GuildDraft
 
@@ -48,7 +49,7 @@ def aios_factory() -> aiohttp.ClientSession:
     # TODO: Add players to tournament
     # This would require email addresses, which I don't particularly want to ask for
 
-async def create_gatherling_pairings(ctx: ComponentContext, draft: GuildDraft, redis: Redis) -> None:
+async def create_gatherling_pairings(ctx: ComponentContext, draft: GuildDraft, redis: Redis, force: bool) -> None:
     """
     Create tournament and pairings on Gatherling.
     """
@@ -79,8 +80,8 @@ async def create_gatherling_pairings(ctx: ComponentContext, draft: GuildDraft, r
         else:
             bad_ids.append(p)
 
-    if bad_ids:
-        await ctx.send("Unable to create pairings, the following users do not have a [Gatherling](https://gatherling.com/) account, or have not [linked](https://gatherling.com/auth.php) their discord to Gatherling:\n" + '\n'.join(p.mention for p in bad_ids))
+    if bad_ids and not force:
+        await ctx.send("Unable to create pairings, the following users do not have a [Gatherling](https://gatherling.com/) account, or have not [linked](https://gatherling.com/auth.php) their discord to Gatherling:\n" + '\n'.join(p.mention for p in bad_ids), components=[PAIR_FORCE_BUTTON])
         return
 
     if not draft.draft.is_draft_finished():
@@ -92,6 +93,9 @@ async def create_gatherling_pairings(ctx: ComponentContext, draft: GuildDraft, r
         event = await create_event(draft)
         if not event.get('id'):
             event = await find_event(draft)
+    if not event.get('id'):
+        await ctx.send("Error: event not created.")
+        return
     draft.gatherling_id = event.get('id')
     await draft.save_state(redis)
     for p in users:

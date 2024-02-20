@@ -10,7 +10,7 @@ async def fetch(session: aiohttp.ClientSession, url: str) -> str:
         return await response.text()
 
 
-async def fetch_json(session: aiohttp.ClientSession, url: str) -> str:
+async def fetch_json(session: aiohttp.ClientSession, url: str) -> dict:
     async with session.get(url) as response:
         if response.status >= 400:
             raise UserFeedbackException(f"Unable to load {url}")

@@ -4,13 +4,13 @@ from typing import Dict, List, Optional, cast
 
 import redis.asyncio as aioredis
 import interactions
-from interactions import (BaseContext, ButtonStyle, Extension, InteractionContext, SlashContext, Member, Modal, ModalContext, Timestamp, slash_command)
+from interactions import (BaseContext, ButtonStyle, Extension, InteractionContext, SlashContext, Member, Modal, ModalContext, Timestamp, slash_command, slash_str_option)
 from interactions.client.client import Client
 from interactions.client.errors import CommandException, Forbidden
 from interactions.models import (ActionRow, Button, IntervalTrigger, MessageFlags, ShortText, Task, check, listen)
 from interactions.models.internal.checks import TYPE_CHECK_FUNCTION
 from interactions.ext.prefixed_commands import PrefixedContext, prefixed_command
-from interactions.ext.hybrid_commands import hybrid_slash_command
+from interactions.ext.hybrid_commands import hybrid_slash_command, HybridContext
 
 from core_draft.cog_exceptions import DMsClosedException, NoPrivateMessage, PrivateMessageOnly
 from core_draft.draft_player import DraftPlayer
@@ -123,7 +123,7 @@ class CubeDrafter(Extension):
         try:
             await player.fetch_dm()  # Make sure we can send DMs to this player
         except Forbidden:
-            ctx.send("I can't send you DMs, please enable them so I can send you your packs.", flags=flags)
+            await ctx.send("I can't send you DMs, please enable them so I can send you your packs.", flags=flags)
 
         await guild.add_player(player)
         num_players = len(guild.players)
@@ -194,12 +194,12 @@ class CubeDrafter(Extension):
         if ctx.custom_id == 'join_draft':
             await self.register_player(ctx, False)
             return
-        if ctx.custom_id == "pair":
+        if ctx.custom_id in ["pair", "pair_force"]:
             draft = await self.find_draft_by_thread(ctx)
             if draft is None:
                 guild = await self.get_guild(ctx)
                 draft = await guild.load_draft(ctx.channel.name, True)
-            await export.create_gatherling_pairings(ctx, draft, self.redis)
+            await export.create_gatherling_pairings(ctx, draft, self.redis, ctx.custom_id == "pair_force")
             return
         await ctx.defer(edit_origin=True)
         for guild in self.guilds_by_id.values():
@@ -233,14 +233,16 @@ class CubeDrafter(Extension):
                 await ctx.send(prefix + "No pending players")
 
     @hybrid_slash_command(name='deck')  # type: ignore
+    @slash_str_option("Draft ID", False, True)
     @check(dm_only())
-    async def my_deck(self, ctx, draft_id = None):
+    async def my_deck(self, ctx: HybridContext, draft_id: str = None):
         """Show your current deck as images"""
         draft = await self.find_draft_or_send_error(ctx, draft_id)
         if draft is not None:
             await draft.picks(ctx, ctx.author.id)
 
     @hybrid_slash_command()
+    @slash_str_option("Draft ID", False, True)
     async def abandon(self, ctx: PrefixedContext, draft_id: Optional[str] = None) -> None:
         """Vote to cancel an in-progress draft"""
         draft = await self.find_draft_or_send_error(ctx, draft_id)
@@ -258,6 +260,7 @@ class CubeDrafter(Extension):
                 # Alternatively, someone can take over your seat:', components=swap_seats_button(draft, ctx.author)
 
     @hybrid_slash_command(name='pack')
+    @slash_str_option("Draft ID", False, True)
     async def my_pack(self, ctx: PrefixedContext, draft_id: Optional[str] = None) -> None:
         "Resend your current pack"
         draft = await self.find_draft_or_send_error(ctx, draft_id, True)
