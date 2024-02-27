@@ -244,7 +244,7 @@ class CubeDrafter(Extension):
     @check(dm_only())
     async def my_deck(self, ctx: HybridContext, draft_id: str = None):
         """Show your current deck as images"""
-        draft = await self.find_draft_or_send_error(ctx, draft_id)
+        draft = await self.find_draft_or_send_error(ctx, draft_id, False)
         if draft is not None:
             await draft.picks(ctx, ctx.author.id)
 
@@ -365,7 +365,7 @@ class CubeDrafter(Extension):
         else:
             draft = self.find_draft_by_id(draft_id)
             if draft is None:
-                raise CommandException("You are not playing any draft")
+                raise CommandException("Can't find the specified draft")
             return draft
 
     async def find_drafts_by_player(self, ctx: SendableContext) -> List[GuildDraft]:
