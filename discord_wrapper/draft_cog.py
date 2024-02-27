@@ -365,6 +365,9 @@ class CubeDrafter(Extension):
         else:
             draft = self.find_draft_by_id(draft_id)
             if draft is None:
+                drafts = await self.find_drafts_by_player(ctx)
+                draft = next((x for x in drafts if x.id() == draft_id), None)
+            if draft is None:
                 raise CommandException("Can't find the specified draft")
             return draft
 
