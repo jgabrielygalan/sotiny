@@ -2,17 +2,23 @@ import logging
 import os
 from typing import Dict, List, Optional, cast
 
-import redis.asyncio as aioredis
 import interactions
-from interactions import (BaseContext, ButtonStyle, Extension, InteractionContext, SlashContext, Member, Modal, ModalContext, Timestamp, slash_command, slash_str_option)
+import redis.asyncio as aioredis
 from interactions.client.client import Client
 from interactions.client.errors import CommandException, Forbidden
-from interactions.models import (ActionRow, Button, IntervalTrigger, MessageFlags, ShortText, Task, check, listen)
+from interactions.ext.hybrid_commands import (HybridContext,
+                                              hybrid_slash_command)
+from interactions.ext.prefixed_commands import (PrefixedContext,
+                                                prefixed_command)
+from interactions.models import (ActionRow, BaseContext, Button, ButtonStyle,
+                                 Extension, InteractionContext,
+                                 IntervalTrigger, Member, MessageFlags, Modal,
+                                 ModalContext, OptionType, ShortText,
+                                 SlashContext, Task, Timestamp, check, listen,
+                                 slash_command, slash_option)
 from interactions.models.internal.checks import TYPE_CHECK_FUNCTION
-from interactions.ext.prefixed_commands import PrefixedContext, prefixed_command
-from interactions.ext.hybrid_commands import hybrid_slash_command, HybridContext
 
-from core_draft.cog_exceptions import DMsClosedException, NoPrivateMessage, PrivateMessageOnly
+from core_draft.cog_exceptions import NoPrivateMessage, PrivateMessageOnly
 from core_draft.draft_player import DraftPlayer
 from core_draft.draftbot import DraftBot
 from discord_wrapper import export
@@ -234,7 +240,7 @@ class CubeDrafter(Extension):
                 await ctx.send(prefix + "No pending players")
 
     @hybrid_slash_command(name='deck')  # type: ignore
-    @slash_str_option("Draft ID", False, True)
+    @slash_option("draft_id", "Draft ID", OptionType.STRING, False, True)
     @check(dm_only())
     async def my_deck(self, ctx: HybridContext, draft_id: str = None):
         """Show your current deck as images"""
@@ -243,7 +249,7 @@ class CubeDrafter(Extension):
             await draft.picks(ctx, ctx.author.id)
 
     @hybrid_slash_command()
-    @slash_str_option("Draft ID", False, True)
+    @slash_option("draft_id", "Draft ID", OptionType.STRING, False, True)
     async def abandon(self, ctx: PrefixedContext, draft_id: Optional[str] = None) -> None:
         """Vote to cancel an in-progress draft"""
         draft = await self.find_draft_or_send_error(ctx, draft_id)
@@ -261,7 +267,7 @@ class CubeDrafter(Extension):
                 # Alternatively, someone can take over your seat:', components=swap_seats_button(draft, ctx.author)
 
     @hybrid_slash_command(name='pack')
-    @slash_str_option("Draft ID", False, True)
+    @slash_option("draft_id", "Draft ID", OptionType.STRING, False, True)
     async def my_pack(self, ctx: PrefixedContext, draft_id: Optional[str] = None) -> None:
         "Resend your current pack"
         draft = await self.find_draft_or_send_error(ctx, draft_id, True)
