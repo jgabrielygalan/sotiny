@@ -51,6 +51,10 @@ class Bot(Client):
                 await ctx.send("There was an error processing your command")
         await super().on_command_error(self, event=event)
 
+    async def stop(self) -> None:
+        await self.get_ext('CubeDrafter').save_all()
+        return await super().stop()
+
 
 bot = Bot(default_prefix=PREFIX, fetch_members=True, intents=Intents.DEFAULT | Intents.GUILD_MEMBERS | Intents.MESSAGE_CONTENT)
 setup_prefixed_commands(bot, default_prefix=PREFIX)

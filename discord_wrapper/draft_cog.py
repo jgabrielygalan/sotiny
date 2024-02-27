@@ -124,6 +124,7 @@ class CubeDrafter(Extension):
             await player.fetch_dm()  # Make sure we can send DMs to this player
         except Forbidden:
             await ctx.send("I can't send you DMs, please enable them so I can send you your packs.", flags=flags)
+            return
 
         await guild.add_player(player)
         num_players = len(guild.players)
@@ -459,6 +460,10 @@ class CubeDrafter(Extension):
         except ValueError:
             i = 1
         return i
+
+    async def save_all(self) -> None:
+        for guild in self.guilds_by_id.values():
+            await guild.save_state()
 
 def swap_seats_button(draft: GuildDraft, old_player: Member) -> ActionRow:
     button = Button(
