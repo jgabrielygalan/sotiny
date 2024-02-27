@@ -4,7 +4,7 @@ from typing import Optional
 import attrs
 import numpy
 
-from core_draft.cube import Card, fetch_card
+from core_draft.cube import Card, fetch_card, CARD_INFO
 from core_draft.draft_player import DraftPlayer
 
 DECK_CACHE: dict[str, list[str]] = {}
@@ -77,7 +77,11 @@ class DraftBot:
 
         cards = [await fetch_card(c) for c in pack.cards]
         cards.sort(key=weight, reverse=True)
-        return cards[0].name
+        name = cards[0].name
+        if name not in pack.cards:
+            names = {(await fetch_card(c)).name: c for c in pack.cards}
+            name = names[name]
+        return name
 
 
 def similarity_score(a: list[str], b: list[str]) -> float:

@@ -26,3 +26,12 @@ async def test_force_red(player: DraftPlayer, bot: DraftBot) -> None:
     player.push_pack(booster)
     pick = await bot.pick()
     assert pick == "Blood Moon"
+
+@pytest.mark.vcr(record_mode='new_episodes')
+@pytest.mark.asyncio
+async def test_adventure(player: DraftPlayer, bot: DraftBot) -> None:
+    player.deck.extend(["Lightning Bolt", "Shock", "Goblin Guide", "Ponder"])
+    booster = Booster(['Fae of Wishes', 'Bonecrusher Giant', 'Choke'], 1)
+    player.push_pack(booster)
+    pick = await bot.pick()
+    assert pick == "Bonecrusher Giant"
