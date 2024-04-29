@@ -84,6 +84,7 @@ class CubeDrafter(Extension):
     async def on_startup(self) -> None:
         self.status.start()
         self.timeout.start()
+        self.daily_backup.start()
 
     async def setup_guild(self, guild: interactions.Guild) -> GuildData:
         if guild.id not in self.guilds_by_id:
@@ -239,7 +240,7 @@ class CubeDrafter(Extension):
             else:
                 await ctx.send(prefix + "No pending players")
 
-    @hybrid_slash_command(name='deck')  # type: ignore
+    @hybrid_slash_command(name='deck', silence_autocomplete_errors=True)  # type: ignore
     @slash_option("draft_id", "Draft ID", OptionType.STRING, False, True)
     @check(dm_only())
     async def my_deck(self, ctx: HybridContext, draft_id: str = None):
@@ -248,7 +249,7 @@ class CubeDrafter(Extension):
         if draft is not None:
             await draft.picks(ctx, ctx.author.id)
 
-    @hybrid_slash_command()
+    @hybrid_slash_command(silence_autocomplete_errors=True)
     @slash_option("draft_id", "Draft ID", OptionType.STRING, False, True)
     async def abandon(self, ctx: PrefixedContext, draft_id: Optional[str] = None) -> None:
         """Vote to cancel an in-progress draft"""
@@ -266,7 +267,7 @@ class CubeDrafter(Extension):
                 await chan.send(f'{draft.id()} needs {needed - len(draft.abandon_votes)} more votes to abandon.')
                 # Alternatively, someone can take over your seat:', components=swap_seats_button(draft, ctx.author)
 
-    @hybrid_slash_command(name='pack')
+    @hybrid_slash_command(name='pack', silence_autocomplete_errors=True)
     @slash_option("draft_id", "Draft ID", OptionType.STRING, False, True)
     async def my_pack(self, ctx: PrefixedContext, draft_id: Optional[str] = None) -> None:
         "Resend your current pack"
@@ -393,6 +394,10 @@ class CubeDrafter(Extension):
                 if (await draft.get_thread()) == ctx.channel:
                     return draft
         return None
+
+    @Task.create(IntervalTrigger(hours=24))
+    async def daily_backup(self) -> None:
+        await self.save_all()
 
     @Task.create(IntervalTrigger(minutes=1))
     async def status(self) -> None:

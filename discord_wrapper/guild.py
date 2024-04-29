@@ -143,7 +143,10 @@ class GuildData:
     async def save_state(self) -> None:
         if self.redis is None:
             return
-        await self.redis.delete(f'sotiny:{self.guild.id}:players')
+        try:
+            await self.redis.delete(f'sotiny:{self.guild.id}:players')
+        except ConnectionError:
+            return
         if self.players:
             await self.redis.sadd(f'sotiny:{self.guild.id}:players', *self.players)
         if self.pending_conf.cube_id:
